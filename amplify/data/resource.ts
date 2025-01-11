@@ -1,4 +1,5 @@
 import { type ClientSchema, a, defineData, defineFunction  } from '@aws-amplify/backend';
+import { createZodSchema } from './amplifyToZod'
 
 const generateGardenPlanStepsFunction = defineFunction({
   name: 'generateGardenPlanSteps',
@@ -9,24 +10,35 @@ const generateGardenPlanStepsFunction = defineFunction({
   }
 });
 
-const schema = a.schema({
+export const schema = a.schema({
   XY: a.customType({
     x: a.float(),
     y: a.float(),
   }),
 
+  PlantRow: a.customType({
+    location: a.customType({
+      start: a.ref('XY'),
+      end: a.ref('XY'),
+    }),
+    species: a.string(),
+    plantSpacing: a.float(),
+    plantDate: a.date()
+  }),
+
   Step: a.customType({
-    title: a.string(),
+    title: a.string().required(),
     description: a.string(),
     role: a.enum(['ai', 'human']),
-    result: a.string()
+    result: a.string(),
+    plantRows: a.ref('PlantRow').array(),
   }),
 
   PlannedStep: a.model({
     gardenId: a.id(),
     garden: a.belongsTo('Garden', 'gardenId'),
     plantRowId: a.id(),
-    plantRow: a.belongsTo('PlantRow', 'plantRowId'),
+    plantedPlantRow: a.belongsTo('PlantedPlantRow', 'plantRowId'),
     step: a.ref('Step'),
     plannedDate: a.date(),
   })
@@ -36,7 +48,7 @@ const schema = a.schema({
     gardenId: a.id(),
     garden: a.belongsTo('Garden', 'gardenId'),
     plantRowId: a.id(),
-    plantRow: a.belongsTo('PlantRow', 'plantRowId'),
+    plantedPlantRow: a.belongsTo('PlantedPlantRow', 'plantRowId'),
     step: a.ref('Step'),
     completedDate: a.date(),
     notes: a.string(),
@@ -48,21 +60,17 @@ const schema = a.schema({
     objective: a.string(),
     zipCode: a.string(),
     perimeterPoints: a.ref('XY').array(),
-    plantRows: a.hasMany('PlantRow', 'gardenId'),
+    units: a.enum(['imperial', 'metric']),
+    plantedPlantRow: a.hasMany('PlantedPlantRow', 'gardenId'),
     plannedSteps: a.hasMany('PlannedStep', 'gardenId'),
     pastSteps: a.hasMany('PastStep', 'gardenId'),
   })
     .authorization((allow) => [allow.owner()]),
 
-  PlantRow: a.model({
+  PlantedPlantRow: a.model({
     gardenId: a.id(),
     garden: a.belongsTo('Garden', 'gardenId'),
-    location: a.customType({
-      start: a.ref('XY'),
-      end: a.ref('XY'),
-    }),
-    species: a.string(),
-    plantSpacing: a.float(),
+    info: a.ref('PlantRow'),
     plannedSteps: a.hasMany('PlannedStep', 'plantRowId'),
     pastSteps: a.hasMany('PastStep', 'plantRowId'),
   })
@@ -77,6 +85,8 @@ const schema = a.schema({
 .authorization((allow) => [allow.resource(generateGardenPlanStepsFunction)]);
 
 export type Schema = ClientSchema<typeof schema>;
+
+// const zodSchema = createZodSchema(schema.data.types.Garden.identifier)
 
 export const data = defineData({
   schema,
