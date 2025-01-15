@@ -6,6 +6,7 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { schema, Schema } from '../amplify/data/resource';
 
 import { geocode, getWeatherForecast } from './weather';
+import { experimental } from "aws-cdk-lib/aws-cloudfront";
 
 const XY = z.object({
     x: z.number(),
@@ -26,6 +27,10 @@ const CreateGardenType = z.object({
     units: z.enum(['imperial', 'metric']),
 })
 
+const zodStringDate = z.string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format, should be YYYY-MM-DD")
+    .describe("The date in YYYY-MM-DD format")
+
 const PlantRowType = z.object({
     location: z.object({
         start: XY,
@@ -33,9 +38,12 @@ const PlantRowType = z.object({
     }),
     species: z.string(),
     plantSpacingInMeters: z.number(),
-    plantDate: z.string()
-        .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format, should be YYYY-MM-DD")
-        .describe("The date in YYYY-MM-DD format")
+    plantDate: zodStringDate,
+    expectedHarvest: z.object({
+        date: zodStringDate,
+        amount: z.number(),
+        unit: z.string()
+    })
 })
 
 const StepType = z.object({
@@ -46,7 +54,7 @@ const StepType = z.object({
     plantRows: z.array(PlantRowType)
 })
 
-const StepArrayType= z.object({
+const StepArrayType = z.object({
     steps: z.array(StepType),
     explaination: z.string()
 })
@@ -54,7 +62,7 @@ const StepArrayType= z.object({
 export const createGarden = async (userPrompt: string) => {
     const gardenCreationModel = new ChatBedrockConverse({
         model: process.env.MODEL_ID
-    }).withStructuredOutput(CreateGardenType,{includeRaw: true})
+    }).withStructuredOutput(CreateGardenType, { includeRaw: true })
 
     const gardenCreationPrompt = ChatPromptTemplate.fromTemplate(
         `
@@ -74,35 +82,47 @@ export const createGarden = async (userPrompt: string) => {
 }
 
 export const createGardenPlanSteps = async (garden: Schema["Garden"]["createType"]) => {
-    // const location = await geocode(garden.zipCode)
-    const forecast = ""//await getWeatherForecast({lattitude: garden.lattitude, longitude: garden.longitude})
+
+    if (
+        !garden.location ||
+        !garden.location.lattitude ||
+        !garden.location.longitude ||
+        (typeof garden.location?.lattitude) !== 'number' ||
+        (typeof garden.location?.longitude) !== 'number'
+    ) throw new Error("Garden does not have lattitude and longitude. Garden:\n" + stringify(garden))
+
+    const forecast = await getWeatherForecast({ lattitude: garden.location.lattitude, longitude: garden.location.longitude })
 
     const gardenStepPlannerModel = new ChatBedrockConverse({
         model: process.env.MODEL_ID
-    }).withStructuredOutput(StepArrayType,{includeRaw: true})
+    }).withStructuredOutput(StepArrayType, { includeRaw: true })
 
     if (!garden.perimeterPoints) {
         throw new Error("Garden does not have perimeter points")
     }
 
-    const plannerPrompt = ChatPromptTemplate.fromTemplate(
-        `
-        For the given objective, come up with a simple step by step plan. 
-        This plan should involve individual tasks, that if executed correctly will yield the correct answer.
-        Do not add any superfluous steps. 
-        The result of the final step should be the final answer. Make sure that each step has all the information needed - do not skip steps.
-        
-        {objective}
+    const prompt = `
+    For the given objective, come up with a simple step by step plan. 
+    This plan should involve individual tasks, that if executed correctly will accompish the user's objective.
+    Do not add any superfluous steps. 
+    The result of the final step should be the final answer. Make sure that each step has all the information needed - do not skip steps.
+    
+    <userObjective>
+    {objective}
+    </userObjective>
 
-        Today's date is: ${new Date().toISOString().split('T')[0]}
+    Today's date is: ${new Date().toISOString().split('T')[0]}
 
-        The weather forecast is:
-        ${stringify(forecast)}
+    The weather forecast is:
+    ${stringify(forecast)}
 
-        The garden has perimeter points (meters):
-        ${garden.perimeterPoints.map((point) => `(${point?.x}, ${point?.y})`).join(", ")}
-        `,
-    );
+    The garden has perimeter points (meters):
+    ${garden.perimeterPoints.map((point) => `(${point?.x}, ${point?.y})`).join(", ")}
+    `
+
+    console.log("Prompt: ", prompt)
+
+    const plannerPrompt = ChatPromptTemplate.fromTemplate(prompt);
 
     const gandenStepLannerWithPrompt = plannerPrompt.pipe(gardenStepPlannerModel);
 

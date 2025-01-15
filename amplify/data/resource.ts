@@ -1,5 +1,7 @@
 import { type ClientSchema, a, defineData, defineFunction } from '@aws-amplify/backend';
 import { createZodSchema } from './amplifyToZod'
+import { experimental } from 'aws-cdk-lib/aws-cloudfront';
+import { Experimental_CssVarsProvider } from '@mui/material';
 
 const generateGardenPlanStepsFunction = defineFunction({
   name: 'generateGardenPlanSteps',
@@ -16,14 +18,29 @@ export const schema = a.schema({
     y: a.float().required(),
   }),
 
+  expectedHarvest: a.customType({
+    date: a.date(),
+    amount: a.float(),
+    unit: a.string(),
+  }),
+
+  rowLocation: a.customType({
+    start: a.ref('XY').required(),
+    end: a.ref('XY').required(),
+  }),
+
+  latLongLocation: a.customType({
+    cityStateAndCountry: a.string().required(),
+    lattitude: a.float(),
+    longitude: a.float()
+  }),
+
   PlantRow: a.customType({
-    location: a.customType({
-      start: a.ref('XY'),
-      end: a.ref('XY'),
-    }),
-    species: a.string(),
-    plantSpacingInMeters: a.float(),
-    plantDate: a.date()
+    location: a.ref('rowLocation').required(),    
+    species: a.string().required(),
+    plantSpacingInMeters: a.float().required(),
+    plantDate: a.date().required(),
+    expectedHarvest: a.ref('expectedHarvest').required()
   }),
 
   Step: a.customType({
@@ -80,12 +97,9 @@ export const schema = a.schema({
   Garden: a.model({
     name: a.string().required(),
     objective: a.string(),
-    location: a.customType({
-      cityStateAndCountry: a.string().required(),
-      lattitude: a.float(),
-      longitude: a.float()
-    }),
+    location: a.ref('latLongLocation').required(),
     perimeterPoints: a.ref('XY').array(),
+    northVector: a.ref('XY'),
     units: a.enum(['imperial', 'metric']),
     plantedPlantRow: a.hasMany('PlantedPlantRow', 'gardenId'),
     plannedSteps: a.hasMany('PlannedStep', 'gardenId'),
