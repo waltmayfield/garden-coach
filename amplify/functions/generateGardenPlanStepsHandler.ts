@@ -7,69 +7,70 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/data';
 import { getAmplifyDataClientConfig } from '@aws-amplify/backend/function/runtime';
-// import { env } from '$amplify/env/generateGardenPlanSteps';
-import { GraphqlOutput } from '@aws-amplify/backend-output-schemas';
+import { env } from '$amplify/env/generateGardenPlanSteps';
+// import { GraphqlOutput } from '@aws-amplify/backend-output-schemas';
 
 import { AppSyncIdentityCognito, AppSyncIdentityOIDC } from 'aws-lambda';
 
 import { schema, Schema } from '../data/resource';
 import { getGarden } from './graphql/queries';
 
+// import { getGardenPlanSteps } from '@/../utils/amplifyStrucutedOutputs';
+import { createGardenPlanSteps } from '../../utils/amplifyStrucutedOutputs';
 
+// // type IsSameType<T, U> = T extends U ? (U extends T ? true : false) : false;
 
-// type IsSameType<T, U> = T extends U ? (U extends T ? true : false) : false;
+// const XY = z.object({
+//     x: z.number(),
+//     y: z.number()
+// })
 
-const XY = z.object({
-    x: z.number(),
-    y: z.number()
-})
+// // schema.data.types.PlantRow.fields
 
-// schema.data.types.PlantRow.fields
+// const StepType = z.object({
+//     title: z.string(),
+//     description: z.string(),
+//     role: z.enum(['ai', 'human']),
+//     resources: z.array(z.string()),
+//     plantRows: z.object({
+//         location: z.object({
+//             start: XY,
+//             end: XY
+//         }),
+//         species: z.string(),
+//         plantSpacingInMeters: z.number(),
+//         plantDate: z.date()
+//     })
+// })
 
-const StepType = z.object({
-    title: z.string(),
-    description: z.string(),
-    role: z.enum(['ai', 'human']),
-    resources: z.array(z.string()),
-    plantRows: z.object({
-        location: z.object({
-            start: XY,
-            end: XY
-        }),
-        species: z.string(),
-        plantspacing: z.number(),
-        plantDate: z.date()
-    })
-})
+// const StepArrayType= z.object({
+//     steps: z.array(StepType)
+// })
 
-const StepArrayType= z.object({
-    steps: z.array(StepType)
-})
+// export const getGardenPlanSteps = async (garden: Schema["Garden"]["createType"]) => {
+//     const gardenStepPlannerModel = new ChatBedrockConverse({
+//         model: process.env.MODEL_ID
+//     }).withStructuredOutput(StepArrayType,{includeRaw: true})
 
-export const getGardenPlanSteps = async (garden: Schema["Garden"]["createType"]) => {
-    const gardenStepPlannerModel = new ChatBedrockConverse({
-        model: process.env.MODEL_ID
-    }).withStructuredOutput(StepArrayType,{includeRaw: true})
-
-    const plannerPrompt = ChatPromptTemplate.fromTemplate(
-        `
-        For the given objective, come up with a simple step by step plan. 
-        This plan should involve individual tasks, that if executed correctly will yield the correct answer.
-        Do not add any superfluous steps. 
-        The result of the final step should be the final answer. Make sure that each step has all the information needed - do not skip steps.
+//     const plannerPrompt = ChatPromptTemplate.fromTemplate(
+//         `
+//         For the given objective, come up with a simple step by step plan. 
+//         This plan should involve individual tasks, that if executed correctly will yield the correct answer.
+//         Do not add any superfluous steps. 
+//         The result of the final step should be the final answer. Make sure that each step has all the information needed - do not skip steps.
         
-        {objective}
-        `,
-    );
+//         {objective}
+//         `,
+//     );
 
-    const gandenStepLannerWithPrompt = plannerPrompt.pipe(gardenStepPlannerModel);
+//     const gandenStepLannerWithPrompt = plannerPrompt.pipe(gardenStepPlannerModel);
 
-    const newPlanSteps = await gandenStepLannerWithPrompt.invoke({
-        objective: garden.objective
-    })
+//     const newPlanSteps = await gandenStepLannerWithPrompt.invoke({
+//         objective: garden.objective
+//     })
 
-    return newPlanSteps.parsed
-}
+//     return newPlanSteps.parsed
+// }
 
 export const handler: Schema["generateGardenPlanSteps"]["functionHandler"] = async (event, context) => {
 

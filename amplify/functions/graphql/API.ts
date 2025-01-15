@@ -5,9 +5,30 @@
 export type Step = {
   __typename: "Step",
   description?: string | null,
+  plantRows?:  Array<PlantRow | null > | null,
   result?: string | null,
   role?: StepRole | null,
-  title?: string | null,
+  title: string,
+};
+
+export type PlantRow = {
+  __typename: "PlantRow",
+  location?: PlantRowLocation | null,
+  plantDate?: string | null,
+  plantSpacingInMeters?: number | null,
+  species?: string | null,
+};
+
+export type PlantRowLocation = {
+  __typename: "PlantRowLocation",
+  end?: XY | null,
+  start?: XY | null,
+};
+
+export type XY = {
+  __typename: "XY",
+  x?: number | null,
+  y?: number | null,
 };
 
 export enum StepRole {
@@ -15,6 +36,46 @@ export enum StepRole {
   human = "human",
 }
 
+
+export type ChatMessage = {
+  __typename: "ChatMessage",
+  chatSessionId?: string | null,
+  content?: ChatMessageContent | null,
+  createdAt?: string | null,
+  id: string,
+  owner?: string | null,
+  role?: ChatMessageRole | null,
+  session?: ChatSession | null,
+  updatedAt: string,
+};
+
+export type ChatMessageContent = {
+  __typename: "ChatMessageContent",
+  proposedSteps?:  Array<Step | null > | null,
+  text?: string | null,
+};
+
+export enum ChatMessageRole {
+  ai = "ai",
+  human = "human",
+  tool = "tool",
+}
+
+
+export type ChatSession = {
+  __typename: "ChatSession",
+  createdAt: string,
+  id: string,
+  messages?: ModelChatMessageConnection | null,
+  owner?: string | null,
+  updatedAt: string,
+};
+
+export type ModelChatMessageConnection = {
+  __typename: "ModelChatMessageConnection",
+  items:  Array<ChatMessage | null >,
+  nextToken?: string | null,
+};
 
 export type Garden = {
   __typename: "Garden",
@@ -26,7 +87,8 @@ export type Garden = {
   pastSteps?: ModelPastStepConnection | null,
   perimeterPoints?:  Array<XY | null > | null,
   plannedSteps?: ModelPlannedStepConnection | null,
-  plantRows?: ModelPlantRowConnection | null,
+  plantedPlantRow?: ModelPlantedPlantRowConnection | null,
+  units?: GardenUnits | null,
   updatedAt: string,
   zipCode?: string | null,
 };
@@ -46,37 +108,23 @@ export type PastStep = {
   id: string,
   notes?: string | null,
   owner?: string | null,
-  plantRow?: PlantRow | null,
   plantRowId?: string | null,
+  plantedPlantRow?: PlantedPlantRow | null,
   step?: Step | null,
   updatedAt: string,
 };
 
-export type PlantRow = {
-  __typename: "PlantRow",
+export type PlantedPlantRow = {
+  __typename: "PlantedPlantRow",
   createdAt: string,
   garden?: Garden | null,
   gardenId?: string | null,
   id: string,
-  location?: PlantRowLocation | null,
+  info?: PlantRow | null,
   owner?: string | null,
   pastSteps?: ModelPastStepConnection | null,
   plannedSteps?: ModelPlannedStepConnection | null,
-  plantSpacing?: number | null,
-  species?: string | null,
   updatedAt: string,
-};
-
-export type PlantRowLocation = {
-  __typename: "PlantRowLocation",
-  end?: XY | null,
-  start?: XY | null,
-};
-
-export type XY = {
-  __typename: "XY",
-  x?: number | null,
-  y?: number | null,
 };
 
 export type ModelPlannedStepConnection = {
@@ -93,32 +141,47 @@ export type PlannedStep = {
   id: string,
   owner?: string | null,
   plannedDate?: string | null,
-  plantRow?: PlantRow | null,
   plantRowId?: string | null,
+  plantedPlantRow?: PlantedPlantRow | null,
   step?: Step | null,
   updatedAt: string,
 };
 
-export type ModelPlantRowConnection = {
-  __typename: "ModelPlantRowConnection",
-  items:  Array<PlantRow | null >,
+export type ModelPlantedPlantRowConnection = {
+  __typename: "ModelPlantedPlantRowConnection",
+  items:  Array<PlantedPlantRow | null >,
   nextToken?: string | null,
 };
 
-export type ModelGardenFilterInput = {
-  and?: Array< ModelGardenFilterInput | null > | null,
-  createdAt?: ModelStringInput | null,
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  not?: ModelGardenFilterInput | null,
-  objective?: ModelStringInput | null,
-  or?: Array< ModelGardenFilterInput | null > | null,
-  owner?: ModelStringInput | null,
-  updatedAt?: ModelStringInput | null,
-  zipCode?: ModelStringInput | null,
+export enum GardenUnits {
+  imperial = "imperial",
+  metric = "metric",
+}
+
+
+export type ModelStringKeyConditionInput = {
+  beginsWith?: string | null,
+  between?: Array< string | null > | null,
+  eq?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  le?: string | null,
+  lt?: string | null,
 };
 
-export type ModelStringInput = {
+export type ModelChatMessageFilterInput = {
+  and?: Array< ModelChatMessageFilterInput | null > | null,
+  chatSessionId?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  id?: ModelIDInput | null,
+  not?: ModelChatMessageFilterInput | null,
+  or?: Array< ModelChatMessageFilterInput | null > | null,
+  owner?: ModelStringInput | null,
+  role?: ModelChatMessageRoleInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelIDInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
   beginsWith?: string | null,
@@ -158,7 +221,7 @@ export type ModelSizeInput = {
   ne?: number | null,
 };
 
-export type ModelIDInput = {
+export type ModelStringInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
   beginsWith?: string | null,
@@ -172,6 +235,52 @@ export type ModelIDInput = {
   ne?: string | null,
   notContains?: string | null,
   size?: ModelSizeInput | null,
+};
+
+export type ModelChatMessageRoleInput = {
+  eq?: ChatMessageRole | null,
+  ne?: ChatMessageRole | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
+export type ModelChatSessionFilterInput = {
+  and?: Array< ModelChatSessionFilterInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  id?: ModelIDInput | null,
+  not?: ModelChatSessionFilterInput | null,
+  or?: Array< ModelChatSessionFilterInput | null > | null,
+  owner?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelChatSessionConnection = {
+  __typename: "ModelChatSessionConnection",
+  items:  Array<ChatSession | null >,
+  nextToken?: string | null,
+};
+
+export type ModelGardenFilterInput = {
+  and?: Array< ModelGardenFilterInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  not?: ModelGardenFilterInput | null,
+  objective?: ModelStringInput | null,
+  or?: Array< ModelGardenFilterInput | null > | null,
+  owner?: ModelStringInput | null,
+  units?: ModelGardenUnitsInput | null,
+  updatedAt?: ModelStringInput | null,
+  zipCode?: ModelStringInput | null,
+};
+
+export type ModelGardenUnitsInput = {
+  eq?: GardenUnits | null,
+  ne?: GardenUnits | null,
 };
 
 export type ModelGardenConnection = {
@@ -207,29 +316,78 @@ export type ModelPlannedStepFilterInput = {
   updatedAt?: ModelStringInput | null,
 };
 
-export type ModelPlantRowFilterInput = {
-  and?: Array< ModelPlantRowFilterInput | null > | null,
+export type ModelPlantedPlantRowFilterInput = {
+  and?: Array< ModelPlantedPlantRowFilterInput | null > | null,
   createdAt?: ModelStringInput | null,
   gardenId?: ModelIDInput | null,
   id?: ModelIDInput | null,
-  not?: ModelPlantRowFilterInput | null,
-  or?: Array< ModelPlantRowFilterInput | null > | null,
+  not?: ModelPlantedPlantRowFilterInput | null,
+  or?: Array< ModelPlantedPlantRowFilterInput | null > | null,
   owner?: ModelStringInput | null,
-  plantSpacing?: ModelFloatInput | null,
-  species?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
 
-export type ModelFloatInput = {
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  between?: Array< number | null > | null,
-  eq?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ne?: number | null,
+export type ModelChatMessageConditionInput = {
+  and?: Array< ModelChatMessageConditionInput | null > | null,
+  chatSessionId?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  not?: ModelChatMessageConditionInput | null,
+  or?: Array< ModelChatMessageConditionInput | null > | null,
+  owner?: ModelStringInput | null,
+  role?: ModelChatMessageRoleInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type CreateChatMessageInput = {
+  chatSessionId?: string | null,
+  content?: ChatMessageContentInput | null,
+  createdAt?: string | null,
+  id?: string | null,
+  owner?: string | null,
+  role?: ChatMessageRole | null,
+};
+
+export type ChatMessageContentInput = {
+  proposedSteps?: Array< StepInput | null > | null,
+  text?: string | null,
+};
+
+export type StepInput = {
+  description?: string | null,
+  plantRows?: Array< PlantRowInput | null > | null,
+  result?: string | null,
+  role?: StepRole | null,
+  title: string,
+};
+
+export type PlantRowInput = {
+  location?: PlantRowLocationInput | null,
+  plantDate?: string | null,
+  plantSpacingInMeters?: number | null,
+  species?: string | null,
+};
+
+export type PlantRowLocationInput = {
+  end?: XYInput | null,
+  start?: XYInput | null,
+};
+
+export type XYInput = {
+  x?: number | null,
+  y?: number | null,
+};
+
+export type ModelChatSessionConditionInput = {
+  and?: Array< ModelChatSessionConditionInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  not?: ModelChatSessionConditionInput | null,
+  or?: Array< ModelChatSessionConditionInput | null > | null,
+  owner?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type CreateChatSessionInput = {
+  id?: string | null,
 };
 
 export type ModelGardenConditionInput = {
@@ -240,6 +398,7 @@ export type ModelGardenConditionInput = {
   objective?: ModelStringInput | null,
   or?: Array< ModelGardenConditionInput | null > | null,
   owner?: ModelStringInput | null,
+  units?: ModelGardenUnitsInput | null,
   updatedAt?: ModelStringInput | null,
   zipCode?: ModelStringInput | null,
 };
@@ -249,12 +408,8 @@ export type CreateGardenInput = {
   name?: string | null,
   objective?: string | null,
   perimeterPoints?: Array< XYInput | null > | null,
+  units?: GardenUnits | null,
   zipCode?: string | null,
-};
-
-export type XYInput = {
-  x?: number | null,
-  y?: number | null,
 };
 
 export type ModelPastStepConditionInput = {
@@ -279,13 +434,6 @@ export type CreatePastStepInput = {
   step?: StepInput | null,
 };
 
-export type StepInput = {
-  description?: string | null,
-  result?: string | null,
-  role?: StepRole | null,
-  title?: string | null,
-};
-
 export type ModelPlannedStepConditionInput = {
   and?: Array< ModelPlannedStepConditionInput | null > | null,
   createdAt?: ModelStringInput | null,
@@ -306,29 +454,28 @@ export type CreatePlannedStepInput = {
   step?: StepInput | null,
 };
 
-export type ModelPlantRowConditionInput = {
-  and?: Array< ModelPlantRowConditionInput | null > | null,
+export type ModelPlantedPlantRowConditionInput = {
+  and?: Array< ModelPlantedPlantRowConditionInput | null > | null,
   createdAt?: ModelStringInput | null,
   gardenId?: ModelIDInput | null,
-  not?: ModelPlantRowConditionInput | null,
-  or?: Array< ModelPlantRowConditionInput | null > | null,
+  not?: ModelPlantedPlantRowConditionInput | null,
+  or?: Array< ModelPlantedPlantRowConditionInput | null > | null,
   owner?: ModelStringInput | null,
-  plantSpacing?: ModelFloatInput | null,
-  species?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
 };
 
-export type CreatePlantRowInput = {
+export type CreatePlantedPlantRowInput = {
   gardenId?: string | null,
   id?: string | null,
-  location?: PlantRowLocationInput | null,
-  plantSpacing?: number | null,
-  species?: string | null,
+  info?: PlantRowInput | null,
 };
 
-export type PlantRowLocationInput = {
-  end?: XYInput | null,
-  start?: XYInput | null,
+export type DeleteChatMessageInput = {
+  id: string,
+};
+
+export type DeleteChatSessionInput = {
+  id: string,
 };
 
 export type DeleteGardenInput = {
@@ -343,7 +490,20 @@ export type DeletePlannedStepInput = {
   id: string,
 };
 
-export type DeletePlantRowInput = {
+export type DeletePlantedPlantRowInput = {
+  id: string,
+};
+
+export type UpdateChatMessageInput = {
+  chatSessionId?: string | null,
+  content?: ChatMessageContentInput | null,
+  createdAt?: string | null,
+  id: string,
+  owner?: string | null,
+  role?: ChatMessageRole | null,
+};
+
+export type UpdateChatSessionInput = {
   id: string,
 };
 
@@ -352,6 +512,7 @@ export type UpdateGardenInput = {
   name?: string | null,
   objective?: string | null,
   perimeterPoints?: Array< XYInput | null > | null,
+  units?: GardenUnits | null,
   zipCode?: string | null,
 };
 
@@ -372,24 +533,36 @@ export type UpdatePlannedStepInput = {
   step?: StepInput | null,
 };
 
-export type UpdatePlantRowInput = {
+export type UpdatePlantedPlantRowInput = {
   gardenId?: string | null,
   id: string,
-  location?: PlantRowLocationInput | null,
-  plantSpacing?: number | null,
-  species?: string | null,
+  info?: PlantRowInput | null,
 };
 
-export type ModelSubscriptionGardenFilterInput = {
-  and?: Array< ModelSubscriptionGardenFilterInput | null > | null,
+export type ModelSubscriptionChatMessageFilterInput = {
+  and?: Array< ModelSubscriptionChatMessageFilterInput | null > | null,
+  chatSessionId?: ModelSubscriptionIDInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  objective?: ModelSubscriptionStringInput | null,
-  or?: Array< ModelSubscriptionGardenFilterInput | null > | null,
+  or?: Array< ModelSubscriptionChatMessageFilterInput | null > | null,
   owner?: ModelStringInput | null,
+  role?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  zipCode?: ModelSubscriptionStringInput | null,
+};
+
+export type ModelSubscriptionIDInput = {
+  beginsWith?: string | null,
+  between?: Array< string | null > | null,
+  contains?: string | null,
+  eq?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  in?: Array< string | null > | null,
+  le?: string | null,
+  lt?: string | null,
+  ne?: string | null,
+  notContains?: string | null,
+  notIn?: Array< string | null > | null,
 };
 
 export type ModelSubscriptionStringInput = {
@@ -407,19 +580,26 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
-export type ModelSubscriptionIDInput = {
-  beginsWith?: string | null,
-  between?: Array< string | null > | null,
-  contains?: string | null,
-  eq?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  in?: Array< string | null > | null,
-  le?: string | null,
-  lt?: string | null,
-  ne?: string | null,
-  notContains?: string | null,
-  notIn?: Array< string | null > | null,
+export type ModelSubscriptionChatSessionFilterInput = {
+  and?: Array< ModelSubscriptionChatSessionFilterInput | null > | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  or?: Array< ModelSubscriptionChatSessionFilterInput | null > | null,
+  owner?: ModelStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+};
+
+export type ModelSubscriptionGardenFilterInput = {
+  and?: Array< ModelSubscriptionGardenFilterInput | null > | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  objective?: ModelSubscriptionStringInput | null,
+  or?: Array< ModelSubscriptionGardenFilterInput | null > | null,
+  owner?: ModelStringInput | null,
+  units?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  zipCode?: ModelSubscriptionStringInput | null,
 };
 
 export type ModelSubscriptionPastStepFilterInput = {
@@ -447,42 +627,79 @@ export type ModelSubscriptionPlannedStepFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
 };
 
-export type ModelSubscriptionPlantRowFilterInput = {
-  and?: Array< ModelSubscriptionPlantRowFilterInput | null > | null,
+export type ModelSubscriptionPlantedPlantRowFilterInput = {
+  and?: Array< ModelSubscriptionPlantedPlantRowFilterInput | null > | null,
   createdAt?: ModelSubscriptionStringInput | null,
   gardenId?: ModelSubscriptionIDInput | null,
   id?: ModelSubscriptionIDInput | null,
-  or?: Array< ModelSubscriptionPlantRowFilterInput | null > | null,
+  or?: Array< ModelSubscriptionPlantedPlantRowFilterInput | null > | null,
   owner?: ModelStringInput | null,
-  plantSpacing?: ModelSubscriptionFloatInput | null,
-  species?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
 };
 
-export type ModelSubscriptionFloatInput = {
-  between?: Array< number | null > | null,
-  eq?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  in?: Array< number | null > | null,
-  le?: number | null,
-  lt?: number | null,
-  ne?: number | null,
-  notIn?: Array< number | null > | null,
-};
-
 export type GenerateGardenPlanStepsQueryVariables = {
-  gardenId?: string | null,
+  gardenId: string,
 };
 
 export type GenerateGardenPlanStepsQuery = {
   generateGardenPlanSteps?:  Array< {
     __typename: "Step",
     description?: string | null,
+    plantRows?:  Array< {
+      __typename: "PlantRow",
+      plantDate?: string | null,
+      plantSpacingInMeters?: number | null,
+      species?: string | null,
+    } | null > | null,
     result?: string | null,
     role?: StepRole | null,
-    title?: string | null,
+    title: string,
   } | null > | null,
+};
+
+export type GetChatMessageQueryVariables = {
+  id: string,
+};
+
+export type GetChatMessageQuery = {
+  getChatMessage?:  {
+    __typename: "ChatMessage",
+    chatSessionId?: string | null,
+    content?:  {
+      __typename: "ChatMessageContent",
+      text?: string | null,
+    } | null,
+    createdAt?: string | null,
+    id: string,
+    owner?: string | null,
+    role?: ChatMessageRole | null,
+    session?:  {
+      __typename: "ChatSession",
+      createdAt: string,
+      id: string,
+      owner?: string | null,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type GetChatSessionQueryVariables = {
+  id: string,
+};
+
+export type GetChatSessionQuery = {
+  getChatSession?:  {
+    __typename: "ChatSession",
+    createdAt: string,
+    id: string,
+    messages?:  {
+      __typename: "ModelChatMessageConnection",
+      nextToken?: string | null,
+    } | null,
+    owner?: string | null,
+    updatedAt: string,
+  } | null,
 };
 
 export type GetGardenQueryVariables = {
@@ -510,10 +727,11 @@ export type GetGardenQuery = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantRows?:  {
-      __typename: "ModelPlantRowConnection",
+    plantedPlantRow?:  {
+      __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    units?: GardenUnits | null,
     updatedAt: string,
     zipCode?: string | null,
   } | null,
@@ -535,6 +753,7 @@ export type GetPastStepQuery = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -542,23 +761,21 @@ export type GetPastStepQuery = {
     id: string,
     notes?: string | null,
     owner?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
@@ -579,6 +796,7 @@ export type GetPlannedStepQuery = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -586,35 +804,33 @@ export type GetPlannedStepQuery = {
     id: string,
     owner?: string | null,
     plannedDate?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
 };
 
-export type GetPlantRowQueryVariables = {
+export type GetPlantedPlantRowQueryVariables = {
   id: string,
 };
 
-export type GetPlantRowQuery = {
-  getPlantRow?:  {
-    __typename: "PlantRow",
+export type GetPlantedPlantRowQuery = {
+  getPlantedPlantRow?:  {
+    __typename: "PlantedPlantRow",
     createdAt: string,
     garden?:  {
       __typename: "Garden",
@@ -623,13 +839,17 @@ export type GetPlantRowQuery = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
-    location?:  {
-      __typename: "PlantRowLocation",
+    info?:  {
+      __typename: "PlantRow",
+      plantDate?: string | null,
+      plantSpacingInMeters?: number | null,
+      species?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -640,9 +860,74 @@ export type GetPlantRowQuery = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantSpacing?: number | null,
-    species?: string | null,
     updatedAt: string,
+  } | null,
+};
+
+export type ListChatMessageByChatSessionIdAndCreatedAtQueryVariables = {
+  chatSessionId: string,
+  createdAt?: ModelStringKeyConditionInput | null,
+  filter?: ModelChatMessageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListChatMessageByChatSessionIdAndCreatedAtQuery = {
+  listChatMessageByChatSessionIdAndCreatedAt?:  {
+    __typename: "ModelChatMessageConnection",
+    items:  Array< {
+      __typename: "ChatMessage",
+      chatSessionId?: string | null,
+      createdAt?: string | null,
+      id: string,
+      owner?: string | null,
+      role?: ChatMessageRole | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListChatMessagesQueryVariables = {
+  filter?: ModelChatMessageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListChatMessagesQuery = {
+  listChatMessages?:  {
+    __typename: "ModelChatMessageConnection",
+    items:  Array< {
+      __typename: "ChatMessage",
+      chatSessionId?: string | null,
+      createdAt?: string | null,
+      id: string,
+      owner?: string | null,
+      role?: ChatMessageRole | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListChatSessionsQueryVariables = {
+  filter?: ModelChatSessionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListChatSessionsQuery = {
+  listChatSessions?:  {
+    __typename: "ModelChatSessionConnection",
+    items:  Array< {
+      __typename: "ChatSession",
+      createdAt: string,
+      id: string,
+      owner?: string | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -662,6 +947,7 @@ export type ListGardensQuery = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null >,
@@ -716,26 +1002,71 @@ export type ListPlannedStepsQuery = {
   } | null,
 };
 
-export type ListPlantRowsQueryVariables = {
-  filter?: ModelPlantRowFilterInput | null,
+export type ListPlantedPlantRowsQueryVariables = {
+  filter?: ModelPlantedPlantRowFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListPlantRowsQuery = {
-  listPlantRows?:  {
-    __typename: "ModelPlantRowConnection",
+export type ListPlantedPlantRowsQuery = {
+  listPlantedPlantRows?:  {
+    __typename: "ModelPlantedPlantRowConnection",
     items:  Array< {
-      __typename: "PlantRow",
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
+  } | null,
+};
+
+export type CreateChatMessageMutationVariables = {
+  condition?: ModelChatMessageConditionInput | null,
+  input: CreateChatMessageInput,
+};
+
+export type CreateChatMessageMutation = {
+  createChatMessage?:  {
+    __typename: "ChatMessage",
+    chatSessionId?: string | null,
+    content?:  {
+      __typename: "ChatMessageContent",
+      text?: string | null,
+    } | null,
+    createdAt?: string | null,
+    id: string,
+    owner?: string | null,
+    role?: ChatMessageRole | null,
+    session?:  {
+      __typename: "ChatSession",
+      createdAt: string,
+      id: string,
+      owner?: string | null,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateChatSessionMutationVariables = {
+  condition?: ModelChatSessionConditionInput | null,
+  input: CreateChatSessionInput,
+};
+
+export type CreateChatSessionMutation = {
+  createChatSession?:  {
+    __typename: "ChatSession",
+    createdAt: string,
+    id: string,
+    messages?:  {
+      __typename: "ModelChatMessageConnection",
+      nextToken?: string | null,
+    } | null,
+    owner?: string | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -765,10 +1096,11 @@ export type CreateGardenMutation = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantRows?:  {
-      __typename: "ModelPlantRowConnection",
+    plantedPlantRow?:  {
+      __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    units?: GardenUnits | null,
     updatedAt: string,
     zipCode?: string | null,
   } | null,
@@ -791,6 +1123,7 @@ export type CreatePastStepMutation = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -798,23 +1131,21 @@ export type CreatePastStepMutation = {
     id: string,
     notes?: string | null,
     owner?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
@@ -836,6 +1167,7 @@ export type CreatePlannedStepMutation = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -843,36 +1175,34 @@ export type CreatePlannedStepMutation = {
     id: string,
     owner?: string | null,
     plannedDate?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
 };
 
-export type CreatePlantRowMutationVariables = {
-  condition?: ModelPlantRowConditionInput | null,
-  input: CreatePlantRowInput,
+export type CreatePlantedPlantRowMutationVariables = {
+  condition?: ModelPlantedPlantRowConditionInput | null,
+  input: CreatePlantedPlantRowInput,
 };
 
-export type CreatePlantRowMutation = {
-  createPlantRow?:  {
-    __typename: "PlantRow",
+export type CreatePlantedPlantRowMutation = {
+  createPlantedPlantRow?:  {
+    __typename: "PlantedPlantRow",
     createdAt: string,
     garden?:  {
       __typename: "Garden",
@@ -881,13 +1211,17 @@ export type CreatePlantRowMutation = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
-    location?:  {
-      __typename: "PlantRowLocation",
+    info?:  {
+      __typename: "PlantRow",
+      plantDate?: string | null,
+      plantSpacingInMeters?: number | null,
+      species?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -898,8 +1232,53 @@ export type CreatePlantRowMutation = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantSpacing?: number | null,
-    species?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteChatMessageMutationVariables = {
+  condition?: ModelChatMessageConditionInput | null,
+  input: DeleteChatMessageInput,
+};
+
+export type DeleteChatMessageMutation = {
+  deleteChatMessage?:  {
+    __typename: "ChatMessage",
+    chatSessionId?: string | null,
+    content?:  {
+      __typename: "ChatMessageContent",
+      text?: string | null,
+    } | null,
+    createdAt?: string | null,
+    id: string,
+    owner?: string | null,
+    role?: ChatMessageRole | null,
+    session?:  {
+      __typename: "ChatSession",
+      createdAt: string,
+      id: string,
+      owner?: string | null,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteChatSessionMutationVariables = {
+  condition?: ModelChatSessionConditionInput | null,
+  input: DeleteChatSessionInput,
+};
+
+export type DeleteChatSessionMutation = {
+  deleteChatSession?:  {
+    __typename: "ChatSession",
+    createdAt: string,
+    id: string,
+    messages?:  {
+      __typename: "ModelChatMessageConnection",
+      nextToken?: string | null,
+    } | null,
+    owner?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -930,10 +1309,11 @@ export type DeleteGardenMutation = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantRows?:  {
-      __typename: "ModelPlantRowConnection",
+    plantedPlantRow?:  {
+      __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    units?: GardenUnits | null,
     updatedAt: string,
     zipCode?: string | null,
   } | null,
@@ -956,6 +1336,7 @@ export type DeletePastStepMutation = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -963,23 +1344,21 @@ export type DeletePastStepMutation = {
     id: string,
     notes?: string | null,
     owner?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
@@ -1001,6 +1380,7 @@ export type DeletePlannedStepMutation = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -1008,36 +1388,34 @@ export type DeletePlannedStepMutation = {
     id: string,
     owner?: string | null,
     plannedDate?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
 };
 
-export type DeletePlantRowMutationVariables = {
-  condition?: ModelPlantRowConditionInput | null,
-  input: DeletePlantRowInput,
+export type DeletePlantedPlantRowMutationVariables = {
+  condition?: ModelPlantedPlantRowConditionInput | null,
+  input: DeletePlantedPlantRowInput,
 };
 
-export type DeletePlantRowMutation = {
-  deletePlantRow?:  {
-    __typename: "PlantRow",
+export type DeletePlantedPlantRowMutation = {
+  deletePlantedPlantRow?:  {
+    __typename: "PlantedPlantRow",
     createdAt: string,
     garden?:  {
       __typename: "Garden",
@@ -1046,13 +1424,17 @@ export type DeletePlantRowMutation = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
-    location?:  {
-      __typename: "PlantRowLocation",
+    info?:  {
+      __typename: "PlantRow",
+      plantDate?: string | null,
+      plantSpacingInMeters?: number | null,
+      species?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1063,8 +1445,53 @@ export type DeletePlantRowMutation = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantSpacing?: number | null,
-    species?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateChatMessageMutationVariables = {
+  condition?: ModelChatMessageConditionInput | null,
+  input: UpdateChatMessageInput,
+};
+
+export type UpdateChatMessageMutation = {
+  updateChatMessage?:  {
+    __typename: "ChatMessage",
+    chatSessionId?: string | null,
+    content?:  {
+      __typename: "ChatMessageContent",
+      text?: string | null,
+    } | null,
+    createdAt?: string | null,
+    id: string,
+    owner?: string | null,
+    role?: ChatMessageRole | null,
+    session?:  {
+      __typename: "ChatSession",
+      createdAt: string,
+      id: string,
+      owner?: string | null,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateChatSessionMutationVariables = {
+  condition?: ModelChatSessionConditionInput | null,
+  input: UpdateChatSessionInput,
+};
+
+export type UpdateChatSessionMutation = {
+  updateChatSession?:  {
+    __typename: "ChatSession",
+    createdAt: string,
+    id: string,
+    messages?:  {
+      __typename: "ModelChatMessageConnection",
+      nextToken?: string | null,
+    } | null,
+    owner?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1095,10 +1522,11 @@ export type UpdateGardenMutation = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantRows?:  {
-      __typename: "ModelPlantRowConnection",
+    plantedPlantRow?:  {
+      __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    units?: GardenUnits | null,
     updatedAt: string,
     zipCode?: string | null,
   } | null,
@@ -1121,6 +1549,7 @@ export type UpdatePastStepMutation = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -1128,23 +1557,21 @@ export type UpdatePastStepMutation = {
     id: string,
     notes?: string | null,
     owner?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
@@ -1166,6 +1593,7 @@ export type UpdatePlannedStepMutation = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -1173,36 +1601,34 @@ export type UpdatePlannedStepMutation = {
     id: string,
     owner?: string | null,
     plannedDate?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
 };
 
-export type UpdatePlantRowMutationVariables = {
-  condition?: ModelPlantRowConditionInput | null,
-  input: UpdatePlantRowInput,
+export type UpdatePlantedPlantRowMutationVariables = {
+  condition?: ModelPlantedPlantRowConditionInput | null,
+  input: UpdatePlantedPlantRowInput,
 };
 
-export type UpdatePlantRowMutation = {
-  updatePlantRow?:  {
-    __typename: "PlantRow",
+export type UpdatePlantedPlantRowMutation = {
+  updatePlantedPlantRow?:  {
+    __typename: "PlantedPlantRow",
     createdAt: string,
     garden?:  {
       __typename: "Garden",
@@ -1211,13 +1637,17 @@ export type UpdatePlantRowMutation = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
-    location?:  {
-      __typename: "PlantRowLocation",
+    info?:  {
+      __typename: "PlantRow",
+      plantDate?: string | null,
+      plantSpacingInMeters?: number | null,
+      species?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1228,8 +1658,53 @@ export type UpdatePlantRowMutation = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantSpacing?: number | null,
-    species?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateChatMessageSubscriptionVariables = {
+  filter?: ModelSubscriptionChatMessageFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnCreateChatMessageSubscription = {
+  onCreateChatMessage?:  {
+    __typename: "ChatMessage",
+    chatSessionId?: string | null,
+    content?:  {
+      __typename: "ChatMessageContent",
+      text?: string | null,
+    } | null,
+    createdAt?: string | null,
+    id: string,
+    owner?: string | null,
+    role?: ChatMessageRole | null,
+    session?:  {
+      __typename: "ChatSession",
+      createdAt: string,
+      id: string,
+      owner?: string | null,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateChatSessionSubscriptionVariables = {
+  filter?: ModelSubscriptionChatSessionFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnCreateChatSessionSubscription = {
+  onCreateChatSession?:  {
+    __typename: "ChatSession",
+    createdAt: string,
+    id: string,
+    messages?:  {
+      __typename: "ModelChatMessageConnection",
+      nextToken?: string | null,
+    } | null,
+    owner?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1260,10 +1735,11 @@ export type OnCreateGardenSubscription = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantRows?:  {
-      __typename: "ModelPlantRowConnection",
+    plantedPlantRow?:  {
+      __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    units?: GardenUnits | null,
     updatedAt: string,
     zipCode?: string | null,
   } | null,
@@ -1286,6 +1762,7 @@ export type OnCreatePastStepSubscription = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -1293,23 +1770,21 @@ export type OnCreatePastStepSubscription = {
     id: string,
     notes?: string | null,
     owner?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
@@ -1331,6 +1806,7 @@ export type OnCreatePlannedStepSubscription = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -1338,36 +1814,34 @@ export type OnCreatePlannedStepSubscription = {
     id: string,
     owner?: string | null,
     plannedDate?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
 };
 
-export type OnCreatePlantRowSubscriptionVariables = {
-  filter?: ModelSubscriptionPlantRowFilterInput | null,
+export type OnCreatePlantedPlantRowSubscriptionVariables = {
+  filter?: ModelSubscriptionPlantedPlantRowFilterInput | null,
   owner?: string | null,
 };
 
-export type OnCreatePlantRowSubscription = {
-  onCreatePlantRow?:  {
-    __typename: "PlantRow",
+export type OnCreatePlantedPlantRowSubscription = {
+  onCreatePlantedPlantRow?:  {
+    __typename: "PlantedPlantRow",
     createdAt: string,
     garden?:  {
       __typename: "Garden",
@@ -1376,13 +1850,17 @@ export type OnCreatePlantRowSubscription = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
-    location?:  {
-      __typename: "PlantRowLocation",
+    info?:  {
+      __typename: "PlantRow",
+      plantDate?: string | null,
+      plantSpacingInMeters?: number | null,
+      species?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1393,8 +1871,53 @@ export type OnCreatePlantRowSubscription = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantSpacing?: number | null,
-    species?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteChatMessageSubscriptionVariables = {
+  filter?: ModelSubscriptionChatMessageFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnDeleteChatMessageSubscription = {
+  onDeleteChatMessage?:  {
+    __typename: "ChatMessage",
+    chatSessionId?: string | null,
+    content?:  {
+      __typename: "ChatMessageContent",
+      text?: string | null,
+    } | null,
+    createdAt?: string | null,
+    id: string,
+    owner?: string | null,
+    role?: ChatMessageRole | null,
+    session?:  {
+      __typename: "ChatSession",
+      createdAt: string,
+      id: string,
+      owner?: string | null,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteChatSessionSubscriptionVariables = {
+  filter?: ModelSubscriptionChatSessionFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnDeleteChatSessionSubscription = {
+  onDeleteChatSession?:  {
+    __typename: "ChatSession",
+    createdAt: string,
+    id: string,
+    messages?:  {
+      __typename: "ModelChatMessageConnection",
+      nextToken?: string | null,
+    } | null,
+    owner?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1425,10 +1948,11 @@ export type OnDeleteGardenSubscription = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantRows?:  {
-      __typename: "ModelPlantRowConnection",
+    plantedPlantRow?:  {
+      __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    units?: GardenUnits | null,
     updatedAt: string,
     zipCode?: string | null,
   } | null,
@@ -1451,6 +1975,7 @@ export type OnDeletePastStepSubscription = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -1458,23 +1983,21 @@ export type OnDeletePastStepSubscription = {
     id: string,
     notes?: string | null,
     owner?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
@@ -1496,6 +2019,7 @@ export type OnDeletePlannedStepSubscription = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -1503,36 +2027,34 @@ export type OnDeletePlannedStepSubscription = {
     id: string,
     owner?: string | null,
     plannedDate?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
 };
 
-export type OnDeletePlantRowSubscriptionVariables = {
-  filter?: ModelSubscriptionPlantRowFilterInput | null,
+export type OnDeletePlantedPlantRowSubscriptionVariables = {
+  filter?: ModelSubscriptionPlantedPlantRowFilterInput | null,
   owner?: string | null,
 };
 
-export type OnDeletePlantRowSubscription = {
-  onDeletePlantRow?:  {
-    __typename: "PlantRow",
+export type OnDeletePlantedPlantRowSubscription = {
+  onDeletePlantedPlantRow?:  {
+    __typename: "PlantedPlantRow",
     createdAt: string,
     garden?:  {
       __typename: "Garden",
@@ -1541,13 +2063,17 @@ export type OnDeletePlantRowSubscription = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
-    location?:  {
-      __typename: "PlantRowLocation",
+    info?:  {
+      __typename: "PlantRow",
+      plantDate?: string | null,
+      plantSpacingInMeters?: number | null,
+      species?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1558,8 +2084,53 @@ export type OnDeletePlantRowSubscription = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantSpacing?: number | null,
-    species?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateChatMessageSubscriptionVariables = {
+  filter?: ModelSubscriptionChatMessageFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnUpdateChatMessageSubscription = {
+  onUpdateChatMessage?:  {
+    __typename: "ChatMessage",
+    chatSessionId?: string | null,
+    content?:  {
+      __typename: "ChatMessageContent",
+      text?: string | null,
+    } | null,
+    createdAt?: string | null,
+    id: string,
+    owner?: string | null,
+    role?: ChatMessageRole | null,
+    session?:  {
+      __typename: "ChatSession",
+      createdAt: string,
+      id: string,
+      owner?: string | null,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateChatSessionSubscriptionVariables = {
+  filter?: ModelSubscriptionChatSessionFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnUpdateChatSessionSubscription = {
+  onUpdateChatSession?:  {
+    __typename: "ChatSession",
+    createdAt: string,
+    id: string,
+    messages?:  {
+      __typename: "ModelChatMessageConnection",
+      nextToken?: string | null,
+    } | null,
+    owner?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1590,10 +2161,11 @@ export type OnUpdateGardenSubscription = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantRows?:  {
-      __typename: "ModelPlantRowConnection",
+    plantedPlantRow?:  {
+      __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    units?: GardenUnits | null,
     updatedAt: string,
     zipCode?: string | null,
   } | null,
@@ -1616,6 +2188,7 @@ export type OnUpdatePastStepSubscription = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -1623,23 +2196,21 @@ export type OnUpdatePastStepSubscription = {
     id: string,
     notes?: string | null,
     owner?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
@@ -1661,6 +2232,7 @@ export type OnUpdatePlannedStepSubscription = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
@@ -1668,36 +2240,34 @@ export type OnUpdatePlannedStepSubscription = {
     id: string,
     owner?: string | null,
     plannedDate?: string | null,
-    plantRow?:  {
-      __typename: "PlantRow",
+    plantRowId?: string | null,
+    plantedPlantRow?:  {
+      __typename: "PlantedPlantRow",
       createdAt: string,
       gardenId?: string | null,
       id: string,
       owner?: string | null,
-      plantSpacing?: number | null,
-      species?: string | null,
       updatedAt: string,
     } | null,
-    plantRowId?: string | null,
     step?:  {
       __typename: "Step",
       description?: string | null,
       result?: string | null,
       role?: StepRole | null,
-      title?: string | null,
+      title: string,
     } | null,
     updatedAt: string,
   } | null,
 };
 
-export type OnUpdatePlantRowSubscriptionVariables = {
-  filter?: ModelSubscriptionPlantRowFilterInput | null,
+export type OnUpdatePlantedPlantRowSubscriptionVariables = {
+  filter?: ModelSubscriptionPlantedPlantRowFilterInput | null,
   owner?: string | null,
 };
 
-export type OnUpdatePlantRowSubscription = {
-  onUpdatePlantRow?:  {
-    __typename: "PlantRow",
+export type OnUpdatePlantedPlantRowSubscription = {
+  onUpdatePlantedPlantRow?:  {
+    __typename: "PlantedPlantRow",
     createdAt: string,
     garden?:  {
       __typename: "Garden",
@@ -1706,13 +2276,17 @@ export type OnUpdatePlantRowSubscription = {
       name?: string | null,
       objective?: string | null,
       owner?: string | null,
+      units?: GardenUnits | null,
       updatedAt: string,
       zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
-    location?:  {
-      __typename: "PlantRowLocation",
+    info?:  {
+      __typename: "PlantRow",
+      plantDate?: string | null,
+      plantSpacingInMeters?: number | null,
+      species?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1723,8 +2297,6 @@ export type OnUpdatePlantRowSubscription = {
       __typename: "ModelPlannedStepConnection",
       nextToken?: string | null,
     } | null,
-    plantSpacing?: number | null,
-    species?: string | null,
     updatedAt: string,
   } | null,
 };

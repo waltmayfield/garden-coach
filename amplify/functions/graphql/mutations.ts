@@ -8,6 +8,55 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const createChatMessage = /* GraphQL */ `mutation CreateChatMessage(
+  $condition: ModelChatMessageConditionInput
+  $input: CreateChatMessageInput!
+) {
+  createChatMessage(condition: $condition, input: $input) {
+    chatSessionId
+    content {
+      text
+      __typename
+    }
+    createdAt
+    id
+    owner
+    role
+    session {
+      createdAt
+      id
+      owner
+      updatedAt
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChatMessageMutationVariables,
+  APITypes.CreateChatMessageMutation
+>;
+export const createChatSession = /* GraphQL */ `mutation CreateChatSession(
+  $condition: ModelChatSessionConditionInput
+  $input: CreateChatSessionInput!
+) {
+  createChatSession(condition: $condition, input: $input) {
+    createdAt
+    id
+    messages {
+      nextToken
+      __typename
+    }
+    owner
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateChatSessionMutationVariables,
+  APITypes.CreateChatSessionMutation
+>;
 export const createGarden = /* GraphQL */ `mutation CreateGarden(
   $condition: ModelGardenConditionInput
   $input: CreateGardenInput!
@@ -31,10 +80,11 @@ export const createGarden = /* GraphQL */ `mutation CreateGarden(
       nextToken
       __typename
     }
-    plantRows {
+    plantedPlantRow {
       nextToken
       __typename
     }
+    units
     updatedAt
     zipCode
     __typename
@@ -57,6 +107,7 @@ export const createPastStep = /* GraphQL */ `mutation CreatePastStep(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -65,17 +116,15 @@ export const createPastStep = /* GraphQL */ `mutation CreatePastStep(
     id
     notes
     owner
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -103,6 +152,7 @@ export const createPlannedStep = /* GraphQL */ `mutation CreatePlannedStep(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -111,17 +161,15 @@ export const createPlannedStep = /* GraphQL */ `mutation CreatePlannedStep(
     id
     owner
     plannedDate
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -137,11 +185,11 @@ export const createPlannedStep = /* GraphQL */ `mutation CreatePlannedStep(
   APITypes.CreatePlannedStepMutationVariables,
   APITypes.CreatePlannedStepMutation
 >;
-export const createPlantRow = /* GraphQL */ `mutation CreatePlantRow(
-  $condition: ModelPlantRowConditionInput
-  $input: CreatePlantRowInput!
+export const createPlantedPlantRow = /* GraphQL */ `mutation CreatePlantedPlantRow(
+  $condition: ModelPlantedPlantRowConditionInput
+  $input: CreatePlantedPlantRowInput!
 ) {
-  createPlantRow(condition: $condition, input: $input) {
+  createPlantedPlantRow(condition: $condition, input: $input) {
     createdAt
     garden {
       createdAt
@@ -149,13 +197,17 @@ export const createPlantRow = /* GraphQL */ `mutation CreatePlantRow(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
     }
     gardenId
     id
-    location {
+    info {
+      plantDate
+      plantSpacingInMeters
+      species
       __typename
     }
     owner
@@ -167,15 +219,62 @@ export const createPlantRow = /* GraphQL */ `mutation CreatePlantRow(
       nextToken
       __typename
     }
-    plantSpacing
-    species
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreatePlantRowMutationVariables,
-  APITypes.CreatePlantRowMutation
+  APITypes.CreatePlantedPlantRowMutationVariables,
+  APITypes.CreatePlantedPlantRowMutation
+>;
+export const deleteChatMessage = /* GraphQL */ `mutation DeleteChatMessage(
+  $condition: ModelChatMessageConditionInput
+  $input: DeleteChatMessageInput!
+) {
+  deleteChatMessage(condition: $condition, input: $input) {
+    chatSessionId
+    content {
+      text
+      __typename
+    }
+    createdAt
+    id
+    owner
+    role
+    session {
+      createdAt
+      id
+      owner
+      updatedAt
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChatMessageMutationVariables,
+  APITypes.DeleteChatMessageMutation
+>;
+export const deleteChatSession = /* GraphQL */ `mutation DeleteChatSession(
+  $condition: ModelChatSessionConditionInput
+  $input: DeleteChatSessionInput!
+) {
+  deleteChatSession(condition: $condition, input: $input) {
+    createdAt
+    id
+    messages {
+      nextToken
+      __typename
+    }
+    owner
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteChatSessionMutationVariables,
+  APITypes.DeleteChatSessionMutation
 >;
 export const deleteGarden = /* GraphQL */ `mutation DeleteGarden(
   $condition: ModelGardenConditionInput
@@ -200,10 +299,11 @@ export const deleteGarden = /* GraphQL */ `mutation DeleteGarden(
       nextToken
       __typename
     }
-    plantRows {
+    plantedPlantRow {
       nextToken
       __typename
     }
+    units
     updatedAt
     zipCode
     __typename
@@ -226,6 +326,7 @@ export const deletePastStep = /* GraphQL */ `mutation DeletePastStep(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -234,17 +335,15 @@ export const deletePastStep = /* GraphQL */ `mutation DeletePastStep(
     id
     notes
     owner
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -272,6 +371,7 @@ export const deletePlannedStep = /* GraphQL */ `mutation DeletePlannedStep(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -280,17 +380,15 @@ export const deletePlannedStep = /* GraphQL */ `mutation DeletePlannedStep(
     id
     owner
     plannedDate
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -306,11 +404,11 @@ export const deletePlannedStep = /* GraphQL */ `mutation DeletePlannedStep(
   APITypes.DeletePlannedStepMutationVariables,
   APITypes.DeletePlannedStepMutation
 >;
-export const deletePlantRow = /* GraphQL */ `mutation DeletePlantRow(
-  $condition: ModelPlantRowConditionInput
-  $input: DeletePlantRowInput!
+export const deletePlantedPlantRow = /* GraphQL */ `mutation DeletePlantedPlantRow(
+  $condition: ModelPlantedPlantRowConditionInput
+  $input: DeletePlantedPlantRowInput!
 ) {
-  deletePlantRow(condition: $condition, input: $input) {
+  deletePlantedPlantRow(condition: $condition, input: $input) {
     createdAt
     garden {
       createdAt
@@ -318,13 +416,17 @@ export const deletePlantRow = /* GraphQL */ `mutation DeletePlantRow(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
     }
     gardenId
     id
-    location {
+    info {
+      plantDate
+      plantSpacingInMeters
+      species
       __typename
     }
     owner
@@ -336,15 +438,62 @@ export const deletePlantRow = /* GraphQL */ `mutation DeletePlantRow(
       nextToken
       __typename
     }
-    plantSpacing
-    species
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeletePlantRowMutationVariables,
-  APITypes.DeletePlantRowMutation
+  APITypes.DeletePlantedPlantRowMutationVariables,
+  APITypes.DeletePlantedPlantRowMutation
+>;
+export const updateChatMessage = /* GraphQL */ `mutation UpdateChatMessage(
+  $condition: ModelChatMessageConditionInput
+  $input: UpdateChatMessageInput!
+) {
+  updateChatMessage(condition: $condition, input: $input) {
+    chatSessionId
+    content {
+      text
+      __typename
+    }
+    createdAt
+    id
+    owner
+    role
+    session {
+      createdAt
+      id
+      owner
+      updatedAt
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChatMessageMutationVariables,
+  APITypes.UpdateChatMessageMutation
+>;
+export const updateChatSession = /* GraphQL */ `mutation UpdateChatSession(
+  $condition: ModelChatSessionConditionInput
+  $input: UpdateChatSessionInput!
+) {
+  updateChatSession(condition: $condition, input: $input) {
+    createdAt
+    id
+    messages {
+      nextToken
+      __typename
+    }
+    owner
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateChatSessionMutationVariables,
+  APITypes.UpdateChatSessionMutation
 >;
 export const updateGarden = /* GraphQL */ `mutation UpdateGarden(
   $condition: ModelGardenConditionInput
@@ -369,10 +518,11 @@ export const updateGarden = /* GraphQL */ `mutation UpdateGarden(
       nextToken
       __typename
     }
-    plantRows {
+    plantedPlantRow {
       nextToken
       __typename
     }
+    units
     updatedAt
     zipCode
     __typename
@@ -395,6 +545,7 @@ export const updatePastStep = /* GraphQL */ `mutation UpdatePastStep(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -403,17 +554,15 @@ export const updatePastStep = /* GraphQL */ `mutation UpdatePastStep(
     id
     notes
     owner
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -441,6 +590,7 @@ export const updatePlannedStep = /* GraphQL */ `mutation UpdatePlannedStep(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -449,17 +599,15 @@ export const updatePlannedStep = /* GraphQL */ `mutation UpdatePlannedStep(
     id
     owner
     plannedDate
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -475,11 +623,11 @@ export const updatePlannedStep = /* GraphQL */ `mutation UpdatePlannedStep(
   APITypes.UpdatePlannedStepMutationVariables,
   APITypes.UpdatePlannedStepMutation
 >;
-export const updatePlantRow = /* GraphQL */ `mutation UpdatePlantRow(
-  $condition: ModelPlantRowConditionInput
-  $input: UpdatePlantRowInput!
+export const updatePlantedPlantRow = /* GraphQL */ `mutation UpdatePlantedPlantRow(
+  $condition: ModelPlantedPlantRowConditionInput
+  $input: UpdatePlantedPlantRowInput!
 ) {
-  updatePlantRow(condition: $condition, input: $input) {
+  updatePlantedPlantRow(condition: $condition, input: $input) {
     createdAt
     garden {
       createdAt
@@ -487,13 +635,17 @@ export const updatePlantRow = /* GraphQL */ `mutation UpdatePlantRow(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
     }
     gardenId
     id
-    location {
+    info {
+      plantDate
+      plantSpacingInMeters
+      species
       __typename
     }
     owner
@@ -505,13 +657,11 @@ export const updatePlantRow = /* GraphQL */ `mutation UpdatePlantRow(
       nextToken
       __typename
     }
-    plantSpacing
-    species
     updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdatePlantRowMutationVariables,
-  APITypes.UpdatePlantRowMutation
+  APITypes.UpdatePlantedPlantRowMutationVariables,
+  APITypes.UpdatePlantedPlantRowMutation
 >;

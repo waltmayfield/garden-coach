@@ -8,6 +8,55 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateChatMessage = /* GraphQL */ `subscription OnCreateChatMessage(
+  $filter: ModelSubscriptionChatMessageFilterInput
+  $owner: String
+) {
+  onCreateChatMessage(filter: $filter, owner: $owner) {
+    chatSessionId
+    content {
+      text
+      __typename
+    }
+    createdAt
+    id
+    owner
+    role
+    session {
+      createdAt
+      id
+      owner
+      updatedAt
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateChatMessageSubscriptionVariables,
+  APITypes.OnCreateChatMessageSubscription
+>;
+export const onCreateChatSession = /* GraphQL */ `subscription OnCreateChatSession(
+  $filter: ModelSubscriptionChatSessionFilterInput
+  $owner: String
+) {
+  onCreateChatSession(filter: $filter, owner: $owner) {
+    createdAt
+    id
+    messages {
+      nextToken
+      __typename
+    }
+    owner
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateChatSessionSubscriptionVariables,
+  APITypes.OnCreateChatSessionSubscription
+>;
 export const onCreateGarden = /* GraphQL */ `subscription OnCreateGarden(
   $filter: ModelSubscriptionGardenFilterInput
   $owner: String
@@ -31,10 +80,11 @@ export const onCreateGarden = /* GraphQL */ `subscription OnCreateGarden(
       nextToken
       __typename
     }
-    plantRows {
+    plantedPlantRow {
       nextToken
       __typename
     }
+    units
     updatedAt
     zipCode
     __typename
@@ -57,6 +107,7 @@ export const onCreatePastStep = /* GraphQL */ `subscription OnCreatePastStep(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -65,17 +116,15 @@ export const onCreatePastStep = /* GraphQL */ `subscription OnCreatePastStep(
     id
     notes
     owner
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -103,6 +152,7 @@ export const onCreatePlannedStep = /* GraphQL */ `subscription OnCreatePlannedSt
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -111,17 +161,15 @@ export const onCreatePlannedStep = /* GraphQL */ `subscription OnCreatePlannedSt
     id
     owner
     plannedDate
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -137,11 +185,11 @@ export const onCreatePlannedStep = /* GraphQL */ `subscription OnCreatePlannedSt
   APITypes.OnCreatePlannedStepSubscriptionVariables,
   APITypes.OnCreatePlannedStepSubscription
 >;
-export const onCreatePlantRow = /* GraphQL */ `subscription OnCreatePlantRow(
-  $filter: ModelSubscriptionPlantRowFilterInput
+export const onCreatePlantedPlantRow = /* GraphQL */ `subscription OnCreatePlantedPlantRow(
+  $filter: ModelSubscriptionPlantedPlantRowFilterInput
   $owner: String
 ) {
-  onCreatePlantRow(filter: $filter, owner: $owner) {
+  onCreatePlantedPlantRow(filter: $filter, owner: $owner) {
     createdAt
     garden {
       createdAt
@@ -149,13 +197,17 @@ export const onCreatePlantRow = /* GraphQL */ `subscription OnCreatePlantRow(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
     }
     gardenId
     id
-    location {
+    info {
+      plantDate
+      plantSpacingInMeters
+      species
       __typename
     }
     owner
@@ -167,15 +219,62 @@ export const onCreatePlantRow = /* GraphQL */ `subscription OnCreatePlantRow(
       nextToken
       __typename
     }
-    plantSpacing
-    species
     updatedAt
     __typename
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnCreatePlantRowSubscriptionVariables,
-  APITypes.OnCreatePlantRowSubscription
+  APITypes.OnCreatePlantedPlantRowSubscriptionVariables,
+  APITypes.OnCreatePlantedPlantRowSubscription
+>;
+export const onDeleteChatMessage = /* GraphQL */ `subscription OnDeleteChatMessage(
+  $filter: ModelSubscriptionChatMessageFilterInput
+  $owner: String
+) {
+  onDeleteChatMessage(filter: $filter, owner: $owner) {
+    chatSessionId
+    content {
+      text
+      __typename
+    }
+    createdAt
+    id
+    owner
+    role
+    session {
+      createdAt
+      id
+      owner
+      updatedAt
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteChatMessageSubscriptionVariables,
+  APITypes.OnDeleteChatMessageSubscription
+>;
+export const onDeleteChatSession = /* GraphQL */ `subscription OnDeleteChatSession(
+  $filter: ModelSubscriptionChatSessionFilterInput
+  $owner: String
+) {
+  onDeleteChatSession(filter: $filter, owner: $owner) {
+    createdAt
+    id
+    messages {
+      nextToken
+      __typename
+    }
+    owner
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteChatSessionSubscriptionVariables,
+  APITypes.OnDeleteChatSessionSubscription
 >;
 export const onDeleteGarden = /* GraphQL */ `subscription OnDeleteGarden(
   $filter: ModelSubscriptionGardenFilterInput
@@ -200,10 +299,11 @@ export const onDeleteGarden = /* GraphQL */ `subscription OnDeleteGarden(
       nextToken
       __typename
     }
-    plantRows {
+    plantedPlantRow {
       nextToken
       __typename
     }
+    units
     updatedAt
     zipCode
     __typename
@@ -226,6 +326,7 @@ export const onDeletePastStep = /* GraphQL */ `subscription OnDeletePastStep(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -234,17 +335,15 @@ export const onDeletePastStep = /* GraphQL */ `subscription OnDeletePastStep(
     id
     notes
     owner
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -272,6 +371,7 @@ export const onDeletePlannedStep = /* GraphQL */ `subscription OnDeletePlannedSt
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -280,17 +380,15 @@ export const onDeletePlannedStep = /* GraphQL */ `subscription OnDeletePlannedSt
     id
     owner
     plannedDate
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -306,11 +404,11 @@ export const onDeletePlannedStep = /* GraphQL */ `subscription OnDeletePlannedSt
   APITypes.OnDeletePlannedStepSubscriptionVariables,
   APITypes.OnDeletePlannedStepSubscription
 >;
-export const onDeletePlantRow = /* GraphQL */ `subscription OnDeletePlantRow(
-  $filter: ModelSubscriptionPlantRowFilterInput
+export const onDeletePlantedPlantRow = /* GraphQL */ `subscription OnDeletePlantedPlantRow(
+  $filter: ModelSubscriptionPlantedPlantRowFilterInput
   $owner: String
 ) {
-  onDeletePlantRow(filter: $filter, owner: $owner) {
+  onDeletePlantedPlantRow(filter: $filter, owner: $owner) {
     createdAt
     garden {
       createdAt
@@ -318,13 +416,17 @@ export const onDeletePlantRow = /* GraphQL */ `subscription OnDeletePlantRow(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
     }
     gardenId
     id
-    location {
+    info {
+      plantDate
+      plantSpacingInMeters
+      species
       __typename
     }
     owner
@@ -336,15 +438,62 @@ export const onDeletePlantRow = /* GraphQL */ `subscription OnDeletePlantRow(
       nextToken
       __typename
     }
-    plantSpacing
-    species
     updatedAt
     __typename
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnDeletePlantRowSubscriptionVariables,
-  APITypes.OnDeletePlantRowSubscription
+  APITypes.OnDeletePlantedPlantRowSubscriptionVariables,
+  APITypes.OnDeletePlantedPlantRowSubscription
+>;
+export const onUpdateChatMessage = /* GraphQL */ `subscription OnUpdateChatMessage(
+  $filter: ModelSubscriptionChatMessageFilterInput
+  $owner: String
+) {
+  onUpdateChatMessage(filter: $filter, owner: $owner) {
+    chatSessionId
+    content {
+      text
+      __typename
+    }
+    createdAt
+    id
+    owner
+    role
+    session {
+      createdAt
+      id
+      owner
+      updatedAt
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateChatMessageSubscriptionVariables,
+  APITypes.OnUpdateChatMessageSubscription
+>;
+export const onUpdateChatSession = /* GraphQL */ `subscription OnUpdateChatSession(
+  $filter: ModelSubscriptionChatSessionFilterInput
+  $owner: String
+) {
+  onUpdateChatSession(filter: $filter, owner: $owner) {
+    createdAt
+    id
+    messages {
+      nextToken
+      __typename
+    }
+    owner
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateChatSessionSubscriptionVariables,
+  APITypes.OnUpdateChatSessionSubscription
 >;
 export const onUpdateGarden = /* GraphQL */ `subscription OnUpdateGarden(
   $filter: ModelSubscriptionGardenFilterInput
@@ -369,10 +518,11 @@ export const onUpdateGarden = /* GraphQL */ `subscription OnUpdateGarden(
       nextToken
       __typename
     }
-    plantRows {
+    plantedPlantRow {
       nextToken
       __typename
     }
+    units
     updatedAt
     zipCode
     __typename
@@ -395,6 +545,7 @@ export const onUpdatePastStep = /* GraphQL */ `subscription OnUpdatePastStep(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -403,17 +554,15 @@ export const onUpdatePastStep = /* GraphQL */ `subscription OnUpdatePastStep(
     id
     notes
     owner
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -441,6 +590,7 @@ export const onUpdatePlannedStep = /* GraphQL */ `subscription OnUpdatePlannedSt
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
@@ -449,17 +599,15 @@ export const onUpdatePlannedStep = /* GraphQL */ `subscription OnUpdatePlannedSt
     id
     owner
     plannedDate
-    plantRow {
+    plantRowId
+    plantedPlantRow {
       createdAt
       gardenId
       id
       owner
-      plantSpacing
-      species
       updatedAt
       __typename
     }
-    plantRowId
     step {
       description
       result
@@ -475,11 +623,11 @@ export const onUpdatePlannedStep = /* GraphQL */ `subscription OnUpdatePlannedSt
   APITypes.OnUpdatePlannedStepSubscriptionVariables,
   APITypes.OnUpdatePlannedStepSubscription
 >;
-export const onUpdatePlantRow = /* GraphQL */ `subscription OnUpdatePlantRow(
-  $filter: ModelSubscriptionPlantRowFilterInput
+export const onUpdatePlantedPlantRow = /* GraphQL */ `subscription OnUpdatePlantedPlantRow(
+  $filter: ModelSubscriptionPlantedPlantRowFilterInput
   $owner: String
 ) {
-  onUpdatePlantRow(filter: $filter, owner: $owner) {
+  onUpdatePlantedPlantRow(filter: $filter, owner: $owner) {
     createdAt
     garden {
       createdAt
@@ -487,13 +635,17 @@ export const onUpdatePlantRow = /* GraphQL */ `subscription OnUpdatePlantRow(
       name
       objective
       owner
+      units
       updatedAt
       zipCode
       __typename
     }
     gardenId
     id
-    location {
+    info {
+      plantDate
+      plantSpacingInMeters
+      species
       __typename
     }
     owner
@@ -505,13 +657,11 @@ export const onUpdatePlantRow = /* GraphQL */ `subscription OnUpdatePlantRow(
       nextToken
       __typename
     }
-    plantSpacing
-    species
     updatedAt
     __typename
   }
 }
 ` as GeneratedSubscription<
-  APITypes.OnUpdatePlantRowSubscriptionVariables,
-  APITypes.OnUpdatePlantRowSubscription
+  APITypes.OnUpdatePlantedPlantRowSubscriptionVariables,
+  APITypes.OnUpdatePlantedPlantRowSubscription
 >;

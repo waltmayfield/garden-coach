@@ -1,4 +1,4 @@
-import { type ClientSchema, a, defineData, defineFunction  } from '@aws-amplify/backend';
+import { type ClientSchema, a, defineData, defineFunction } from '@aws-amplify/backend';
 import { createZodSchema } from './amplifyToZod'
 
 const generateGardenPlanStepsFunction = defineFunction({
@@ -12,8 +12,8 @@ const generateGardenPlanStepsFunction = defineFunction({
 
 export const schema = a.schema({
   XY: a.customType({
-    x: a.float(),
-    y: a.float(),
+    x: a.float().required(),
+    y: a.float().required(),
   }),
 
   PlantRow: a.customType({
@@ -22,7 +22,7 @@ export const schema = a.schema({
       end: a.ref('XY'),
     }),
     species: a.string(),
-    plantSpacing: a.float(),
+    plantSpacingInMeters: a.float(),
     plantDate: a.date()
   }),
 
@@ -33,6 +33,28 @@ export const schema = a.schema({
     result: a.string(),
     plantRows: a.ref('PlantRow').array(),
   }),
+
+  ChatSession: a.model({
+    messages: a.hasMany("ChatMessage", "chatSessionId"),
+  })
+    .authorization((allow) => [allow.owner()]),
+
+  ChatMessage: a
+    .model({
+      chatSessionId: a.id(),
+      session: a.belongsTo("ChatSession", "chatSessionId"),
+      content: a.customType({
+        text: a.string(),
+        proposedSteps: a.ref('Step').array()
+      }),
+      role: a.enum(["human", "ai", "tool"]),
+      owner: a.string(),
+      createdAt: a.datetime()
+    })
+    .secondaryIndexes((index) => [
+      index("chatSessionId").sortKeys(["createdAt"])
+    ])
+    .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
   PlannedStep: a.model({
     gardenId: a.id(),
@@ -56,9 +78,13 @@ export const schema = a.schema({
     .authorization((allow) => [allow.owner()]),
 
   Garden: a.model({
-    name: a.string(),
+    name: a.string().required(),
     objective: a.string(),
-    zipCode: a.string(),
+    location: a.customType({
+      cityStateAndCountry: a.string().required(),
+      lattitude: a.float(),
+      longitude: a.float()
+    }),
     perimeterPoints: a.ref('XY').array(),
     units: a.enum(['imperial', 'metric']),
     plantedPlantRow: a.hasMany('PlantedPlantRow', 'gardenId'),
@@ -75,14 +101,14 @@ export const schema = a.schema({
     pastSteps: a.hasMany('PastStep', 'plantRowId'),
   })
     .authorization((allow) => [allow.owner()]),
-  
+
   generateGardenPlanSteps: a.query()
-    .arguments({gardenId: a.id().required()})
+    .arguments({ gardenId: a.id().required() })
     .returns(a.ref('Step').array())
     .handler(a.handler.function(generateGardenPlanStepsFunction))
     .authorization((allow) => [allow.authenticated()]),
 })
-.authorization((allow) => [allow.resource(generateGardenPlanStepsFunction)]);
+  .authorization((allow) => [allow.resource(generateGardenPlanStepsFunction)]);
 
 export type Schema = ClientSchema<typeof schema>;
 
