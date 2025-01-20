@@ -3,7 +3,7 @@ import { geocode, getWeatherForecast } from '../../utils/weather';
 
 
 const main = async () => {
-    const location = await geocode("78756")
+    const location = await geocode("Austin, Texas, USA")
     console.log("Location: \n", stringify(location))
 
     const forecast = await getWeatherForecast({lattitude: location.lat, longitude: location.lng})

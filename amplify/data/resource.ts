@@ -8,7 +8,8 @@ const generateGardenPlanStepsFunction = defineFunction({
   entry: '../functions/generateGardenPlanStepsHandler.ts',
   timeoutSeconds: 900,
   environment: {
-    MODEL_ID: 'us.anthropic.claude-3-sonnet-20240229-v1:0',
+    // MODEL_ID: 'us.anthropic.claude-3-sonnet-20240229-v1:0',
+    MODEL_ID: 'us.amazon.nova-pro-v1:0'
   }
 });
 
