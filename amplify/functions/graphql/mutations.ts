@@ -64,7 +64,18 @@ export const createGarden = /* GraphQL */ `mutation CreateGarden(
   createGarden(condition: $condition, input: $input) {
     createdAt
     id
+    location {
+      cityStateAndCountry
+      lattitude
+      longitude
+      __typename
+    }
     name
+    northVector {
+      x
+      y
+      __typename
+    }
     objective
     owner
     pastSteps {
@@ -86,7 +97,6 @@ export const createGarden = /* GraphQL */ `mutation CreateGarden(
     }
     units
     updatedAt
-    zipCode
     __typename
   }
 }
@@ -109,7 +119,6 @@ export const createPastStep = /* GraphQL */ `mutation CreatePastStep(
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -154,7 +163,6 @@ export const createPlannedStep = /* GraphQL */ `mutation CreatePlannedStep(
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -199,7 +207,6 @@ export const createPlantedPlantRow = /* GraphQL */ `mutation CreatePlantedPlantR
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -283,7 +290,18 @@ export const deleteGarden = /* GraphQL */ `mutation DeleteGarden(
   deleteGarden(condition: $condition, input: $input) {
     createdAt
     id
+    location {
+      cityStateAndCountry
+      lattitude
+      longitude
+      __typename
+    }
     name
+    northVector {
+      x
+      y
+      __typename
+    }
     objective
     owner
     pastSteps {
@@ -305,7 +323,6 @@ export const deleteGarden = /* GraphQL */ `mutation DeleteGarden(
     }
     units
     updatedAt
-    zipCode
     __typename
   }
 }
@@ -328,7 +345,6 @@ export const deletePastStep = /* GraphQL */ `mutation DeletePastStep(
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -373,7 +389,6 @@ export const deletePlannedStep = /* GraphQL */ `mutation DeletePlannedStep(
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -418,7 +433,6 @@ export const deletePlantedPlantRow = /* GraphQL */ `mutation DeletePlantedPlantR
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -502,7 +516,18 @@ export const updateGarden = /* GraphQL */ `mutation UpdateGarden(
   updateGarden(condition: $condition, input: $input) {
     createdAt
     id
+    location {
+      cityStateAndCountry
+      lattitude
+      longitude
+      __typename
+    }
     name
+    northVector {
+      x
+      y
+      __typename
+    }
     objective
     owner
     pastSteps {
@@ -524,7 +549,6 @@ export const updateGarden = /* GraphQL */ `mutation UpdateGarden(
     }
     units
     updatedAt
-    zipCode
     __typename
   }
 }
@@ -547,7 +571,6 @@ export const updatePastStep = /* GraphQL */ `mutation UpdatePastStep(
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -592,7 +615,6 @@ export const updatePlannedStep = /* GraphQL */ `mutation UpdatePlannedStep(
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -637,7 +659,6 @@ export const updatePlantedPlantRow = /* GraphQL */ `mutation UpdatePlantedPlantR
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId

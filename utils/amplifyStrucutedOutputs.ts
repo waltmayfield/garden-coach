@@ -3,10 +3,17 @@ import { stringify } from "yaml";
 import { ChatBedrockConverse } from "@langchain/aws";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
+import { Amplify } from 'aws-amplify';
+import { generateClient } from 'aws-amplify/data';
 import { schema, Schema } from '../amplify/data/resource';
+import { CreateGardenInput } from '../amplify/functions/graphql/API'
 
 import { geocode, getWeatherForecast } from './weather';
 import { experimental } from "aws-cdk-lib/aws-cloudfront";
+
+import { createGarden } from '../amplify/functions/graphql/mutations';
+
+const amplifyClient = generateClient<Schema>();
 
 const XY = z.object({
     x: z.number(),
@@ -23,7 +30,7 @@ const CreateGardenType = z.object({
         lattitude: z.number(),
         longitude: z.number()
     }),
-    perimeterPoints: z.array(XY),
+    perimeterPoints: z.array(XY.nullable()).nullable(),
     northVector: XY,
     units: z.enum(['imperial', 'metric']),
 })
@@ -60,7 +67,7 @@ const StepArrayType = z.object({
     explaination: z.string()
 })
 
-export const createGarden = async (userPrompt: string) => {
+export const generateGarden = async (userPrompt: string) => {
     const gardenCreationModel = new ChatBedrockConverse({
         model: process.env.MODEL_ID
     }).withStructuredOutput(CreateGardenType, { includeRaw: true })
@@ -82,7 +89,7 @@ export const createGarden = async (userPrompt: string) => {
     return newGarden.parsed
 }
 
-export const createGardenPlanSteps = async (garden: Schema["Garden"]["createType"]) => {
+export const generateGardenPlanSteps = async (garden: Schema["Garden"]["createType"]) => {
 
     if (
         !garden.location ||
@@ -134,7 +141,39 @@ export const createGardenPlanSteps = async (garden: Schema["Garden"]["createType
 
 
 const typeChecks = async () => {
-    const newGarden: Schema["Garden"]["createType"] = await createGarden("Maximize food production")
-    const newSteps = await createGardenPlanSteps(newGarden)
+    const generatedGarden: Schema["Garden"]["createType"] = await generateGarden("Maximize food production")
+    // const generatedGarden: CreateGardenInput = await generateGarden("Maximize food production")
+    const newSteps = await generateGardenPlanSteps(generatedGarden as Schema["Garden"]["createType"])
     const firstNewStep: Schema["PlannedStep"]["createType"]["step"] = newSteps.steps[0]
+
+
+    // if (!generatedGarden.perimeterPoints) throw new Error ("Generated garden does not have perimeter points")
+    if (generatedGarden.perimeterPoints?.some((point) => !point)) throw new Error("Generated garden has null perimeter points")
+    
+    // const dummyGeneratedGarden: CreateGardenInput = {
+    //     name: "testName",
+    //     location: {
+    //         cityStateAndCountry: "Austin, Texas, USA",
+    //         lattitude: 30.2672,
+    //         longitude: -97.7431
+    //     },
+    //     perimeterPoints: [
+    //         { x: 0, y: 0 },
+    //         { x: 0, y: 8 },
+    //         { x: 2, y: 8 },
+    //         { x: 2, y: 0 }
+    //     ]
+    // } 
+
+    // const createGardenResponse = await amplifyClient.graphql({
+    //     query: createGarden,
+    //     variables: { input: dummyGeneratedGarden}
+    // })
+
+    // const createGardenResponse = await amplifyClient.graphql({
+    //     query: createGarden,
+    //     variables: { input: generatedGarden as CreateGardenInput}
+    // })
+
+    // return createGardenResponse.data?.createGarden
 }

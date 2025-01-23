@@ -64,7 +64,18 @@ export const onCreateGarden = /* GraphQL */ `subscription OnCreateGarden(
   onCreateGarden(filter: $filter, owner: $owner) {
     createdAt
     id
+    location {
+      cityStateAndCountry
+      lattitude
+      longitude
+      __typename
+    }
     name
+    northVector {
+      x
+      y
+      __typename
+    }
     objective
     owner
     pastSteps {
@@ -86,7 +97,6 @@ export const onCreateGarden = /* GraphQL */ `subscription OnCreateGarden(
     }
     units
     updatedAt
-    zipCode
     __typename
   }
 }
@@ -109,7 +119,6 @@ export const onCreatePastStep = /* GraphQL */ `subscription OnCreatePastStep(
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -154,7 +163,6 @@ export const onCreatePlannedStep = /* GraphQL */ `subscription OnCreatePlannedSt
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -199,7 +207,6 @@ export const onCreatePlantedPlantRow = /* GraphQL */ `subscription OnCreatePlant
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -283,7 +290,18 @@ export const onDeleteGarden = /* GraphQL */ `subscription OnDeleteGarden(
   onDeleteGarden(filter: $filter, owner: $owner) {
     createdAt
     id
+    location {
+      cityStateAndCountry
+      lattitude
+      longitude
+      __typename
+    }
     name
+    northVector {
+      x
+      y
+      __typename
+    }
     objective
     owner
     pastSteps {
@@ -305,7 +323,6 @@ export const onDeleteGarden = /* GraphQL */ `subscription OnDeleteGarden(
     }
     units
     updatedAt
-    zipCode
     __typename
   }
 }
@@ -328,7 +345,6 @@ export const onDeletePastStep = /* GraphQL */ `subscription OnDeletePastStep(
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -373,7 +389,6 @@ export const onDeletePlannedStep = /* GraphQL */ `subscription OnDeletePlannedSt
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -418,7 +433,6 @@ export const onDeletePlantedPlantRow = /* GraphQL */ `subscription OnDeletePlant
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -502,7 +516,18 @@ export const onUpdateGarden = /* GraphQL */ `subscription OnUpdateGarden(
   onUpdateGarden(filter: $filter, owner: $owner) {
     createdAt
     id
+    location {
+      cityStateAndCountry
+      lattitude
+      longitude
+      __typename
+    }
     name
+    northVector {
+      x
+      y
+      __typename
+    }
     objective
     owner
     pastSteps {
@@ -524,7 +549,6 @@ export const onUpdateGarden = /* GraphQL */ `subscription OnUpdateGarden(
     }
     units
     updatedAt
-    zipCode
     __typename
   }
 }
@@ -547,7 +571,6 @@ export const onUpdatePastStep = /* GraphQL */ `subscription OnUpdatePastStep(
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -592,7 +615,6 @@ export const onUpdatePlannedStep = /* GraphQL */ `subscription OnUpdatePlannedSt
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -637,7 +659,6 @@ export const onUpdatePlantedPlantRow = /* GraphQL */ `subscription OnUpdatePlant
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId

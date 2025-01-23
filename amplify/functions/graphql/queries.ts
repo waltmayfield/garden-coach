@@ -8,6 +8,50 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const generateGarden = /* GraphQL */ `query GenerateGarden($userInput: String) {
+  generateGarden(userInput: $userInput) {
+    createdAt
+    id
+    location {
+      cityStateAndCountry
+      lattitude
+      longitude
+      __typename
+    }
+    name
+    northVector {
+      x
+      y
+      __typename
+    }
+    objective
+    owner
+    pastSteps {
+      nextToken
+      __typename
+    }
+    perimeterPoints {
+      x
+      y
+      __typename
+    }
+    plannedSteps {
+      nextToken
+      __typename
+    }
+    plantedPlantRow {
+      nextToken
+      __typename
+    }
+    units
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GenerateGardenQueryVariables,
+  APITypes.GenerateGardenQuery
+>;
 export const generateGardenPlanSteps = /* GraphQL */ `query GenerateGardenPlanSteps($gardenId: ID!) {
   generateGardenPlanSteps(gardenId: $gardenId) {
     description
@@ -74,7 +118,18 @@ export const getGarden = /* GraphQL */ `query GetGarden($id: ID!) {
   getGarden(id: $id) {
     createdAt
     id
+    location {
+      cityStateAndCountry
+      lattitude
+      longitude
+      __typename
+    }
     name
+    northVector {
+      x
+      y
+      __typename
+    }
     objective
     owner
     pastSteps {
@@ -96,7 +151,6 @@ export const getGarden = /* GraphQL */ `query GetGarden($id: ID!) {
     }
     units
     updatedAt
-    zipCode
     __typename
   }
 }
@@ -113,7 +167,6 @@ export const getPastStep = /* GraphQL */ `query GetPastStep($id: ID!) {
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -155,7 +208,6 @@ export const getPlannedStep = /* GraphQL */ `query GetPlannedStep($id: ID!) {
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -197,7 +249,6 @@ export const getPlantedPlantRow = /* GraphQL */ `query GetPlantedPlantRow($id: I
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     gardenId
@@ -316,7 +367,6 @@ export const listGardens = /* GraphQL */ `query ListGardens(
       owner
       units
       updatedAt
-      zipCode
       __typename
     }
     nextToken

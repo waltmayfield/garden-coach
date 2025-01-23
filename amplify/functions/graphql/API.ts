@@ -2,6 +2,112 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type Garden = {
+  __typename: "Garden",
+  createdAt: string,
+  id: string,
+  location: latLongLocation,
+  name: string,
+  northVector?: XY | null,
+  objective?: string | null,
+  owner?: string | null,
+  pastSteps?: ModelPastStepConnection | null,
+  perimeterPoints?:  Array<XY | null > | null,
+  plannedSteps?: ModelPlannedStepConnection | null,
+  plantedPlantRow?: ModelPlantedPlantRowConnection | null,
+  units?: GardenUnits | null,
+  updatedAt: string,
+};
+
+export type latLongLocation = {
+  __typename: "latLongLocation",
+  cityStateAndCountry: string,
+  lattitude?: number | null,
+  longitude?: number | null,
+};
+
+export type XY = {
+  __typename: "XY",
+  x: number,
+  y: number,
+};
+
+export type ModelPastStepConnection = {
+  __typename: "ModelPastStepConnection",
+  items:  Array<PastStep | null >,
+  nextToken?: string | null,
+};
+
+export type PastStep = {
+  __typename: "PastStep",
+  completedDate?: string | null,
+  createdAt: string,
+  garden?: Garden | null,
+  gardenId?: string | null,
+  id: string,
+  notes?: string | null,
+  owner?: string | null,
+  plantRowId?: string | null,
+  plantedPlantRow?: PlantedPlantRow | null,
+  step?: Step | null,
+  updatedAt: string,
+};
+
+export type PlantedPlantRow = {
+  __typename: "PlantedPlantRow",
+  createdAt: string,
+  garden?: Garden | null,
+  gardenId?: string | null,
+  id: string,
+  info?: PlantRow | null,
+  owner?: string | null,
+  pastSteps?: ModelPastStepConnection | null,
+  plannedSteps?: ModelPlannedStepConnection | null,
+  updatedAt: string,
+};
+
+export type PlantRow = {
+  __typename: "PlantRow",
+  expectedHarvest: expectedHarvest,
+  location: rowLocation,
+  plantDate: string,
+  plantSpacingInMeters: number,
+  species: string,
+};
+
+export type expectedHarvest = {
+  __typename: "expectedHarvest",
+  amount?: number | null,
+  date?: string | null,
+  unit?: string | null,
+};
+
+export type rowLocation = {
+  __typename: "rowLocation",
+  end: XY,
+  start: XY,
+};
+
+export type ModelPlannedStepConnection = {
+  __typename: "ModelPlannedStepConnection",
+  items:  Array<PlannedStep | null >,
+  nextToken?: string | null,
+};
+
+export type PlannedStep = {
+  __typename: "PlannedStep",
+  createdAt: string,
+  garden?: Garden | null,
+  gardenId?: string | null,
+  id: string,
+  owner?: string | null,
+  plannedDate?: string | null,
+  plantRowId?: string | null,
+  plantedPlantRow?: PlantedPlantRow | null,
+  step?: Step | null,
+  updatedAt: string,
+};
+
 export type Step = {
   __typename: "Step",
   description?: string | null,
@@ -11,29 +117,21 @@ export type Step = {
   title: string,
 };
 
-export type PlantRow = {
-  __typename: "PlantRow",
-  location?: PlantRowLocation | null,
-  plantDate?: string | null,
-  plantSpacingInMeters?: number | null,
-  species?: string | null,
-};
-
-export type PlantRowLocation = {
-  __typename: "PlantRowLocation",
-  end?: XY | null,
-  start?: XY | null,
-};
-
-export type XY = {
-  __typename: "XY",
-  x?: number | null,
-  y?: number | null,
-};
-
 export enum StepRole {
   ai = "ai",
   human = "human",
+}
+
+
+export type ModelPlantedPlantRowConnection = {
+  __typename: "ModelPlantedPlantRowConnection",
+  items:  Array<PlantedPlantRow | null >,
+  nextToken?: string | null,
+};
+
+export enum GardenUnits {
+  imperial = "imperial",
+  metric = "metric",
 }
 
 
@@ -76,88 +174,6 @@ export type ModelChatMessageConnection = {
   items:  Array<ChatMessage | null >,
   nextToken?: string | null,
 };
-
-export type Garden = {
-  __typename: "Garden",
-  createdAt: string,
-  id: string,
-  name?: string | null,
-  objective?: string | null,
-  owner?: string | null,
-  pastSteps?: ModelPastStepConnection | null,
-  perimeterPoints?:  Array<XY | null > | null,
-  plannedSteps?: ModelPlannedStepConnection | null,
-  plantedPlantRow?: ModelPlantedPlantRowConnection | null,
-  units?: GardenUnits | null,
-  updatedAt: string,
-  zipCode?: string | null,
-};
-
-export type ModelPastStepConnection = {
-  __typename: "ModelPastStepConnection",
-  items:  Array<PastStep | null >,
-  nextToken?: string | null,
-};
-
-export type PastStep = {
-  __typename: "PastStep",
-  completedDate?: string | null,
-  createdAt: string,
-  garden?: Garden | null,
-  gardenId?: string | null,
-  id: string,
-  notes?: string | null,
-  owner?: string | null,
-  plantRowId?: string | null,
-  plantedPlantRow?: PlantedPlantRow | null,
-  step?: Step | null,
-  updatedAt: string,
-};
-
-export type PlantedPlantRow = {
-  __typename: "PlantedPlantRow",
-  createdAt: string,
-  garden?: Garden | null,
-  gardenId?: string | null,
-  id: string,
-  info?: PlantRow | null,
-  owner?: string | null,
-  pastSteps?: ModelPastStepConnection | null,
-  plannedSteps?: ModelPlannedStepConnection | null,
-  updatedAt: string,
-};
-
-export type ModelPlannedStepConnection = {
-  __typename: "ModelPlannedStepConnection",
-  items:  Array<PlannedStep | null >,
-  nextToken?: string | null,
-};
-
-export type PlannedStep = {
-  __typename: "PlannedStep",
-  createdAt: string,
-  garden?: Garden | null,
-  gardenId?: string | null,
-  id: string,
-  owner?: string | null,
-  plannedDate?: string | null,
-  plantRowId?: string | null,
-  plantedPlantRow?: PlantedPlantRow | null,
-  step?: Step | null,
-  updatedAt: string,
-};
-
-export type ModelPlantedPlantRowConnection = {
-  __typename: "ModelPlantedPlantRowConnection",
-  items:  Array<PlantedPlantRow | null >,
-  nextToken?: string | null,
-};
-
-export enum GardenUnits {
-  imperial = "imperial",
-  metric = "metric",
-}
-
 
 export type ModelStringKeyConditionInput = {
   beginsWith?: string | null,
@@ -275,7 +291,6 @@ export type ModelGardenFilterInput = {
   owner?: ModelStringInput | null,
   units?: ModelGardenUnitsInput | null,
   updatedAt?: ModelStringInput | null,
-  zipCode?: ModelStringInput | null,
 };
 
 export type ModelGardenUnitsInput = {
@@ -361,20 +376,27 @@ export type StepInput = {
 };
 
 export type PlantRowInput = {
-  location?: PlantRowLocationInput | null,
-  plantDate?: string | null,
-  plantSpacingInMeters?: number | null,
-  species?: string | null,
+  expectedHarvest: ExpectedHarvestInput,
+  location: RowLocationInput,
+  plantDate: string,
+  plantSpacingInMeters: number,
+  species: string,
 };
 
-export type PlantRowLocationInput = {
-  end?: XYInput | null,
-  start?: XYInput | null,
+export type ExpectedHarvestInput = {
+  amount?: number | null,
+  date?: string | null,
+  unit?: string | null,
+};
+
+export type RowLocationInput = {
+  end: XYInput,
+  start: XYInput,
 };
 
 export type XYInput = {
-  x?: number | null,
-  y?: number | null,
+  x: number,
+  y: number,
 };
 
 export type ModelChatSessionConditionInput = {
@@ -400,16 +422,22 @@ export type ModelGardenConditionInput = {
   owner?: ModelStringInput | null,
   units?: ModelGardenUnitsInput | null,
   updatedAt?: ModelStringInput | null,
-  zipCode?: ModelStringInput | null,
 };
 
 export type CreateGardenInput = {
   id?: string | null,
-  name?: string | null,
+  location: LatLongLocationInput,
+  name: string,
+  northVector?: XYInput | null,
   objective?: string | null,
   perimeterPoints?: Array< XYInput | null > | null,
   units?: GardenUnits | null,
-  zipCode?: string | null,
+};
+
+export type LatLongLocationInput = {
+  cityStateAndCountry: string,
+  lattitude?: number | null,
+  longitude?: number | null,
 };
 
 export type ModelPastStepConditionInput = {
@@ -509,11 +537,12 @@ export type UpdateChatSessionInput = {
 
 export type UpdateGardenInput = {
   id: string,
+  location?: LatLongLocationInput | null,
   name?: string | null,
+  northVector?: XYInput | null,
   objective?: string | null,
   perimeterPoints?: Array< XYInput | null > | null,
   units?: GardenUnits | null,
-  zipCode?: string | null,
 };
 
 export type UpdatePastStepInput = {
@@ -599,7 +628,6 @@ export type ModelSubscriptionGardenFilterInput = {
   owner?: ModelStringInput | null,
   units?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
-  zipCode?: ModelSubscriptionStringInput | null,
 };
 
 export type ModelSubscriptionPastStepFilterInput = {
@@ -637,6 +665,51 @@ export type ModelSubscriptionPlantedPlantRowFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
 };
 
+export type GenerateGardenQueryVariables = {
+  userInput?: string | null,
+};
+
+export type GenerateGardenQuery = {
+  generateGarden?:  {
+    __typename: "Garden",
+    createdAt: string,
+    id: string,
+    location:  {
+      __typename: "latLongLocation",
+      cityStateAndCountry: string,
+      lattitude?: number | null,
+      longitude?: number | null,
+    },
+    name: string,
+    northVector?:  {
+      __typename: "XY",
+      x: number,
+      y: number,
+    } | null,
+    objective?: string | null,
+    owner?: string | null,
+    pastSteps?:  {
+      __typename: "ModelPastStepConnection",
+      nextToken?: string | null,
+    } | null,
+    perimeterPoints?:  Array< {
+      __typename: "XY",
+      x: number,
+      y: number,
+    } | null > | null,
+    plannedSteps?:  {
+      __typename: "ModelPlannedStepConnection",
+      nextToken?: string | null,
+    } | null,
+    plantedPlantRow?:  {
+      __typename: "ModelPlantedPlantRowConnection",
+      nextToken?: string | null,
+    } | null,
+    units?: GardenUnits | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type GenerateGardenPlanStepsQueryVariables = {
   gardenId: string,
 };
@@ -647,9 +720,9 @@ export type GenerateGardenPlanStepsQuery = {
     description?: string | null,
     plantRows?:  Array< {
       __typename: "PlantRow",
-      plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
-      species?: string | null,
+      plantDate: string,
+      plantSpacingInMeters: number,
+      species: string,
     } | null > | null,
     result?: string | null,
     role?: StepRole | null,
@@ -711,7 +784,18 @@ export type GetGardenQuery = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    name?: string | null,
+    location:  {
+      __typename: "latLongLocation",
+      cityStateAndCountry: string,
+      lattitude?: number | null,
+      longitude?: number | null,
+    },
+    name: string,
+    northVector?:  {
+      __typename: "XY",
+      x: number,
+      y: number,
+    } | null,
     objective?: string | null,
     owner?: string | null,
     pastSteps?:  {
@@ -720,8 +804,8 @@ export type GetGardenQuery = {
     } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
-      x?: number | null,
-      y?: number | null,
+      x: number,
+      y: number,
     } | null > | null,
     plannedSteps?:  {
       __typename: "ModelPlannedStepConnection",
@@ -733,7 +817,6 @@ export type GetGardenQuery = {
     } | null,
     units?: GardenUnits | null,
     updatedAt: string,
-    zipCode?: string | null,
   } | null,
 };
 
@@ -750,12 +833,11 @@ export type GetPastStepQuery = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -793,12 +875,11 @@ export type GetPlannedStepQuery = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -836,20 +917,19 @@ export type GetPlantedPlantRowQuery = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
     info?:  {
       __typename: "PlantRow",
-      plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
-      species?: string | null,
+      plantDate: string,
+      plantSpacingInMeters: number,
+      species: string,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -944,12 +1024,11 @@ export type ListGardensQuery = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1080,7 +1159,18 @@ export type CreateGardenMutation = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    name?: string | null,
+    location:  {
+      __typename: "latLongLocation",
+      cityStateAndCountry: string,
+      lattitude?: number | null,
+      longitude?: number | null,
+    },
+    name: string,
+    northVector?:  {
+      __typename: "XY",
+      x: number,
+      y: number,
+    } | null,
     objective?: string | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1089,8 +1179,8 @@ export type CreateGardenMutation = {
     } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
-      x?: number | null,
-      y?: number | null,
+      x: number,
+      y: number,
     } | null > | null,
     plannedSteps?:  {
       __typename: "ModelPlannedStepConnection",
@@ -1102,7 +1192,6 @@ export type CreateGardenMutation = {
     } | null,
     units?: GardenUnits | null,
     updatedAt: string,
-    zipCode?: string | null,
   } | null,
 };
 
@@ -1120,12 +1209,11 @@ export type CreatePastStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -1164,12 +1252,11 @@ export type CreatePlannedStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -1208,20 +1295,19 @@ export type CreatePlantedPlantRowMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
     info?:  {
       __typename: "PlantRow",
-      plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
-      species?: string | null,
+      plantDate: string,
+      plantSpacingInMeters: number,
+      species: string,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1293,7 +1379,18 @@ export type DeleteGardenMutation = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    name?: string | null,
+    location:  {
+      __typename: "latLongLocation",
+      cityStateAndCountry: string,
+      lattitude?: number | null,
+      longitude?: number | null,
+    },
+    name: string,
+    northVector?:  {
+      __typename: "XY",
+      x: number,
+      y: number,
+    } | null,
     objective?: string | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1302,8 +1399,8 @@ export type DeleteGardenMutation = {
     } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
-      x?: number | null,
-      y?: number | null,
+      x: number,
+      y: number,
     } | null > | null,
     plannedSteps?:  {
       __typename: "ModelPlannedStepConnection",
@@ -1315,7 +1412,6 @@ export type DeleteGardenMutation = {
     } | null,
     units?: GardenUnits | null,
     updatedAt: string,
-    zipCode?: string | null,
   } | null,
 };
 
@@ -1333,12 +1429,11 @@ export type DeletePastStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -1377,12 +1472,11 @@ export type DeletePlannedStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -1421,20 +1515,19 @@ export type DeletePlantedPlantRowMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
     info?:  {
       __typename: "PlantRow",
-      plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
-      species?: string | null,
+      plantDate: string,
+      plantSpacingInMeters: number,
+      species: string,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1506,7 +1599,18 @@ export type UpdateGardenMutation = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    name?: string | null,
+    location:  {
+      __typename: "latLongLocation",
+      cityStateAndCountry: string,
+      lattitude?: number | null,
+      longitude?: number | null,
+    },
+    name: string,
+    northVector?:  {
+      __typename: "XY",
+      x: number,
+      y: number,
+    } | null,
     objective?: string | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1515,8 +1619,8 @@ export type UpdateGardenMutation = {
     } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
-      x?: number | null,
-      y?: number | null,
+      x: number,
+      y: number,
     } | null > | null,
     plannedSteps?:  {
       __typename: "ModelPlannedStepConnection",
@@ -1528,7 +1632,6 @@ export type UpdateGardenMutation = {
     } | null,
     units?: GardenUnits | null,
     updatedAt: string,
-    zipCode?: string | null,
   } | null,
 };
 
@@ -1546,12 +1649,11 @@ export type UpdatePastStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -1590,12 +1692,11 @@ export type UpdatePlannedStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -1634,20 +1735,19 @@ export type UpdatePlantedPlantRowMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
     info?:  {
       __typename: "PlantRow",
-      plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
-      species?: string | null,
+      plantDate: string,
+      plantSpacingInMeters: number,
+      species: string,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1719,7 +1819,18 @@ export type OnCreateGardenSubscription = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    name?: string | null,
+    location:  {
+      __typename: "latLongLocation",
+      cityStateAndCountry: string,
+      lattitude?: number | null,
+      longitude?: number | null,
+    },
+    name: string,
+    northVector?:  {
+      __typename: "XY",
+      x: number,
+      y: number,
+    } | null,
     objective?: string | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1728,8 +1839,8 @@ export type OnCreateGardenSubscription = {
     } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
-      x?: number | null,
-      y?: number | null,
+      x: number,
+      y: number,
     } | null > | null,
     plannedSteps?:  {
       __typename: "ModelPlannedStepConnection",
@@ -1741,7 +1852,6 @@ export type OnCreateGardenSubscription = {
     } | null,
     units?: GardenUnits | null,
     updatedAt: string,
-    zipCode?: string | null,
   } | null,
 };
 
@@ -1759,12 +1869,11 @@ export type OnCreatePastStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -1803,12 +1912,11 @@ export type OnCreatePlannedStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -1847,20 +1955,19 @@ export type OnCreatePlantedPlantRowSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
     info?:  {
       __typename: "PlantRow",
-      plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
-      species?: string | null,
+      plantDate: string,
+      plantSpacingInMeters: number,
+      species: string,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1932,7 +2039,18 @@ export type OnDeleteGardenSubscription = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    name?: string | null,
+    location:  {
+      __typename: "latLongLocation",
+      cityStateAndCountry: string,
+      lattitude?: number | null,
+      longitude?: number | null,
+    },
+    name: string,
+    northVector?:  {
+      __typename: "XY",
+      x: number,
+      y: number,
+    } | null,
     objective?: string | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1941,8 +2059,8 @@ export type OnDeleteGardenSubscription = {
     } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
-      x?: number | null,
-      y?: number | null,
+      x: number,
+      y: number,
     } | null > | null,
     plannedSteps?:  {
       __typename: "ModelPlannedStepConnection",
@@ -1954,7 +2072,6 @@ export type OnDeleteGardenSubscription = {
     } | null,
     units?: GardenUnits | null,
     updatedAt: string,
-    zipCode?: string | null,
   } | null,
 };
 
@@ -1972,12 +2089,11 @@ export type OnDeletePastStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -2016,12 +2132,11 @@ export type OnDeletePlannedStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -2060,20 +2175,19 @@ export type OnDeletePlantedPlantRowSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
     info?:  {
       __typename: "PlantRow",
-      plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
-      species?: string | null,
+      plantDate: string,
+      plantSpacingInMeters: number,
+      species: string,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -2145,7 +2259,18 @@ export type OnUpdateGardenSubscription = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    name?: string | null,
+    location:  {
+      __typename: "latLongLocation",
+      cityStateAndCountry: string,
+      lattitude?: number | null,
+      longitude?: number | null,
+    },
+    name: string,
+    northVector?:  {
+      __typename: "XY",
+      x: number,
+      y: number,
+    } | null,
     objective?: string | null,
     owner?: string | null,
     pastSteps?:  {
@@ -2154,8 +2279,8 @@ export type OnUpdateGardenSubscription = {
     } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
-      x?: number | null,
-      y?: number | null,
+      x: number,
+      y: number,
     } | null > | null,
     plannedSteps?:  {
       __typename: "ModelPlannedStepConnection",
@@ -2167,7 +2292,6 @@ export type OnUpdateGardenSubscription = {
     } | null,
     units?: GardenUnits | null,
     updatedAt: string,
-    zipCode?: string | null,
   } | null,
 };
 
@@ -2185,12 +2309,11 @@ export type OnUpdatePastStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -2229,12 +2352,11 @@ export type OnUpdatePlannedStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
@@ -2273,20 +2395,19 @@ export type OnUpdatePlantedPlantRowSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name?: string | null,
+      name: string,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
       updatedAt: string,
-      zipCode?: string | null,
     } | null,
     gardenId?: string | null,
     id: string,
     info?:  {
       __typename: "PlantRow",
-      plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
-      species?: string | null,
+      plantDate: string,
+      plantSpacingInMeters: number,
+      species: string,
     } | null,
     owner?: string | null,
     pastSteps?:  {

@@ -1,15 +1,25 @@
 import { type ClientSchema, a, defineData, defineFunction } from '@aws-amplify/backend';
-import { createZodSchema } from './amplifyToZod'
-import { experimental } from 'aws-cdk-lib/aws-cloudfront';
-import { Experimental_CssVarsProvider } from '@mui/material';
+// import { createZodSchema } from './amplifyToZod'
 
 const generateGardenPlanStepsFunction = defineFunction({
   name: 'generateGardenPlanSteps',
   entry: '../functions/generateGardenPlanStepsHandler.ts',
   timeoutSeconds: 900,
   environment: {
+    MODEL_ID: 'us.anthropic.claude-3-5-sonnet-20241022-v2:0'
     // MODEL_ID: 'us.anthropic.claude-3-sonnet-20240229-v1:0',
-    MODEL_ID: 'us.amazon.nova-pro-v1:0'
+    // MODEL_ID: 'us.amazon.nova-pro-v1:0'
+  }
+});
+
+const generateGardenFunction = defineFunction({
+  name: 'generateGarden',
+  entry: '../functions/generateGardenHandler.ts',
+  timeoutSeconds: 900,
+  environment: {
+    MODEL_ID: 'us.anthropic.claude-3-5-sonnet-20241022-v2:0'
+    // MODEL_ID: 'us.anthropic.claude-3-sonnet-20240229-v1:0',
+    // MODEL_ID: 'us.amazon.nova-pro-v1:0'
   }
 });
 
@@ -96,9 +106,9 @@ export const schema = a.schema({
     .authorization((allow) => [allow.owner()]),
 
   Garden: a.model({
-    name: a.string().required(),
+    name: a.string(),
     objective: a.string(),
-    location: a.ref('latLongLocation').required(),
+    location: a.ref('latLongLocation'),
     perimeterPoints: a.ref('XY').array(),
     northVector: a.ref('XY'),
     units: a.enum(['imperial', 'metric']),
@@ -117,13 +127,23 @@ export const schema = a.schema({
   })
     .authorization((allow) => [allow.owner()]),
 
+
+  generateGarden: a.query()
+    .arguments({ gardenId: a.id(), userInput: a.string()})
+    .returns(a.ref('Garden'))
+    .handler(a.handler.function(generateGardenFunction))
+    .authorization((allow) => [allow.authenticated()]),
+
   generateGardenPlanSteps: a.query()
     .arguments({ gardenId: a.id().required() })
     .returns(a.ref('Step').array())
     .handler(a.handler.function(generateGardenPlanStepsFunction))
     .authorization((allow) => [allow.authenticated()]),
 })
-  .authorization((allow) => [allow.resource(generateGardenPlanStepsFunction)]);
+  .authorization((allow) => [
+    allow.resource(generateGardenPlanStepsFunction),
+    allow.resource(generateGardenFunction)
+  ]);
 
 export type Schema = ClientSchema<typeof schema>;
 
