@@ -1,7 +1,7 @@
 import { type ClientSchema, a, defineData, defineFunction } from '@aws-amplify/backend';
 // import { createZodSchema } from './amplifyToZod'
 
-const generateGardenPlanStepsFunction = defineFunction({
+export const generateGardenPlanStepsFunction = defineFunction({
   name: 'generateGardenPlanSteps',
   entry: '../functions/generateGardenPlanStepsHandler.ts',
   timeoutSeconds: 900,
@@ -12,7 +12,7 @@ const generateGardenPlanStepsFunction = defineFunction({
   }
 });
 
-const generateGardenFunction = defineFunction({
+export const generateGardenFunction = defineFunction({
   name: 'generateGarden',
   entry: '../functions/generateGardenHandler.ts',
   timeoutSeconds: 900,
@@ -127,17 +127,16 @@ export const schema = a.schema({
   })
     .authorization((allow) => [allow.owner()]),
 
-
   generateGarden: a.query()
-    .arguments({ gardenId: a.id(), userInput: a.string()})
-    .returns(a.ref('Garden'))
-    .handler(a.handler.function(generateGardenFunction))
+    .arguments({ gardenId: a.id().required(), userInput: a.string().required()})
+    // .returns(a.ref('Garden'))
+    .handler(a.handler.function(generateGardenFunction).async())
     .authorization((allow) => [allow.authenticated()]),
 
   generateGardenPlanSteps: a.query()
     .arguments({ gardenId: a.id().required() })
-    .returns(a.ref('Step').array())
-    .handler(a.handler.function(generateGardenPlanStepsFunction))
+    // .returns(a.ref('Step').array())
+    .handler(a.handler.function(generateGardenPlanStepsFunction).async())
     .authorization((allow) => [allow.authenticated()]),
 })
   .authorization((allow) => [

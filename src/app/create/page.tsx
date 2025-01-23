@@ -1,5 +1,6 @@
 "use client"
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Container, TextField, Typography } from '@mui/material';
 import { Authenticator } from '@aws-amplify/ui-react';
 
@@ -12,7 +13,7 @@ import { type Schema } from "@/../amplify/data/resource";
 const amplifyClient = generateClient<Schema>();
 
 const CreatePage = () => {
-
+    const router = useRouter();
     const [gardenObjective, setGardenObjective] = React.useState("");
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,11 +23,13 @@ const CreatePage = () => {
     const handleSubmit = async () => {
         try {
             const newGarden = await amplifyClient.models.Garden.create({});
-            amplifyClient.queries.generateGarden({ 
+            const generateGardenResponse = amplifyClient.queries.generateGarden({ 
                 gardenId: newGarden.data!.id,
                 userInput: gardenObjective
             })
-            // TODO: Now route the user to the garden's page
+            console.log('generateGardenResponse:\n', generateGardenResponse)
+            
+            router.push(`/garden/${newGarden.data!.id}`);
             // await amplifyClient.createGarden({ name: gardenName });
             alert("Garden created successfully!");
         } catch (error) {
