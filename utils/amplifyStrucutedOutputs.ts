@@ -58,7 +58,7 @@ const StepType = z.object({
     title: z.string(),
     description: z.string(),
     role: z.enum(['ai', 'human']),
-    resources: z.array(z.string()),
+    // resources: z.array(z.string()),
     plantRows: z.array(PlantRowType)
 })
 

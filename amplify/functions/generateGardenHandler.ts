@@ -8,7 +8,8 @@ import { env } from '$amplify/env/generateGarden';
 
 import { AppSyncIdentityCognito, AppSyncIdentityOIDC } from 'aws-lambda';
 
-import { generateGardenPlanSteps } from './graphql/queries';
+// import { generateGardenPlanSteps } from './graphql/queries';
+import { generateGardenPlanSteps } from '../../utils/graphqlStatements'
 import { createGarden, updateGarden } from './graphql/mutations';
 import { CreateGardenInput, UpdateGardenInput } from "./graphql/API";
 
@@ -31,30 +32,32 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
     //     My family has three members and I would like as much of our food to come from this garden as possible.
     //     Maximize the yield of vegtables and fill the garden as much as possible.
     //     `)
-    
-    const generatedGarden: Schema["Garden"]["createType"] = await generateGarden(event.arguments.userInput)
-    
-    const updateGardenInput: UpdateGardenInput = {
-        id: event.arguments.gardenId!,
-        ...(generatedGarden as Partial<UpdateGardenInput>)
+
+    try {
+
+        const generatedGarden: Schema["Garden"]["createType"] = await generateGarden(event.arguments.userInput)
+
+        const updateGardenInput: UpdateGardenInput = {
+            id: event.arguments.gardenId!,
+            ...(generatedGarden as Partial<UpdateGardenInput>)
+        }
+
+        const updateGardenResponse = await amplifyClient.graphql({
+            query: updateGarden,
+            variables: { input: updateGardenInput }
+        })
+
+        console.log('updateGardenResponse:\n', updateGardenResponse.data.updateGarden)
+
+
+        const generateStepsResponse = await amplifyClient.graphql({
+            query: generateGardenPlanSteps,
+            variables: { gardenId: event.arguments.gardenId }
+        })
+
+        console.log('generateStepsResponse:\n', generateStepsResponse)
+    } catch (error) {
+        console.error("Error generating garden / steps:", JSON.stringify(error, null, 2));
+        throw new Error("Failed to generate garden / steps.");
     }
-    // const createGardenResponse = await amplifyClient.graphql({
-    //     query: createGarden,
-    //     variables: { input: generatedGarden as CreateGardenInput}
-    // })
-
-    const updateGardenResponse = await amplifyClient.graphql({
-        query: updateGarden,
-        variables: { input: updateGardenInput}
-    })
-    
-    console.log('updateGardenResponse:\n', JSON.stringify(updateGardenResponse, null, 2))
-    // return updateGardenResponse.data?.updateGarden
-
-    const generateStepsResponse = await amplifyClient.graphql({
-        query: generateGardenPlanSteps,
-        variables: { gardenId: event.arguments.gardenId }
-    })
-    
-    console.log('generateStepsResponse:\n', JSON.stringify(generateStepsResponse, null, 2))
 }

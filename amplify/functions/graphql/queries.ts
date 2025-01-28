@@ -8,43 +8,9 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
-export const generateGarden = /* GraphQL */ `query GenerateGarden($userInput: String) {
-  generateGarden(userInput: $userInput) {
-    createdAt
-    id
-    location {
-      cityStateAndCountry
-      lattitude
-      longitude
-      __typename
-    }
-    name
-    northVector {
-      x
-      y
-      __typename
-    }
-    objective
-    owner
-    pastSteps {
-      nextToken
-      __typename
-    }
-    perimeterPoints {
-      x
-      y
-      __typename
-    }
-    plannedSteps {
-      nextToken
-      __typename
-    }
-    plantedPlantRow {
-      nextToken
-      __typename
-    }
-    units
-    updatedAt
+export const generateGarden = /* GraphQL */ `query GenerateGarden($gardenId: ID!, $userInput: String!) {
+  generateGarden(gardenId: $gardenId, userInput: $userInput) {
+    success
     __typename
   }
 }
@@ -54,16 +20,7 @@ export const generateGarden = /* GraphQL */ `query GenerateGarden($userInput: St
 >;
 export const generateGardenPlanSteps = /* GraphQL */ `query GenerateGardenPlanSteps($gardenId: ID!) {
   generateGardenPlanSteps(gardenId: $gardenId) {
-    description
-    plantRows {
-      plantDate
-      plantSpacingInMeters
-      species
-      __typename
-    }
-    result
-    role
-    title
+    success
     __typename
   }
 }

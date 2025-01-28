@@ -16,6 +16,8 @@ const main = async () => {
         Maximize the yield of vegtables and fill the garden as much as possible.
         `)
     console.log("New Garden: ", stringify(newGarden))
+    
+    if (!newGarden.location) throw new Error("New garden does not have a location")
 
     if (
         (typeof newGarden.location?.lattitude) !== 'number' || 
@@ -30,6 +32,7 @@ const main = async () => {
     const newSteps = await generateGardenPlanSteps(newGarden)
     const firstNewStep: Schema["PlannedStep"]["createType"]["step"] = newSteps.steps[0]
     console.log("New Steps:\n", stringify(newSteps))
+
 }
 
 main()

@@ -2,12 +2,100 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type EventInvocationResponse = {
+  __typename: "EventInvocationResponse",
+  success: boolean,
+};
+
+export type ChatMessage = {
+  __typename: "ChatMessage",
+  chatSessionId?: string | null,
+  content?: ChatMessageContent | null,
+  createdAt?: string | null,
+  id: string,
+  owner?: string | null,
+  role?: ChatMessageRole | null,
+  session?: ChatSession | null,
+  updatedAt: string,
+};
+
+export type ChatMessageContent = {
+  __typename: "ChatMessageContent",
+  proposedSteps?:  Array<Step | null > | null,
+  text?: string | null,
+};
+
+export type Step = {
+  __typename: "Step",
+  description?: string | null,
+  plantRows?:  Array<PlantRow | null > | null,
+  result?: string | null,
+  role?: StepRole | null,
+  title: string,
+};
+
+export type PlantRow = {
+  __typename: "PlantRow",
+  expectedHarvest: expectedHarvest,
+  location: rowLocation,
+  plantDate: string,
+  plantSpacingInMeters: number,
+  species: string,
+};
+
+export type expectedHarvest = {
+  __typename: "expectedHarvest",
+  amount?: number | null,
+  date?: string | null,
+  unit?: string | null,
+};
+
+export type rowLocation = {
+  __typename: "rowLocation",
+  end: XY,
+  start: XY,
+};
+
+export type XY = {
+  __typename: "XY",
+  x: number,
+  y: number,
+};
+
+export enum StepRole {
+  ai = "ai",
+  human = "human",
+}
+
+
+export enum ChatMessageRole {
+  ai = "ai",
+  human = "human",
+  tool = "tool",
+}
+
+
+export type ChatSession = {
+  __typename: "ChatSession",
+  createdAt: string,
+  id: string,
+  messages?: ModelChatMessageConnection | null,
+  owner?: string | null,
+  updatedAt: string,
+};
+
+export type ModelChatMessageConnection = {
+  __typename: "ModelChatMessageConnection",
+  items:  Array<ChatMessage | null >,
+  nextToken?: string | null,
+};
+
 export type Garden = {
   __typename: "Garden",
   createdAt: string,
   id: string,
-  location: latLongLocation,
-  name: string,
+  location?: latLongLocation | null,
+  name?: string | null,
   northVector?: XY | null,
   objective?: string | null,
   owner?: string | null,
@@ -24,12 +112,6 @@ export type latLongLocation = {
   cityStateAndCountry: string,
   lattitude?: number | null,
   longitude?: number | null,
-};
-
-export type XY = {
-  __typename: "XY",
-  x: number,
-  y: number,
 };
 
 export type ModelPastStepConnection = {
@@ -66,28 +148,6 @@ export type PlantedPlantRow = {
   updatedAt: string,
 };
 
-export type PlantRow = {
-  __typename: "PlantRow",
-  expectedHarvest: expectedHarvest,
-  location: rowLocation,
-  plantDate: string,
-  plantSpacingInMeters: number,
-  species: string,
-};
-
-export type expectedHarvest = {
-  __typename: "expectedHarvest",
-  amount?: number | null,
-  date?: string | null,
-  unit?: string | null,
-};
-
-export type rowLocation = {
-  __typename: "rowLocation",
-  end: XY,
-  start: XY,
-};
-
 export type ModelPlannedStepConnection = {
   __typename: "ModelPlannedStepConnection",
   items:  Array<PlannedStep | null >,
@@ -108,21 +168,6 @@ export type PlannedStep = {
   updatedAt: string,
 };
 
-export type Step = {
-  __typename: "Step",
-  description?: string | null,
-  plantRows?:  Array<PlantRow | null > | null,
-  result?: string | null,
-  role?: StepRole | null,
-  title: string,
-};
-
-export enum StepRole {
-  ai = "ai",
-  human = "human",
-}
-
-
 export type ModelPlantedPlantRowConnection = {
   __typename: "ModelPlantedPlantRowConnection",
   items:  Array<PlantedPlantRow | null >,
@@ -134,46 +179,6 @@ export enum GardenUnits {
   metric = "metric",
 }
 
-
-export type ChatMessage = {
-  __typename: "ChatMessage",
-  chatSessionId?: string | null,
-  content?: ChatMessageContent | null,
-  createdAt?: string | null,
-  id: string,
-  owner?: string | null,
-  role?: ChatMessageRole | null,
-  session?: ChatSession | null,
-  updatedAt: string,
-};
-
-export type ChatMessageContent = {
-  __typename: "ChatMessageContent",
-  proposedSteps?:  Array<Step | null > | null,
-  text?: string | null,
-};
-
-export enum ChatMessageRole {
-  ai = "ai",
-  human = "human",
-  tool = "tool",
-}
-
-
-export type ChatSession = {
-  __typename: "ChatSession",
-  createdAt: string,
-  id: string,
-  messages?: ModelChatMessageConnection | null,
-  owner?: string | null,
-  updatedAt: string,
-};
-
-export type ModelChatMessageConnection = {
-  __typename: "ModelChatMessageConnection",
-  items:  Array<ChatMessage | null >,
-  nextToken?: string | null,
-};
 
 export type ModelStringKeyConditionInput = {
   beginsWith?: string | null,
@@ -426,8 +431,8 @@ export type ModelGardenConditionInput = {
 
 export type CreateGardenInput = {
   id?: string | null,
-  location: LatLongLocationInput,
-  name: string,
+  location?: LatLongLocationInput | null,
+  name?: string | null,
   northVector?: XYInput | null,
   objective?: string | null,
   perimeterPoints?: Array< XYInput | null > | null,
@@ -666,47 +671,14 @@ export type ModelSubscriptionPlantedPlantRowFilterInput = {
 };
 
 export type GenerateGardenQueryVariables = {
-  userInput?: string | null,
+  gardenId: string,
+  userInput: string,
 };
 
 export type GenerateGardenQuery = {
   generateGarden?:  {
-    __typename: "Garden",
-    createdAt: string,
-    id: string,
-    location:  {
-      __typename: "latLongLocation",
-      cityStateAndCountry: string,
-      lattitude?: number | null,
-      longitude?: number | null,
-    },
-    name: string,
-    northVector?:  {
-      __typename: "XY",
-      x: number,
-      y: number,
-    } | null,
-    objective?: string | null,
-    owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
-    } | null,
-    perimeterPoints?:  Array< {
-      __typename: "XY",
-      x: number,
-      y: number,
-    } | null > | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
-    plantedPlantRow?:  {
-      __typename: "ModelPlantedPlantRowConnection",
-      nextToken?: string | null,
-    } | null,
-    units?: GardenUnits | null,
-    updatedAt: string,
+    __typename: "EventInvocationResponse",
+    success: boolean,
   } | null,
 };
 
@@ -715,19 +687,10 @@ export type GenerateGardenPlanStepsQueryVariables = {
 };
 
 export type GenerateGardenPlanStepsQuery = {
-  generateGardenPlanSteps?:  Array< {
-    __typename: "Step",
-    description?: string | null,
-    plantRows?:  Array< {
-      __typename: "PlantRow",
-      plantDate: string,
-      plantSpacingInMeters: number,
-      species: string,
-    } | null > | null,
-    result?: string | null,
-    role?: StepRole | null,
-    title: string,
-  } | null > | null,
+  generateGardenPlanSteps?:  {
+    __typename: "EventInvocationResponse",
+    success: boolean,
+  } | null,
 };
 
 export type GetChatMessageQueryVariables = {
@@ -784,13 +747,13 @@ export type GetGardenQuery = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    location:  {
+    location?:  {
       __typename: "latLongLocation",
       cityStateAndCountry: string,
       lattitude?: number | null,
       longitude?: number | null,
-    },
-    name: string,
+    } | null,
+    name?: string | null,
     northVector?:  {
       __typename: "XY",
       x: number,
@@ -833,7 +796,7 @@ export type GetPastStepQuery = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -875,7 +838,7 @@ export type GetPlannedStepQuery = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -917,7 +880,7 @@ export type GetPlantedPlantRowQuery = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1024,7 +987,7 @@ export type ListGardensQuery = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1159,13 +1122,13 @@ export type CreateGardenMutation = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    location:  {
+    location?:  {
       __typename: "latLongLocation",
       cityStateAndCountry: string,
       lattitude?: number | null,
       longitude?: number | null,
-    },
-    name: string,
+    } | null,
+    name?: string | null,
     northVector?:  {
       __typename: "XY",
       x: number,
@@ -1209,7 +1172,7 @@ export type CreatePastStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1252,7 +1215,7 @@ export type CreatePlannedStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1295,7 +1258,7 @@ export type CreatePlantedPlantRowMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1379,13 +1342,13 @@ export type DeleteGardenMutation = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    location:  {
+    location?:  {
       __typename: "latLongLocation",
       cityStateAndCountry: string,
       lattitude?: number | null,
       longitude?: number | null,
-    },
-    name: string,
+    } | null,
+    name?: string | null,
     northVector?:  {
       __typename: "XY",
       x: number,
@@ -1429,7 +1392,7 @@ export type DeletePastStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1472,7 +1435,7 @@ export type DeletePlannedStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1515,7 +1478,7 @@ export type DeletePlantedPlantRowMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1599,13 +1562,13 @@ export type UpdateGardenMutation = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    location:  {
+    location?:  {
       __typename: "latLongLocation",
       cityStateAndCountry: string,
       lattitude?: number | null,
       longitude?: number | null,
-    },
-    name: string,
+    } | null,
+    name?: string | null,
     northVector?:  {
       __typename: "XY",
       x: number,
@@ -1649,7 +1612,7 @@ export type UpdatePastStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1692,7 +1655,7 @@ export type UpdatePlannedStepMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1735,7 +1698,7 @@ export type UpdatePlantedPlantRowMutation = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1819,13 +1782,13 @@ export type OnCreateGardenSubscription = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    location:  {
+    location?:  {
       __typename: "latLongLocation",
       cityStateAndCountry: string,
       lattitude?: number | null,
       longitude?: number | null,
-    },
-    name: string,
+    } | null,
+    name?: string | null,
     northVector?:  {
       __typename: "XY",
       x: number,
@@ -1869,7 +1832,7 @@ export type OnCreatePastStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1912,7 +1875,7 @@ export type OnCreatePlannedStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -1955,7 +1918,7 @@ export type OnCreatePlantedPlantRowSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -2039,13 +2002,13 @@ export type OnDeleteGardenSubscription = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    location:  {
+    location?:  {
       __typename: "latLongLocation",
       cityStateAndCountry: string,
       lattitude?: number | null,
       longitude?: number | null,
-    },
-    name: string,
+    } | null,
+    name?: string | null,
     northVector?:  {
       __typename: "XY",
       x: number,
@@ -2089,7 +2052,7 @@ export type OnDeletePastStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -2132,7 +2095,7 @@ export type OnDeletePlannedStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -2175,7 +2138,7 @@ export type OnDeletePlantedPlantRowSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -2259,13 +2222,13 @@ export type OnUpdateGardenSubscription = {
     __typename: "Garden",
     createdAt: string,
     id: string,
-    location:  {
+    location?:  {
       __typename: "latLongLocation",
       cityStateAndCountry: string,
       lattitude?: number | null,
       longitude?: number | null,
-    },
-    name: string,
+    } | null,
+    name?: string | null,
     northVector?:  {
       __typename: "XY",
       x: number,
@@ -2309,7 +2272,7 @@ export type OnUpdatePastStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -2352,7 +2315,7 @@ export type OnUpdatePlannedStepSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,
@@ -2395,7 +2358,7 @@ export type OnUpdatePlantedPlantRowSubscription = {
       __typename: "Garden",
       createdAt: string,
       id: string,
-      name: string,
+      name?: string | null,
       objective?: string | null,
       owner?: string | null,
       units?: GardenUnits | null,

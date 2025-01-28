@@ -1,6 +1,6 @@
 import { defineBackend } from '@aws-amplify/backend';
 import { auth } from './auth/resource';
-import { data, generateGardenFunction } from './data/resource';
+import { data, generateGardenFunction, generateGardenPlanStepsFunction } from './data/resource';
 
 import {
   aws_iam as iam
@@ -10,12 +10,21 @@ import {
 const backend = defineBackend({
   auth,
   data,
-  generateGardenFunction
+  generateGardenFunction,
+  generateGardenPlanStepsFunction
 });
 
-backend.generateGardenFunction.resources.lambda.addToRolePolicy(
-  new iam.PolicyStatement({
-    actions: ['bedrock:InvokeModel'],
-    resources: ['*']
-  })
-)
+backend.addOutput({custom: {rootStackName: backend.stack.stackName}});
+
+//Add permissions to the lambda functions to invoke the model
+[
+  backend.generateGardenFunction.resources.lambda,
+  backend.generateGardenPlanStepsFunction.resources.lambda
+].forEach((resource) => {
+  resource.addToRolePolicy(
+    new iam.PolicyStatement({
+      actions: ['bedrock:InvokeModel'],
+      resources: ['*']
+    })
+  )
+})

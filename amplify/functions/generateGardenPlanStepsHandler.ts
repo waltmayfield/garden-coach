@@ -12,12 +12,17 @@ import { AppSyncIdentityCognito, AppSyncIdentityOIDC } from 'aws-lambda';
 
 import { Schema } from '../data/resource';
 import { getGarden } from './graphql/queries';
-import { updateGarden, createPlannedStep } from './graphql/mutations';
+import { updateGarden } from './graphql/mutations';
 import { UpdateGardenInput, CreatePlannedStepInput } from "./graphql/API";
 
+import { createPlannedStepForGarden } from '../../utils/graphqlStatements'
 import { generateGardenPlanSteps } from '../../utils/amplifyStrucutedOutputs';
 
+
+
 export const handler: Schema["generateGardenPlanSteps"]["functionHandler"] = async (event, context) => {
+
+    console.log('event:\n', JSON.stringify(event, null, 2))
 
     const { resourceConfig, libraryOptions } = await getAmplifyDataClientConfig(env);
 
@@ -48,17 +53,17 @@ export const handler: Schema["generateGardenPlanSteps"]["functionHandler"] = asy
     const garden = gardenResponse.data.getGarden;
 
     if (!garden) throw new Error(`Garden with id ${event.arguments.gardenId} not found`);
-    if (!garden.location.cityStateAndCountry) throw new Error(`Garden with id ${event.arguments.gardenId} has no location`);
+    if (!garden.location || !garden.location.cityStateAndCountry) throw new Error(`Garden with id ${event.arguments.gardenId} has no location`);
 
     if (
-        (typeof garden.location?.lattitude) !== 'number' || 
+        (typeof garden.location?.lattitude) !== 'number' ||
         (typeof garden.location?.longitude) !== 'number'
     ) {
         console.log("Geocoding garden location: ", garden.location.cityStateAndCountry)
         const gardenLatLong = await geocode(garden.location.cityStateAndCountry)
         garden.location.lattitude = gardenLatLong.lat
-        garden.location.longitude = gardenLatLong.lng 
-        
+        garden.location.longitude = gardenLatLong.lng
+
         amplifyClient.graphql({
             query: updateGarden,
             variables: { input: garden }
@@ -73,17 +78,27 @@ export const handler: Schema["generateGardenPlanSteps"]["functionHandler"] = asy
     const firstNewStep: Schema["PlannedStep"]["createType"]["step"] = newSteps.steps[0]
     console.log("New Steps:\n", stringify(newSteps))
 
-    const createNewStepPromises = newSteps.steps.map((step) => {
-        return amplifyClient.graphql({
-            query: createPlannedStep,
-            variables: { input: {
-                gardenId: garden.id,
-                step: step
-             } as CreatePlannedStepInput}
-        })
+    // const createNewStepPromises = 
+    newSteps.steps.forEach(async (step) => {
+        const stepInput: Schema["PlannedStep"]["createType"] = {
+            gardenId: garden.id,
+            step: step
+        }
+        console.log("Step Input:\n", stringify(stepInput))
+        const createStepResponse = await amplifyClient.graphql({
+            query: createPlannedStepForGarden,
+            variables: { input: stepInput as CreatePlannedStepInput }
+        }).catch((error) => console.error("Error creating new step: ", stringify(error)))
+
+        console.log("Created new step: ", createStepResponse)
+        // .then(
+        //     (response) => console.log("Created new step: ", response)
+        // ).catch(
+        //     (error) => console.error("Error creating new step: ", error)
+        // )
     })
 
-    await Promise.all(createNewStepPromises)
+    // await Promise.all(createNewStepPromises)
 
     // return [];
 }

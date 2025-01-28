@@ -35,11 +35,12 @@ function Page({
 
                 const plannedStepsSub = amplifyClient.models.PlannedStep.observeQuery({
                     filter: {
-                        id: { eq: gardenId }
+                        gardenId: { eq: gardenId }
                     }
                 }).subscribe({
                     next: ({ items, isSynced }) => {
                         setPlannedSteps(items)
+                        console.log('plannedSteps: ', items)
                     }
                 })
     
