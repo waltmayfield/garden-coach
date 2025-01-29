@@ -91,6 +91,7 @@ export const schema = a.schema({
     plantedPlantRow: a.belongsTo('PlantedPlantRow', 'plantRowId'),
     step: a.ref('Step'),
     plannedDate: a.date(),
+    owner: a.string(),
   })
     .authorization((allow) => [allow.owner()]),
 
@@ -102,6 +103,7 @@ export const schema = a.schema({
     step: a.ref('Step'),
     completedDate: a.date(),
     notes: a.string(),
+    owner: a.string(),
   })
     .authorization((allow) => [allow.owner()]),
 

@@ -7,6 +7,7 @@ import { getConfiguredAmplifyClient } from '../utils'
 import { Schema } from '../../amplify/data/resource';
 
 import { generateGarden, generateGardenPlanSteps } from '../../utils/amplifyStrucutedOutputs';
+import { setAmplifyClientEnvVars } from '../../utils/testUtils';
 
 import { handler } from '../../amplify/functions/generateGardenPlanStepsHandler'
 
@@ -39,6 +40,7 @@ const dummyEvent: AppSyncResolverEvent<any> = {
 };
 
 const main = async () => {
+    await setAmplifyClientEnvVars()
     const amplifyClient = await getConfiguredAmplifyClient()
 
     const newGarden: Schema["Garden"]["createType"] = await generateGarden(`
@@ -53,13 +55,15 @@ const main = async () => {
     const garden = await amplifyClient.graphql({
         query: createGarden,
         variables: {
-            input: newGarden as CreateGardenInput
+            input: {
+                ...(newGarden as CreateGardenInput)
+            }
         }
     }).catch(
         (error => console.error("Error creating new garden: ", error))
     )
 
-    dummyEvent.arguments.gardenId = garden!.data!.createGarden.id
+    dummyEvent.arguments.gardenId = 'c16a4e71-1361-4507-b70f-7d082bd668d4'//garden!.data!.createGarden.id
 
     const gardenSteps = await handler(dummyEvent, {} as any, () => { })
 

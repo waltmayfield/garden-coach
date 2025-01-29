@@ -17,18 +17,19 @@ import { UpdateGardenInput, CreatePlannedStepInput } from "./graphql/API";
 
 import { createPlannedStepForGarden } from '../../utils/graphqlStatements'
 import { generateGardenPlanSteps } from '../../utils/amplifyStrucutedOutputs';
-
+import { getConfiguredAmplifyClient } from '../../utils/amplifyUtils';
 
 
 export const handler: Schema["generateGardenPlanSteps"]["functionHandler"] = async (event, context) => {
 
     console.log('event:\n', JSON.stringify(event, null, 2))
 
-    const { resourceConfig, libraryOptions } = await getAmplifyDataClientConfig(env);
+    // const { resourceConfig, libraryOptions } = await getAmplifyDataClientConfig(env);
 
-    Amplify.configure(resourceConfig, libraryOptions);
+    // Amplify.configure(resourceConfig, libraryOptions);
 
-    const amplifyClient = generateClient<Schema>();
+    // const amplifyClient = generateClient<Schema>();
+    const amplifyClient = getConfiguredAmplifyClient();
 
     const gardenResponse = await amplifyClient.graphql({
         query: getGarden,
@@ -79,16 +80,17 @@ export const handler: Schema["generateGardenPlanSteps"]["functionHandler"] = asy
     console.log("New Steps:\n", stringify(newSteps))
 
     // const createNewStepPromises = 
-    newSteps.steps.forEach(async (step) => {
+    for (const step of newSteps.steps) {
         const stepInput: Schema["PlannedStep"]["createType"] = {
             gardenId: garden.id,
+            owner: garden.owner,
             step: step
         }
         console.log("Step Input:\n", stringify(stepInput))
         const createStepResponse = await amplifyClient.graphql({
             query: createPlannedStepForGarden,
             variables: { input: stepInput as CreatePlannedStepInput }
-        }).catch((error) => console.error("Error creating new step: ", stringify(error)))
+        })//.catch((error) => console.error("Error creating new step: ", stringify(error)))
 
         console.log("Created new step: ", createStepResponse)
         // .then(
@@ -96,7 +98,7 @@ export const handler: Schema["generateGardenPlanSteps"]["functionHandler"] = asy
         // ).catch(
         //     (error) => console.error("Error creating new step: ", error)
         // )
-    })
+    }
 
     // await Promise.all(createNewStepPromises)
 
