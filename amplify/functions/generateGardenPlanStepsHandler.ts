@@ -76,15 +76,16 @@ export const handler: Schema["generateGardenPlanSteps"]["functionHandler"] = asy
     }
 
     const newSteps = await generateGardenPlanSteps(garden)
-    const firstNewStep: Schema["PlannedStep"]["createType"]["step"] = newSteps.steps[0]
+    const firstNewStep: Schema["PlannedStep"]["createType"]["step"] = newSteps.steps[0].step
     console.log("New Steps:\n", stringify(newSteps))
 
     // const createNewStepPromises = 
-    for (const step of newSteps.steps) {
+    for (const plannedStep of newSteps.steps) {
         const stepInput: Schema["PlannedStep"]["createType"] = {
             gardenId: garden.id,
             owner: garden.owner,
-            step: step
+            step: plannedStep.step,
+            plannedDate: plannedStep.plannedDate
         }
         console.log("Step Input:\n", stringify(stepInput))
         const createStepResponse = await amplifyClient.graphql({

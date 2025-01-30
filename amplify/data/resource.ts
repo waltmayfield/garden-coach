@@ -47,11 +47,11 @@ export const schema = a.schema({
   }),
 
   PlantRow: a.customType({
-    location: a.ref('rowLocation').required(),    
-    species: a.string().required(),
-    plantSpacingInMeters: a.float().required(),
-    plantDate: a.date().required(),
-    expectedHarvest: a.ref('expectedHarvest').required()
+    location: a.ref('rowLocation'),    
+    species: a.string(),
+    plantSpacingInMeters: a.float(),
+    plantDate: a.date(),
+    expectedHarvest: a.ref('expectedHarvest')
   }),
 
   Step: a.customType({

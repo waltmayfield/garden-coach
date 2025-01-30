@@ -46,7 +46,7 @@ const PlantRowType = z.object({
     }),
     species: z.string(),
     plantSpacingInMeters: z.number(),
-    plantDate: zodStringDate,
+    // plantDate: zodStringDate,
     expectedHarvest: z.object({
         date: zodStringDate,
         amount: z.number(),
@@ -59,12 +59,21 @@ const StepType = z.object({
     description: z.string(),
     role: z.enum(['ai', 'human']),
     // resources: z.array(z.string()),
-    plantRows: z.array(PlantRowType)
+    plantRows: z.array(PlantRowType),
+
+})
+
+const PlannedStepArrayType = z.object({
+    steps: z.array(z.object({
+        step: StepType,
+        plannedDate: zodStringDate,
+    })),
+    explaination: z.string(),
 })
 
 const StepArrayType = z.object({
     steps: z.array(StepType),
-    explaination: z.string()
+    explaination: z.string(),
 })
 
 export const generateGarden = async (userPrompt: string) => {
@@ -74,7 +83,7 @@ export const generateGarden = async (userPrompt: string) => {
 
     const gardenCreationPrompt = ChatPromptTemplate.fromTemplate(
         `
-        Create a new garden based on the user's prompt.
+        Create a new garden based on the user's prompt. Use the x coordinate for the longest side of the garden.
 
         <userPrompt>
         {userPrompt}
@@ -103,7 +112,7 @@ export const generateGardenPlanSteps = async (garden: Schema["Garden"]["createTy
 
     const gardenStepPlannerModel = new ChatBedrockConverse({
         model: process.env.MODEL_ID
-    }).withStructuredOutput(StepArrayType, { includeRaw: true })
+    }).withStructuredOutput(PlannedStepArrayType, { includeRaw: true })
 
     if (!garden.perimeterPoints) {
         throw new Error("Garden does not have perimeter points")
@@ -130,9 +139,9 @@ export const generateGardenPlanSteps = async (garden: Schema["Garden"]["createTy
 
     const plannerPrompt = ChatPromptTemplate.fromTemplate(prompt);
 
-    const gandenStepLannerWithPrompt = plannerPrompt.pipe(gardenStepPlannerModel);
+    const gandenStepPlannerWithPrompt = plannerPrompt.pipe(gardenStepPlannerModel);
 
-    const newPlanSteps = await gandenStepLannerWithPrompt.invoke({
+    const newPlanSteps = await gandenStepPlannerWithPrompt.invoke({
         objective: garden.objective
     })
 
@@ -144,7 +153,7 @@ const typeChecks = async () => {
     const generatedGarden: Schema["Garden"]["createType"] = await generateGarden("Maximize food production")
     // const generatedGarden: CreateGardenInput = await generateGarden("Maximize food production")
     const newSteps = await generateGardenPlanSteps(generatedGarden as Schema["Garden"]["createType"])
-    const firstNewStep: Schema["PlannedStep"]["createType"]["step"] = newSteps.steps[0]
+    const firstNewStep: Schema["PlannedStep"]["createType"]["step"] = newSteps.steps[0].step
 
 
     // if (!generatedGarden.perimeterPoints) throw new Error ("Generated garden does not have perimeter points")
