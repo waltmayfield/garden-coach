@@ -14,7 +14,7 @@ export const generateGardenPlanStepsFunction = defineFunction({
 
 export const generateGardenFunction = defineFunction({
   name: 'generateGarden',
-  entry: '../functions/generateGardenHandler.ts',
+  entry: '../functions/generateGarden/generateGardenHandler.ts',
   timeoutSeconds: 900,
   environment: {
     MODEL_ID: 'us.anthropic.claude-3-5-sonnet-20241022-v2:0'
@@ -47,7 +47,7 @@ export const schema = a.schema({
   }),
 
   PlantRow: a.customType({
-    location: a.ref('rowLocation'),    
+    location: a.ref('rowLocation'),
     species: a.string(),
     plantSpacingInMeters: a.float(),
     plantDate: a.date(),
@@ -65,7 +65,7 @@ export const schema = a.schema({
   ChatSession: a.model({
     messages: a.hasMany("ChatMessage", "chatSessionId"),
   })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
   ChatMessage: a
     .model({
@@ -93,7 +93,7 @@ export const schema = a.schema({
     plannedDate: a.date(),
     owner: a.string(),
   })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
   PastStep: a.model({
     gardenId: a.id(),
@@ -105,7 +105,7 @@ export const schema = a.schema({
     notes: a.string(),
     owner: a.string(),
   })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
   Garden: a.model({
     name: a.string(),
@@ -118,7 +118,7 @@ export const schema = a.schema({
     plannedSteps: a.hasMany('PlannedStep', 'gardenId'),
     pastSteps: a.hasMany('PastStep', 'gardenId'),
   })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
   PlantedPlantRow: a.model({
     gardenId: a.id(),
@@ -127,10 +127,10 @@ export const schema = a.schema({
     plannedSteps: a.hasMany('PlannedStep', 'plantRowId'),
     pastSteps: a.hasMany('PastStep', 'plantRowId'),
   })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
   generateGarden: a.query()
-    .arguments({ gardenId: a.id().required(), userInput: a.string().required()})
+    .arguments({ gardenId: a.id().required(), userInput: a.string().required() })
     // .returns(a.ref('Garden'))
     .handler(a.handler.function(generateGardenFunction).async())
     .authorization((allow) => [allow.authenticated()]),
@@ -140,6 +140,7 @@ export const schema = a.schema({
     // .returns(a.ref('Step').array())
     .handler(a.handler.function(generateGardenPlanStepsFunction).async())
     .authorization((allow) => [allow.authenticated()]),
+  
 })
   .authorization((allow) => [
     allow.resource(generateGardenPlanStepsFunction),

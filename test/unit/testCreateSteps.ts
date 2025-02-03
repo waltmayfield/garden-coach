@@ -63,7 +63,7 @@ const main = async () => {
         (error => console.error("Error creating new garden: ", error))
     )
 
-    dummyEvent.arguments.gardenId = 'c16a4e71-1361-4507-b70f-7d082bd668d4'//garden!.data!.createGarden.id
+    dummyEvent.arguments.gardenId = garden!.data!.createGarden.id
 
     const gardenSteps = await handler(dummyEvent, {} as any, () => { })
 

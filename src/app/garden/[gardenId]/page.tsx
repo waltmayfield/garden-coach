@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState, useMemo } from 'react';
-import { stringify } from 'yaml';
+// import { stringify } from 'yaml';
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
 import { Box, Card, CardContent, Typography } from '@mui/material';
@@ -17,7 +17,8 @@ const GardenSVG: React.FC<GardenSVGProps> = ({ garden, plannedSteps }) => {
         plannedSteps.forEach(plannedStep => {
             plannedStep.step?.plantRows?.forEach(row => {
                 if (row?.species && !map.has(row.species)) {
-                    const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+                    const colors = ['#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
                     map.set(row.species, color);
                 }
             });
@@ -116,8 +117,8 @@ function Page({
 }) {
     const [activeGarden, setActiveGarden] = useState<Schema["Garden"]["createType"]>();
     const [plannedSteps, setPlannedSteps] = useState<Array<Schema["PlannedStep"]["createType"]>>();
-    const [pastSteps, setPastSteps] = useState<Array<Schema["PastStep"]["createType"]>>();
-    const [isLoading, setIsLoading] = useState(true);
+    // const [pastSteps, setPastSteps] = useState<Array<Schema["PastStep"]["createType"]>>();
+    // const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const gardenSubscriptionHandler = async () => {
@@ -128,7 +129,7 @@ function Page({
                         id: { eq: gardenId }
                     }
                 }).subscribe({
-                    next: ({ items, isSynced }) => {
+                    next: ({ items }) => {
                         setActiveGarden(items[0])
                     }
                 })
@@ -138,15 +139,15 @@ function Page({
                         gardenId: { eq: gardenId }
                     }
                 }).subscribe({
-                    next: ({ items, isSynced }) => {
+                    next: ({ items }) => {
                         setPlannedSteps(items)
                         console.log('plannedSteps: ', items)
                     }
                 })
 
                 return () => {
-                    gardenSub.unsubscribe(),
-                        plannedStepsSub.unsubscribe()
+                    gardenSub.unsubscribe();
+                    plannedStepsSub.unsubscribe();
                 };
             }
         }
@@ -198,6 +199,9 @@ function Page({
                                     <Box key={rowIndex} mt={2}>
                                         <Typography variant="body2" color="text.secondary">
                                             Species: {row?.species}
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Location: {JSON.stringify(row?.location)}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
                                             Expected Harvest: {row?.expectedHarvest?.date ? new Date(row.expectedHarvest.date).toLocaleDateString() : "Unknown"} - {row?.expectedHarvest?.amount} {row?.expectedHarvest?.unit}

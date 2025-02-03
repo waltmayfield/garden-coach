@@ -22,7 +22,7 @@ const XY = z.object({
 
 // schema.data.types.Garden
 
-const CreateGardenType = z.object({
+export const createGardenType = z.object({
     name: z.string(),
     objective: z.string(),
     location: z.object({
@@ -63,7 +63,7 @@ const StepType = z.object({
 
 })
 
-const PlannedStepArrayType = z.object({
+export const plannedStepArrayType = z.object({
     steps: z.array(z.object({
         step: StepType,
         plannedDate: zodStringDate,
@@ -79,7 +79,7 @@ const StepArrayType = z.object({
 export const generateGarden = async (userPrompt: string) => {
     const gardenCreationModel = new ChatBedrockConverse({
         model: process.env.MODEL_ID
-    }).withStructuredOutput(CreateGardenType, { includeRaw: true })
+    }).withStructuredOutput(createGardenType, { includeRaw: true })
 
     const gardenCreationPrompt = ChatPromptTemplate.fromTemplate(
         `
@@ -112,7 +112,7 @@ export const generateGardenPlanSteps = async (garden: Schema["Garden"]["createTy
 
     const gardenStepPlannerModel = new ChatBedrockConverse({
         model: process.env.MODEL_ID
-    }).withStructuredOutput(PlannedStepArrayType, { includeRaw: true })
+    }).withStructuredOutput(plannedStepArrayType, { includeRaw: true })
 
     if (!garden.perimeterPoints) {
         throw new Error("Garden does not have perimeter points")
