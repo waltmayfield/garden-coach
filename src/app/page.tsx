@@ -12,8 +12,11 @@ const LandingPage = () => {
         <Typography variant="h5" component="h2" gutterBottom>
           Your personal guide to a beautiful garden
         </Typography>
-        <Button variant="contained" color="primary" size="large" sx={{ mt: 3 }}>
+        <Button variant="contained" color="primary" size="large" sx={{ mt: 3 }} href="/create">
           Get Started
+        </Button>
+        <Button variant="outlined" color="secondary" size="large" sx={{ mt: 2, ml: 2 }} href="/listGardens">
+          Browse Gardens
         </Button>
       </Box>
       <Grid container spacing={4} sx={{ mt: 5 }}>

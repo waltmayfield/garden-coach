@@ -18,12 +18,14 @@ import { Calculator } from "@langchain/community/tools/calculator";
 // import { generateGardenPlanSteps } from './graphql/queries';
 import { generateGardenPlanSteps } from '../../../utils/graphqlStatements'
 import { createGarden, updateGarden } from '../graphql/mutations';
+import { getGarden, listPlannedSteps} from '../graphql/queries';
 import { CreateGardenInput, UpdateGardenInput } from "../graphql/API";
 
 import { Schema } from '../../data/resource';
 
 import { generateGarden } from '../../../utils/amplifyStrucutedOutputs';
 import { createGardenInfoToolBuilder, createGardenPlanToolBuilder } from "./toolBox";
+import { get } from "http";
 
 export const handler: Schema["generateGarden"]["functionHandler"] = async (event, context) => {
     console.log('event:\n', JSON.stringify(event, null, 2))
@@ -33,6 +35,20 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
     if (!('sub' in event.identity)) throw new Error("Event does not contain user");
 
     const amplifyClient = getConfiguredAmplifyClient();
+
+    const {data: garden} = await amplifyClient.graphql({
+        query: getGarden,
+        variables: { id: event.arguments.gardenId }
+    })
+
+    const gardenString = stringify(garden.getGarden)
+
+    const {data: plannedSteps} = await amplifyClient.graphql({
+        query: listPlannedSteps,
+        variables: { filter: { gardenId: { eq: event.arguments.gardenId } } }
+    })
+
+    const plannedStepsString = plannedSteps.listPlannedSteps.items.map((step) => stringify(step)).join('\n')
 
     const agentModel = new ChatBedrockConverse({
         model: process.env.MODEL_ID,
@@ -62,6 +78,15 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
                     You are a helpful garden planner. Update the garden based on the user's request. 
                     Create planned steps to fill the garden over the course of a year. 
                     Call the createGardenPlannedSteps tool once for each season. Fill the garden with plants each season.
+
+                    <currentGardenAttriburtes>
+                    ${gardenString}
+                    </currentGardenAttriburtes>
+
+                    <currentPlannedSteps>
+                    ${plannedStepsString}
+                    </currentPlannedSteps>
+                    
                     `,
                 }),
                 new HumanMessage({

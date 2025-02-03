@@ -8,25 +8,25 @@ import { Schema } from '../../../amplify/data/resource';
 import { createGardenType, plannedStepArrayType } from "../../../utils/amplifyStrucutedOutputs";
 import { createPlannedStepForGarden } from '../../../utils/graphqlStatements'
 import { UpdateGardenInput, UpdatePlannedStepInput, CreatePlannedStepInput } from "../graphql/API";
-import { updateGarden } from "../graphql/mutations";
+import { updateGarden, updatePlannedStep } from "../graphql/mutations";
 import { getConfiguredAmplifyClient } from "../../../utils/amplifyUtils";
 
 export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
-    async (createGardenProps) => {
+    async (functionArgs) => {
         const amplifyClient = getConfiguredAmplifyClient();
 
         // Functions must return strings
         let updateGardenInput: UpdateGardenInput = {
             id: props.gardenId,
-            ...(createGardenProps as Partial<UpdateGardenInput>)
+            ...(functionArgs as Partial<UpdateGardenInput>)
         }
 
         if (
-            (typeof createGardenProps.location?.lattitude) !== 'number' ||
-            (typeof createGardenProps.location?.longitude) !== 'number'
+            (typeof functionArgs.location?.lattitude) !== 'number' ||
+            (typeof functionArgs.location?.longitude) !== 'number'
         ) {
-            console.log("Geocoding garden location: ", createGardenProps.location.cityStateAndCountry)
-            const gardenLatLong = await geocode(createGardenProps.location.cityStateAndCountry)
+            console.log("Geocoding garden location: ", functionArgs.location.cityStateAndCountry)
+            const gardenLatLong = await geocode(functionArgs.location.cityStateAndCountry)
             updateGardenInput.location!.lattitude = gardenLatLong.lat
             updateGardenInput.location!.longitude = gardenLatLong.lng
         }
@@ -47,11 +47,11 @@ export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
 );
 
 export const createGardenPlanToolBuilder = (props: {gardenId: string, owner: string}) => tool(
-    async (plannedStepArrayType) => {
+    async ({steps}) => {
         const { gardenId, owner } = props;
         const amplifyClient = getConfiguredAmplifyClient();
 
-        for (const plannedStep of plannedStepArrayType.steps) {
+        for (const plannedStep of steps) {
                 const stepInput: Schema["PlannedStep"]["createType"] = {
                     gardenId: gardenId,
                     owner: owner,
@@ -77,5 +77,25 @@ export const createGardenPlanToolBuilder = (props: {gardenId: string, owner: str
         name: "createGardenPlannedSteps",
         description: "Add planned steps to the garden",
         schema: plannedStepArrayType,
+    }
+);
+
+export const updatePlannedStepTool = () => tool(
+    async (updatedPlannedStep) => {
+        const amplifyClient = getConfiguredAmplifyClient();
+
+        await amplifyClient.graphql({
+            query: updatePlannedStep,
+            variables: { input: updatedPlannedStep}
+        })
+        
+        return `Updated the planned step id: ${updatedPlannedStep.id}`
+    },
+    {
+        name: "updatePlannedStep",
+        description: "Update one of the garden's planned steps",
+        schema: plannedStepArrayType.extend({
+            id: z.string().nonempty("ID is required")
+        }),
     }
 );

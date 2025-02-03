@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 // import { stringify } from 'yaml';
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, TextField, Typography } from '@mui/material';
 const amplifyClient = generateClient<Schema>();
 
 interface GardenSVGProps {
@@ -94,12 +94,12 @@ const GardenSVG: React.FC<GardenSVGProps> = ({ garden, plannedSteps }) => {
 
     return (
         <Box display="flex" flexDirection="row" gap={0}>
-            <svg width="500" height="500" viewBox={getViewBox()}>
+            <svg height="500" viewBox={getViewBox()}>
             {renderPerimeter()}
             {renderPlantRows()}
-            {renderLegend()}
+            {/* {renderLegend()} */}
             </svg>
-            <svg width="500" height="500" viewBox="0 0 10 10">
+            <svg height="500" viewBox="0 0 10 10">
             {/* {renderPerimeter()}
             {renderPlantRows()} */}
             {renderLegend()}
@@ -109,12 +109,12 @@ const GardenSVG: React.FC<GardenSVGProps> = ({ garden, plannedSteps }) => {
     );
 };
 
-
 function Page({
     params,
 }: {
     params: Promise<{ gardenId: string }>
 }) {
+    const [userChatInput, setUserChatInput] = useState<string>('');
     const [activeGarden, setActiveGarden] = useState<Schema["Garden"]["createType"]>();
     const [plannedSteps, setPlannedSteps] = useState<Array<Schema["PlannedStep"]["createType"]>>();
     // const [pastSteps, setPastSteps] = useState<Array<Schema["PastStep"]["createType"]>>();
@@ -124,24 +124,27 @@ function Page({
         const gardenSubscriptionHandler = async () => {
             const gardenId = (await params).gardenId
             if (gardenId) {
+                console.log('Creating subscription for garden: ', gardenId)
                 const gardenSub = amplifyClient.models.Garden.observeQuery({
                     filter: {
                         id: { eq: gardenId }
                     }
                 }).subscribe({
-                    next: ({ items }) => {
-                        setActiveGarden(items[0])
+                    next: ({ items, isSynced }) => {
+                        console.log('garden: ', items)
+                        if (isSynced) setActiveGarden(items[0])
                     }
                 })
 
+                console.log('Creating subscription for planned steps: ')
                 const plannedStepsSub = amplifyClient.models.PlannedStep.observeQuery({
                     filter: {
                         gardenId: { eq: gardenId }
                     }
                 }).subscribe({
-                    next: ({ items }) => {
-                        setPlannedSteps(items)
+                    next: ({ items, isSynced }) => {
                         console.log('plannedSteps: ', items)
+                        if (isSynced) setPlannedSteps(items)
                     }
                 })
 
@@ -156,7 +159,8 @@ function Page({
 
     }, [params])
 
-    if (!activeGarden) {
+
+    if (!activeGarden || !activeGarden.id) {
         return <Typography variant="h6">Loading...</Typography>;
     }
 
@@ -195,6 +199,18 @@ function Page({
                                 <Typography variant="body2" color="text.secondary">
                                     {plannedStep.step?.description}
                                 </Typography>
+                                <Button 
+                                    variant="contained" 
+                                    color="secondary"
+                                    onClick={async () => {
+                                        await amplifyClient.models.PlannedStep.delete({
+                                            id: plannedStep.id!
+                                        });
+                                        setPlannedSteps(prev => prev?.filter(step => step.id !== plannedStep.id));
+                                    }}
+                                >
+                                    Delete
+                                </Button>
                                 {plannedStep.step?.plantRows?.map((row, rowIndex) => (
                                     <Box key={rowIndex} mt={2}>
                                         <Typography variant="body2" color="text.secondary">
@@ -211,11 +227,59 @@ function Page({
                             </CardContent>
                         </Card>
                         <Box mt={5}>
-                            <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} />
+                            {(
+                                plannedStep.step &&
+                                plannedStep.step.plantRows &&
+                                plannedStep.step?.plantRows?.length > 0
+                            ) && (
+                                <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} />
+                            )}
+                            {/* <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} /> */}
                         </Box>
                     </Box>
                 ))}
             </Box>
+
+            {/* Floating Chat Box */}
+            <Box
+                sx={{
+                    position: 'fixed',
+                    bottom: 16,
+                    right: 16,
+                    width: 300,
+                    padding: 2,
+                    boxShadow: 3,
+                    borderRadius: 2,
+                    backgroundColor: 'white',
+                    zIndex: 1000,
+                }}
+            >
+                <Typography variant="h6">Chat</Typography>
+                <Box display="flex" flexDirection="column" gap={1}>
+                    <TextField
+                        variant="outlined"
+                        placeholder="Type your message..."
+                        value={userChatInput}
+                        onChange={(e) => setUserChatInput(e.target.value)}
+                        fullWidth
+                        multiline
+                        rows={4}
+                    />
+                    <Button 
+                    variant="contained" 
+                    color="primary"
+                    onClick={() => {
+                        amplifyClient.queries.generateGarden({
+                            gardenId: activeGarden.id!,
+                            userInput: userChatInput
+                        })
+
+                        setUserChatInput('')
+                    }}
+                    >Send</Button>
+                </Box>
+            </Box>
+
             <pre>{JSON.stringify(activeGarden, null, 2)}</pre>
             <pre>{JSON.stringify(plannedSteps, null, 2)}</pre>
         </Box>
