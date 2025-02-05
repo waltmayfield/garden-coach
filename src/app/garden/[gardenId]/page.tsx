@@ -11,8 +11,9 @@ interface GardenSVGProps {
     plannedSteps: Schema["PlannedStep"]["createType"][];
 }
 
-const GardenSVG: React.FC<GardenSVGProps> = ({ garden, plannedSteps }) => {
-    const speciesColorMap = useMemo(() => {
+// const GardenSVG: React.FC<GardenSVGProps> = ({ garden, plannedSteps }) => {
+const createGardenSVG = ({ garden, plannedSteps }: GardenSVGProps) => {
+    const getSpeciesColorMap = () => {
         const map = new Map<string, string>();
         plannedSteps.forEach(plannedStep => {
             plannedStep.step?.plantRows?.forEach(row => {
@@ -24,7 +25,8 @@ const GardenSVG: React.FC<GardenSVGProps> = ({ garden, plannedSteps }) => {
             });
         });
         return map;
-    }, [plannedSteps]);
+    };
+    const speciesColorMap = getSpeciesColorMap()
 
     const renderPlantRows = () => {
         return plannedSteps
@@ -95,19 +97,26 @@ const GardenSVG: React.FC<GardenSVGProps> = ({ garden, plannedSteps }) => {
     return (
         <Box display="flex" flexDirection="row" gap={0}>
             <svg height="500" viewBox={getViewBox()}>
-            {renderPerimeter()}
-            {renderPlantRows()}
-            {/* {renderLegend()} */}
+                {renderPerimeter()}
+                {renderPlantRows()}
+                {/* {renderLegend()} */}
             </svg>
             <svg height="500" viewBox="0 0 10 10">
-            {/* {renderPerimeter()}
+                {/* {renderPerimeter()}
             {renderPlantRows()} */}
-            {renderLegend()}
+                {renderLegend()}
             </svg>
         </Box>
 
     );
 };
+
+type PlannedSteps = (
+    Schema["PlannedStep"]["createType"] & {
+        gardenSvg?: React.JSX.Element
+    }
+
+)[];
 
 function Page({
     params,
@@ -115,10 +124,50 @@ function Page({
     params: Promise<{ gardenId: string }>
 }) {
     const [userChatInput, setUserChatInput] = useState<string>('');
-    const [activeGarden, setActiveGarden] = useState<Schema["Garden"]["createType"]>();
-    const [plannedSteps, setPlannedSteps] = useState<Array<Schema["PlannedStep"]["createType"]>>();
+    // const [activeGarden, setActiveGarden] = useState<Schema["Garden"]["createType"]>();
+    const [activeGarden, setActiveGarden] = useState<Schema["Garden"]["type"]>();
+    const [plannedSteps, setPlannedSteps] = useState<PlannedSteps>();
     // const [pastSteps, setPastSteps] = useState<Array<Schema["PastStep"]["createType"]>>();
     // const [isLoading, setIsLoading] = useState(true);
+
+    //Query the garden
+    useEffect(() => {
+        const fetchGarden = async () => {
+            const gardenId = (await params).gardenId
+            if (gardenId) {
+                const {data: newGardenData} = await amplifyClient.models.Garden.get({
+                    id: gardenId
+                });
+                if (newGardenData) setActiveGarden(newGardenData);
+            }
+        }
+        fetchGarden
+    }, [params]);
+
+    //Query the planned steps
+    useEffect(() => {
+        const fetchPlannedSteps = async () => {
+            if (!activeGarden) return;
+            const {data: plannedSteps} = await activeGarden.plannedSteps()
+            const plannedStepsWithSvg = plannedSteps.map(item => {
+                // If the step has plant rows, render the garden svg
+                if (
+                    !item.step ||
+                    !item.step.plantRows ||
+                    item.step?.plantRows?.length === 0
+                ) return item
+
+                return {
+                    ...item,
+                    gardenSvg: createGardenSVG({ garden: activeGarden, plannedSteps: [item] })
+                    // gardenSvg: <GardenSVG garden={activeGarden!} plannedSteps={[item]} />
+                }
+            })
+
+            setPlannedSteps(plannedStepsWithSvg)
+        }
+        fetchPlannedSteps();
+    }, [activeGarden]);
 
     useEffect(() => {
         const gardenSubscriptionHandler = async () => {
@@ -144,7 +193,22 @@ function Page({
                 }).subscribe({
                     next: ({ items, isSynced }) => {
                         console.log('plannedSteps: ', items)
-                        if (isSynced) setPlannedSteps(items)
+                        const itemsWithSvg = items.map(item => {
+                            // If the step has plant rows, render the garden svg
+                            if (
+                                !activeGarden ||
+                                !item.step ||
+                                !item.step.plantRows ||
+                                item.step?.plantRows?.length === 0
+                            ) return item
+
+                            return {
+                                ...item,
+                                // gardenSvg: <GardenSVG garden={activeGarden} plannedSteps={[item]} />
+                            }
+                        })
+
+                        if (isSynced) setPlannedSteps(itemsWithSvg)
                     }
                 })
 
@@ -199,8 +263,8 @@ function Page({
                                 <Typography variant="body2" color="text.secondary">
                                     {plannedStep.step?.description}
                                 </Typography>
-                                <Button 
-                                    variant="contained" 
+                                <Button
+                                    variant="contained"
                                     color="secondary"
                                     onClick={async () => {
                                         await amplifyClient.models.PlannedStep.delete({
@@ -232,8 +296,9 @@ function Page({
                                 plannedStep.step.plantRows &&
                                 plannedStep.step?.plantRows?.length > 0
                             ) && (
-                                <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} />
-                            )}
+                                    // <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} />
+                                    plannedStep.gardenSvg
+                                )}
                             {/* <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} /> */}
                         </Box>
                     </Box>
@@ -265,17 +330,17 @@ function Page({
                         multiline
                         rows={4}
                     />
-                    <Button 
-                    variant="contained" 
-                    color="primary"
-                    onClick={() => {
-                        amplifyClient.queries.generateGarden({
-                            gardenId: activeGarden.id!,
-                            userInput: userChatInput
-                        })
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                            amplifyClient.queries.generateGarden({
+                                gardenId: activeGarden.id!,
+                                userInput: userChatInput
+                            })
 
-                        setUserChatInput('')
-                    }}
+                            setUserChatInput('')
+                        }}
                     >Send</Button>
                 </Box>
             </Box>
