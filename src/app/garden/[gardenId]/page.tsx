@@ -3,152 +3,115 @@ import React, { useEffect, useState, useMemo } from 'react';
 // import { stringify } from 'yaml';
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
-import { Box, Button, Card, CardContent, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+
+import FloatingHidableChatBox from '@/components/FloatingHidableChatBox';
+import { PlannedSteps, GardenWithSvg } from '@/../utils/types';
+import { createGardenSVG } from '@/../utils/drawing';
+
 const amplifyClient = generateClient<Schema>();
-
-interface GardenSVGProps {
-    garden: Schema["Garden"]["createType"];
-    plannedSteps: Schema["PlannedStep"]["createType"][];
-}
-
-// const GardenSVG: React.FC<GardenSVGProps> = ({ garden, plannedSteps }) => {
-const createGardenSVG = ({ garden, plannedSteps }: GardenSVGProps) => {
-    const getSpeciesColorMap = () => {
-        const map = new Map<string, string>();
-        plannedSteps.forEach(plannedStep => {
-            plannedStep.step?.plantRows?.forEach(row => {
-                if (row?.species && !map.has(row.species)) {
-                    const colors = ['#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-                    map.set(row.species, color);
-                }
-            });
-        });
-        return map;
-    };
-    const speciesColorMap = getSpeciesColorMap()
-
-    const renderPlantRows = () => {
-        return plannedSteps
-            .filter(plannedStep => (
-                plannedStep.step &&
-                plannedStep.step.plantRows
-            ))
-            .flatMap((plannedStep, stepIndex) =>
-                plannedStep.step!.plantRows!
-                    .filter(row => (row && row.location && row.species))
-                    .map((row, rowIndex) => (
-                        <g key={`step-${stepIndex}-row-${rowIndex}`}>
-                            <line
-                                x1={row!.location!.start.x}
-                                y1={row!.location!.start.y}
-                                x2={row!.location!.end.x}
-                                y2={row!.location!.end.y}
-                                stroke={speciesColorMap.get(row!.species!) || '#000000'}
-                                strokeWidth={row!.plantSpacingInMeters || 0.1}
-                            />
-                            {/* <text
-                    x={(row!.location!.start.x + row!.location!.end.x) / 2}
-                    y={(row!.location!.start.y + row!.location!.end.y) / 2}
-                    fontSize="0.5"
-                    fill="black"
-                    textAnchor="middle"
-                    transform={`rotate(${Math.atan2(row!.location!.end.y - row!.location!.start.y, row!.location!.end.x - row!.location!.start.x) * 180 / Math.PI}, ${(row!.location!.start.x + row!.location!.end.x) / 2}, ${(row!.location!.start.y + row!.location!.end.y) / 2})`}
-                    >
-                    {row!.species}
-                    </text> */}
-                        </g>
-                    ))
-            );
-    };
-
-    const renderLegend = () => {
-        return (
-            <g className="legend">
-                {[...speciesColorMap.entries()].map(([species, color], index) => (
-                    <g key={`legend-${index}`} transform={`translate(0, ${index * 0.5})`}>
-                        <rect x="5" y="1" width="1" height=".4" fill={color} />
-                        <text x="6" y="1.3" fontSize=".3" fill="black">{species}</text>
-                    </g>
-                ))}
-            </g>
-        );
-    };
-
-
-
-    const renderPerimeter = () => {
-        if (!garden.perimeterPoints) return;
-        const points = garden.perimeterPoints.filter(point => point).map(point => `${point!.x},${point!.y}`).join(' ');
-        return <polygon points={points} fill="saddlebrown" strokeWidth="0" stroke="black" />;
-    };
-
-    const getViewBox = () => {
-        if (!garden.perimeterPoints) return "0 0 10 10";
-        const xValues = garden.perimeterPoints.map(point => point!.x);
-        const yValues = garden.perimeterPoints.map(point => point!.y);
-        const minX = Math.min(...xValues);
-        const maxX = Math.max(...xValues);
-        const minY = Math.min(...yValues);
-        const maxY = Math.max(...yValues);
-        return `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
-    };
-
-    return (
-        <Box display="flex" flexDirection="row" gap={0}>
-            <svg height="500" viewBox={getViewBox()}>
-                {renderPerimeter()}
-                {renderPlantRows()}
-                {/* {renderLegend()} */}
-            </svg>
-            <svg height="500" viewBox="0 0 10 10">
-                {/* {renderPerimeter()}
-            {renderPlantRows()} */}
-                {renderLegend()}
-            </svg>
-        </Box>
-
-    );
-};
-
-type PlannedSteps = (
-    Schema["PlannedStep"]["createType"] & {
-        gardenSvg?: React.JSX.Element
-    }
-
-)[];
 
 function Page({
     params,
 }: {
     params: Promise<{ gardenId: string }>
 }) {
-    const [userChatInput, setUserChatInput] = useState<string>('');
-    // const [activeGarden, setActiveGarden] = useState<Schema["Garden"]["createType"]>();
-    const [activeGarden, setActiveGarden] = useState<Schema["Garden"]["type"]>();
-    const [plannedSteps, setPlannedSteps] = useState<PlannedSteps>();
+    const [activeGarden, setActiveGarden] = useState<GardenWithSvg>();
+    const [plantedPlantRows, setPlantedPlantRows] = useState<Schema["PlantedPlantRow"]["createType"][]>([]);
+    const [plannedSteps, setPlannedSteps] = useState<PlannedSteps>([]);
     // const [pastSteps, setPastSteps] = useState<Array<Schema["PastStep"]["createType"]>>();
-    // const [isLoading, setIsLoading] = useState(true);
+
+    const proccessPlannedSteps = (unproccessedPlanSteps: PlannedSteps) => {
+        if (activeGarden) {
+            console.log('unproccessedPlanSteps: ', unproccessedPlanSteps)
+            const uniquePlannedSteps = unproccessedPlanSteps.filter((step, index, self) =>
+                index === self.findIndex((s) => s.id === step.id)
+            );
+
+            const plannedStepsWithSvg = uniquePlannedSteps.map(item => {
+                // If the step has plant rows, render the garden svg
+                if (
+                    !item.step ||
+                    !item.step.plantRows ||
+                    item.step?.plantRows?.length === 0
+                ) return item
+
+                return {
+                    ...item,
+                    gardenSvg: createGardenSVG({ garden: activeGarden, plannedSteps: [item] })
+                    // gardenSvg: <GardenSVG garden={activeGarden!} plannedSteps={[item]} />
+                }
+            })
+
+            return (
+                plannedStepsWithSvg.sort((a, b) => {
+                    const dateA = new Date(a.plannedDate || 0);
+                    const dateB = new Date(b.plannedDate || 0);
+                    return dateA.getTime() - dateB.getTime();
+                })
+            )
+        }
+
+    }
+
+    const setPlannedStepsAndAddSvg = (newPlannedSteps: PlannedSteps) => {
+        proccessPlannedSteps(newPlannedSteps);
+
+        setPlannedSteps(prev => {
+            const processedPlannedSteps = proccessPlannedSteps([
+                ...prev,
+                ...newPlannedSteps
+
+            ])
+            if (processedPlannedSteps) return processedPlannedSteps
+            else return prev
+        });
+    }
+
+    const addPlantedPlantRowAndUpload = async (
+        newPlantedPlantRow: Schema["PlantedPlantRow"]["createType"]
+    ) => {
+        const createPlantedPlantRowResponse = await amplifyClient.models.PlantedPlantRow.create(newPlantedPlantRow)
+        console.log('createPlantedPlantRowResponse: ', createPlantedPlantRowResponse)
+        if (createPlantedPlantRowResponse.data) setPlantedPlantRows(prev => [...prev, createPlantedPlantRowResponse.data!])
+    }
+
+    const deletePlantedPlantRowAndUpload = async (id: string) => {
+        await amplifyClient.models.PlantedPlantRow.delete({ id: id })
+        setPlantedPlantRows(prev => prev?.filter(row => row.id !== id))
+    }
+
 
     //Query the garden
     useEffect(() => {
         const fetchGarden = async () => {
             const gardenId = (await params).gardenId
             if (gardenId) {
-                const {data: newGardenData} = await amplifyClient.models.Garden.get({
+                const { data: newGardenData } = await amplifyClient.models.Garden.get({
                     id: gardenId
                 });
+                // console.log('newGardenData: ', newGardenData)
                 if (newGardenData) setActiveGarden(newGardenData);
             }
         }
-        fetchGarden
+        fetchGarden()
     }, [params]);
+
+    //Query the PlantedPlantRows
+    useEffect(() => {
+        const fetchPlantedPlantRows = async () => {
+            if (!activeGarden) return;
+            const { data: plantedPlantRows } = await activeGarden.plantedPlantRow()
+            if (plantedPlantRows) setPlantedPlantRows(plantedPlantRows)
+        }
+        fetchPlantedPlantRows();
+    }, [params])
 
     //Query the planned steps
     useEffect(() => {
         const fetchPlannedSteps = async () => {
             if (!activeGarden) return;
-            const {data: plannedSteps} = await activeGarden.plannedSteps()
+            const { data: plannedSteps } = await activeGarden.plannedSteps()
             const plannedStepsWithSvg = plannedSteps.map(item => {
                 // If the step has plant rows, render the garden svg
                 if (
@@ -169,61 +132,6 @@ function Page({
         fetchPlannedSteps();
     }, [activeGarden]);
 
-    useEffect(() => {
-        const gardenSubscriptionHandler = async () => {
-            const gardenId = (await params).gardenId
-            if (gardenId) {
-                console.log('Creating subscription for garden: ', gardenId)
-                const gardenSub = amplifyClient.models.Garden.observeQuery({
-                    filter: {
-                        id: { eq: gardenId }
-                    }
-                }).subscribe({
-                    next: ({ items, isSynced }) => {
-                        console.log('garden: ', items)
-                        if (isSynced) setActiveGarden(items[0])
-                    }
-                })
-
-                console.log('Creating subscription for planned steps: ')
-                const plannedStepsSub = amplifyClient.models.PlannedStep.observeQuery({
-                    filter: {
-                        gardenId: { eq: gardenId }
-                    }
-                }).subscribe({
-                    next: ({ items, isSynced }) => {
-                        console.log('plannedSteps: ', items)
-                        const itemsWithSvg = items.map(item => {
-                            // If the step has plant rows, render the garden svg
-                            if (
-                                !activeGarden ||
-                                !item.step ||
-                                !item.step.plantRows ||
-                                item.step?.plantRows?.length === 0
-                            ) return item
-
-                            return {
-                                ...item,
-                                // gardenSvg: <GardenSVG garden={activeGarden} plannedSteps={[item]} />
-                            }
-                        })
-
-                        if (isSynced) setPlannedSteps(itemsWithSvg)
-                    }
-                })
-
-                return () => {
-                    gardenSub.unsubscribe();
-                    plannedStepsSub.unsubscribe();
-                };
-            }
-        }
-
-        gardenSubscriptionHandler()
-
-    }, [params])
-
-
     if (!activeGarden || !activeGarden.id) {
         return <Typography variant="h6">Loading...</Typography>;
     }
@@ -243,20 +151,57 @@ function Page({
                             <Typography variant="body2" color="text.secondary">
                                 Location: {activeGarden.location?.cityStateAndCountry || "Unknown"}
                             </Typography>
+                            <Box mt={2}>
+                                <Typography variant="h6" component="div">
+                                    Planted Rows
+                                </Typography>
+                                {plantedPlantRows.length === 0 ? (
+                                    <Typography variant="body2" color="text.secondary">
+                                        No plants have been planted yet.
+                                    </Typography>
+                                ) : (
+                                    plantedPlantRows.map((row, index) => (
+                                        <Box key={index} mt={1}>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Species: {row.info?.species}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Location: {JSON.stringify(row.info?.location)}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Plant Date: {row.info?.plantDate ? new Date(row.info?.plantDate).toLocaleDateString() : "Unknown"}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Expected Harvest: {row.info?.expectedHarvest?.date ? new Date(row.info?.expectedHarvest.date).toLocaleDateString() : "Unknown"} - {row.info?.expectedHarvest?.amount} {row.info?.expectedHarvest?.unit}
+                                            </Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={async () => {
+                                                if (row.id) {
+                                                    await deletePlantedPlantRowAndUpload(row.id);
+                                                }
+                                            }}
+                                        >
+                                            Delete
+                                        </Button>
+                                        </Box>
+                                    ))
+                                )}
+                            </Box>
                         </CardContent>
                     </Card>
                 </Box>
-                {plannedSteps?.sort((a, b) => {
-                    const dateA = new Date(a.plannedDate || 0);
-                    const dateB = new Date(b.plannedDate || 0);
-                    return dateA.getTime() - dateB.getTime();
-                }).map((plannedStep, index) => (
+                {plannedSteps?.map((plannedStep, index) => (
                     <Box key={index} display="flex" flexDirection="row" gap={2}>
                         <Card>
                             <CardContent>
                                 <Typography variant="h6" component="div">
                                     {plannedStep.step?.title}
                                 </Typography>
+                                {/* <Typography variant="body2">
+                                    {plannedStep.id}
+                                </Typography> */}
                                 <Typography variant="body2" color="text.secondary">
                                     {plannedStep.plannedDate ? new Date(plannedStep.plannedDate).toLocaleDateString() : "Unknown"}
                                 </Typography>
@@ -286,6 +231,26 @@ function Page({
                                         <Typography variant="body2" color="text.secondary">
                                             Expected Harvest: {row?.expectedHarvest?.date ? new Date(row.expectedHarvest.date).toLocaleDateString() : "Unknown"} - {row?.expectedHarvest?.amount} {row?.expectedHarvest?.unit}
                                         </Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={async () => {
+                                                if (!row) return;
+                                                const newPlantedPlantRow: Schema["PlantedPlantRow"]["createType"] = {
+                                                    gardenId: activeGarden.id,
+                                                    info: {
+                                                        species: row.species,
+                                                        location: row.location,
+                                                        expectedHarvest: row.expectedHarvest,
+                                                        plantDate: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
+                                                    }
+                                                };
+                                                console.log("Creating new planted plant row:\n", newPlantedPlantRow);
+                                                await addPlantedPlantRowAndUpload(newPlantedPlantRow);
+                                            }}
+                                        >
+                                            Add to Planted Rows
+                                        </Button>
                                     </Box>
                                 ))}
                             </CardContent>
@@ -306,47 +271,13 @@ function Page({
             </Box>
 
             {/* Floating Chat Box */}
-            <Box
-                sx={{
-                    position: 'fixed',
-                    bottom: 16,
-                    right: 16,
-                    width: 300,
-                    padding: 2,
-                    boxShadow: 3,
-                    borderRadius: 2,
-                    backgroundColor: 'white',
-                    zIndex: 1000,
-                }}
-            >
-                <Typography variant="h6">Chat</Typography>
-                <Box display="flex" flexDirection="column" gap={1}>
-                    <TextField
-                        variant="outlined"
-                        placeholder="Type your message..."
-                        value={userChatInput}
-                        onChange={(e) => setUserChatInput(e.target.value)}
-                        fullWidth
-                        multiline
-                        rows={4}
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                            amplifyClient.queries.generateGarden({
-                                gardenId: activeGarden.id!,
-                                userInput: userChatInput
-                            })
+            <FloatingHidableChatBox
+                gardenId={activeGarden.id}
+                setPlannedSteps={setPlannedStepsAndAddSvg}
+            />
 
-                            setUserChatInput('')
-                        }}
-                    >Send</Button>
-                </Box>
-            </Box>
-
-            <pre>{JSON.stringify(activeGarden, null, 2)}</pre>
-            <pre>{JSON.stringify(plannedSteps, null, 2)}</pre>
+            {/* <pre>{JSON.stringify(activeGarden, null, 2)}</pre>
+            <pre>{JSON.stringify(plannedSteps, null, 2)}</pre> */}
         </Box>
     );
 }

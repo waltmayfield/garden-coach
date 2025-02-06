@@ -14,12 +14,19 @@ export const createChatMessage = /* GraphQL */ `mutation CreateChatMessage(
   $input: CreateChatMessageInput!
 ) {
   createChatMessage(condition: $condition, input: $input) {
-    chatSessionId
+    gardenId
     content {
       text
     }
-    owner
+    toolCallId
+    toolName
+    toolCalls
+
     role
+    id
+    createdAt
+    updatedAt
+    owner
   }
 }
 ` as GeneratedMutation<
@@ -33,7 +40,6 @@ export const createPlannedStepForGarden = /* GraphQL */ `mutation CreatePlannedS
 ) {
   createPlannedStep(condition: $condition, input: $input) {
     gardenId
-    owner
     plannedDate
     step {
       description
@@ -44,6 +50,10 @@ export const createPlannedStepForGarden = /* GraphQL */ `mutation CreatePlannedS
         species
       }
     }
+    id
+    createdAt
+    updatedAt
+    owner
   }
 }
 ` as GeneratedMutation<

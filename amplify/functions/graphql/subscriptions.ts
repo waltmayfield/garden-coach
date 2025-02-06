@@ -13,22 +13,29 @@ export const onCreateChatMessage = /* GraphQL */ `subscription OnCreateChatMessa
   $owner: String
 ) {
   onCreateChatMessage(filter: $filter, owner: $owner) {
-    chatSessionId
     content {
       text
       __typename
     }
     createdAt
-    id
-    owner
-    role
-    session {
+    garden {
       createdAt
       id
+      name
+      objective
       owner
+      units
       updatedAt
       __typename
     }
+    gardenId
+    id
+    owner
+    responseComplete
+    role
+    toolCallId
+    toolCalls
+    toolName
     updatedAt
     __typename
   }
@@ -36,26 +43,6 @@ export const onCreateChatMessage = /* GraphQL */ `subscription OnCreateChatMessa
 ` as GeneratedSubscription<
   APITypes.OnCreateChatMessageSubscriptionVariables,
   APITypes.OnCreateChatMessageSubscription
->;
-export const onCreateChatSession = /* GraphQL */ `subscription OnCreateChatSession(
-  $filter: ModelSubscriptionChatSessionFilterInput
-  $owner: String
-) {
-  onCreateChatSession(filter: $filter, owner: $owner) {
-    createdAt
-    id
-    messages {
-      nextToken
-      __typename
-    }
-    owner
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnCreateChatSessionSubscriptionVariables,
-  APITypes.OnCreateChatSessionSubscription
 >;
 export const onCreateGarden = /* GraphQL */ `subscription OnCreateGarden(
   $filter: ModelSubscriptionGardenFilterInput
@@ -68,6 +55,10 @@ export const onCreateGarden = /* GraphQL */ `subscription OnCreateGarden(
       cityStateAndCountry
       lattitude
       longitude
+      __typename
+    }
+    messages {
+      nextToken
       __typename
     }
     name
@@ -239,22 +230,29 @@ export const onDeleteChatMessage = /* GraphQL */ `subscription OnDeleteChatMessa
   $owner: String
 ) {
   onDeleteChatMessage(filter: $filter, owner: $owner) {
-    chatSessionId
     content {
       text
       __typename
     }
     createdAt
-    id
-    owner
-    role
-    session {
+    garden {
       createdAt
       id
+      name
+      objective
       owner
+      units
       updatedAt
       __typename
     }
+    gardenId
+    id
+    owner
+    responseComplete
+    role
+    toolCallId
+    toolCalls
+    toolName
     updatedAt
     __typename
   }
@@ -262,26 +260,6 @@ export const onDeleteChatMessage = /* GraphQL */ `subscription OnDeleteChatMessa
 ` as GeneratedSubscription<
   APITypes.OnDeleteChatMessageSubscriptionVariables,
   APITypes.OnDeleteChatMessageSubscription
->;
-export const onDeleteChatSession = /* GraphQL */ `subscription OnDeleteChatSession(
-  $filter: ModelSubscriptionChatSessionFilterInput
-  $owner: String
-) {
-  onDeleteChatSession(filter: $filter, owner: $owner) {
-    createdAt
-    id
-    messages {
-      nextToken
-      __typename
-    }
-    owner
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnDeleteChatSessionSubscriptionVariables,
-  APITypes.OnDeleteChatSessionSubscription
 >;
 export const onDeleteGarden = /* GraphQL */ `subscription OnDeleteGarden(
   $filter: ModelSubscriptionGardenFilterInput
@@ -294,6 +272,10 @@ export const onDeleteGarden = /* GraphQL */ `subscription OnDeleteGarden(
       cityStateAndCountry
       lattitude
       longitude
+      __typename
+    }
+    messages {
+      nextToken
       __typename
     }
     name
@@ -465,22 +447,29 @@ export const onUpdateChatMessage = /* GraphQL */ `subscription OnUpdateChatMessa
   $owner: String
 ) {
   onUpdateChatMessage(filter: $filter, owner: $owner) {
-    chatSessionId
     content {
       text
       __typename
     }
     createdAt
-    id
-    owner
-    role
-    session {
+    garden {
       createdAt
       id
+      name
+      objective
       owner
+      units
       updatedAt
       __typename
     }
+    gardenId
+    id
+    owner
+    responseComplete
+    role
+    toolCallId
+    toolCalls
+    toolName
     updatedAt
     __typename
   }
@@ -488,26 +477,6 @@ export const onUpdateChatMessage = /* GraphQL */ `subscription OnUpdateChatMessa
 ` as GeneratedSubscription<
   APITypes.OnUpdateChatMessageSubscriptionVariables,
   APITypes.OnUpdateChatMessageSubscription
->;
-export const onUpdateChatSession = /* GraphQL */ `subscription OnUpdateChatSession(
-  $filter: ModelSubscriptionChatSessionFilterInput
-  $owner: String
-) {
-  onUpdateChatSession(filter: $filter, owner: $owner) {
-    createdAt
-    id
-    messages {
-      nextToken
-      __typename
-    }
-    owner
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnUpdateChatSessionSubscriptionVariables,
-  APITypes.OnUpdateChatSessionSubscription
 >;
 export const onUpdateGarden = /* GraphQL */ `subscription OnUpdateGarden(
   $filter: ModelSubscriptionGardenFilterInput
@@ -520,6 +489,10 @@ export const onUpdateGarden = /* GraphQL */ `subscription OnUpdateGarden(
       cityStateAndCountry
       lattitude
       longitude
+      __typename
+    }
+    messages {
+      nextToken
       __typename
     }
     name

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { stringify} from "yaml";
+import { stringify } from "yaml";
 
 import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/data';
@@ -9,23 +9,23 @@ import { getConfiguredAmplifyClient } from '../../../utils/amplifyUtils';
 // import { GraphqlOutput } from '@aws-amplify/backend-output-schemas';
 
 import { ChatBedrockConverse } from "@langchain/aws";
-import { HumanMessage, AIMessage, ToolMessage, BaseMessage, MessageContentText, SystemMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage, ToolMessage, BaseMessage, MessageContentText, SystemMessage, AIMessageChunk } from "@langchain/core/messages";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { Calculator } from "@langchain/community/tools/calculator";
 
 // import { AppSyncIdentityCognito, AppSyncIdentityOIDC } from 'aws-lambda';
 
 // import { generateGardenPlanSteps } from './graphql/queries';
-import { generateGardenPlanSteps } from '../../../utils/graphqlStatements'
-import { createGarden, updateGarden } from '../graphql/mutations';
-import { getGarden, listPlannedSteps} from '../graphql/queries';
-import { CreateGardenInput, UpdateGardenInput } from "../graphql/API";
+// import { generateGardenPlanSteps } from '../../../utils/graphqlStatements'
+// import { createGarden, updateGarden } from '../graphql/mutations';
+import { getGarden, listPlannedSteps } from '../graphql/queries';
+// import { CreateGardenInput, UpdateGardenInput } from "../graphql/API";
 
 import { Schema } from '../../data/resource';
 
-import { generateGarden } from '../../../utils/amplifyStrucutedOutputs';
+// import { generateGarden } from '../../../utils/amplifyStrucutedOutputs';
+import { getLangChainMessageTextContent, publishMessage, stringifyLimitStringLength } from '../../../utils/langChainUtils';
 import { createGardenInfoToolBuilder, createGardenPlanToolBuilder } from "./toolBox";
-import { get } from "http";
 
 export const handler: Schema["generateGarden"]["functionHandler"] = async (event, context) => {
     console.log('event:\n', JSON.stringify(event, null, 2))
@@ -36,14 +36,14 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
 
     const amplifyClient = getConfiguredAmplifyClient();
 
-    const {data: garden} = await amplifyClient.graphql({
+    const { data: garden } = await amplifyClient.graphql({
         query: getGarden,
         variables: { id: event.arguments.gardenId }
     })
 
     const gardenString = stringify(garden.getGarden)
 
-    const {data: plannedSteps} = await amplifyClient.graphql({
+    const { data: plannedSteps } = await amplifyClient.graphql({
         query: listPlannedSteps,
         variables: { filter: { gardenId: { eq: event.arguments.gardenId } } }
     })
@@ -57,7 +57,7 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
 
     const agentTools = [
         new Calculator(),
-        createGardenInfoToolBuilder({gardenId: event.arguments.gardenId}),
+        createGardenInfoToolBuilder({ gardenId: event.arguments.gardenId }),
         createGardenPlanToolBuilder({ gardenId: event.arguments.gardenId, owner: event.identity.sub })
     ]
 
@@ -101,18 +101,47 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
 
         // console.log('agentResponse:\n', stringify(agentResponse))
 
-        for await (
-            const chunk of await agent.stream(input, {
-                streamMode: "values",
-            })
-        ) {
-            const newMessage: BaseMessage = chunk.messages[chunk.messages.length - 1];
-    
-            if (!(newMessage instanceof HumanMessage)) {
-                // await publishMessage(event.arguments.chatSessionId, event.identity.sub, newMessage)
-                console.log("newMessage: ", stringify(newMessage))
+        const agentEventStream = agent.streamEvents(
+            input,
+            {
+                version: "v2",
             }
+        );
+
+        for await (const streamEvent of agentEventStream) {
+            switch (streamEvent.event) {
+                case "on_chat_model_stream":
+                    //Handle token stream event
+                    break;
+                case "on_tool_end":
+                case "on_chat_model_end":
+                    const streamChunk = streamEvent.data.output as ToolMessage | AIMessageChunk
+                    // const textContent = getLangChainMessageTextContent(streamChunk)
+                    console.log('received on chat model end:\n', stringifyLimitStringLength(streamChunk))
+                    await publishMessage({
+                        gardenId: event.arguments.gardenId,
+                        owner: event.identity.sub,
+                        message: streamChunk
+                    })
+                    break
+
+            }
+
         }
+
+
+        // for await (
+        //     const chunk of await agent.stream(input, {
+        //         streamMode: "values",
+        //     })
+        // ) {
+        //     const newMessage: BaseMessage = chunk.messages[chunk.messages.length - 1];
+
+        //     if (!(newMessage instanceof HumanMessage)) {
+        //         // await publishMessage(event.arguments.chatSessionId, event.identity.sub, newMessage)
+        //         console.log("newMessage: ", stringify(newMessage))
+        //     }
+        // }
 
     } catch (error) {
         // console.error("Error generating garden / steps:", JSON.stringify(error, null, 2));

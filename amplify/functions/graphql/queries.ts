@@ -30,22 +30,29 @@ export const generateGardenPlanSteps = /* GraphQL */ `query GenerateGardenPlanSt
 >;
 export const getChatMessage = /* GraphQL */ `query GetChatMessage($id: ID!) {
   getChatMessage(id: $id) {
-    chatSessionId
     content {
       text
       __typename
     }
     createdAt
-    id
-    owner
-    role
-    session {
+    garden {
       createdAt
       id
+      name
+      objective
       owner
+      units
       updatedAt
       __typename
     }
+    gardenId
+    id
+    owner
+    responseComplete
+    role
+    toolCallId
+    toolCalls
+    toolName
     updatedAt
     __typename
   }
@@ -53,23 +60,6 @@ export const getChatMessage = /* GraphQL */ `query GetChatMessage($id: ID!) {
 ` as GeneratedQuery<
   APITypes.GetChatMessageQueryVariables,
   APITypes.GetChatMessageQuery
->;
-export const getChatSession = /* GraphQL */ `query GetChatSession($id: ID!) {
-  getChatSession(id: $id) {
-    createdAt
-    id
-    messages {
-      nextToken
-      __typename
-    }
-    owner
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GetChatSessionQueryVariables,
-  APITypes.GetChatSessionQuery
 >;
 export const getGarden = /* GraphQL */ `query GetGarden($id: ID!) {
   getGarden(id: $id) {
@@ -79,6 +69,10 @@ export const getGarden = /* GraphQL */ `query GetGarden($id: ID!) {
       cityStateAndCountry
       lattitude
       longitude
+      __typename
+    }
+    messages {
+      nextToken
       __typename
     }
     name
@@ -233,28 +227,32 @@ export const getPlantedPlantRow = /* GraphQL */ `query GetPlantedPlantRow($id: I
   APITypes.GetPlantedPlantRowQueryVariables,
   APITypes.GetPlantedPlantRowQuery
 >;
-export const listChatMessageByChatSessionIdAndCreatedAt = /* GraphQL */ `query ListChatMessageByChatSessionIdAndCreatedAt(
-  $chatSessionId: ID!
+export const listChatMessageByGardenIdAndCreatedAt = /* GraphQL */ `query ListChatMessageByGardenIdAndCreatedAt(
   $createdAt: ModelStringKeyConditionInput
   $filter: ModelChatMessageFilterInput
+  $gardenId: ID!
   $limit: Int
   $nextToken: String
   $sortDirection: ModelSortDirection
 ) {
-  listChatMessageByChatSessionIdAndCreatedAt(
-    chatSessionId: $chatSessionId
+  listChatMessageByGardenIdAndCreatedAt(
     createdAt: $createdAt
     filter: $filter
+    gardenId: $gardenId
     limit: $limit
     nextToken: $nextToken
     sortDirection: $sortDirection
   ) {
     items {
-      chatSessionId
       createdAt
+      gardenId
       id
       owner
+      responseComplete
       role
+      toolCallId
+      toolCalls
+      toolName
       updatedAt
       __typename
     }
@@ -263,8 +261,8 @@ export const listChatMessageByChatSessionIdAndCreatedAt = /* GraphQL */ `query L
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListChatMessageByChatSessionIdAndCreatedAtQueryVariables,
-  APITypes.ListChatMessageByChatSessionIdAndCreatedAtQuery
+  APITypes.ListChatMessageByGardenIdAndCreatedAtQueryVariables,
+  APITypes.ListChatMessageByGardenIdAndCreatedAtQuery
 >;
 export const listChatMessages = /* GraphQL */ `query ListChatMessages(
   $filter: ModelChatMessageFilterInput
@@ -273,11 +271,15 @@ export const listChatMessages = /* GraphQL */ `query ListChatMessages(
 ) {
   listChatMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
-      chatSessionId
       createdAt
+      gardenId
       id
       owner
+      responseComplete
       role
+      toolCallId
+      toolCalls
+      toolName
       updatedAt
       __typename
     }
@@ -288,27 +290,6 @@ export const listChatMessages = /* GraphQL */ `query ListChatMessages(
 ` as GeneratedQuery<
   APITypes.ListChatMessagesQueryVariables,
   APITypes.ListChatMessagesQuery
->;
-export const listChatSessions = /* GraphQL */ `query ListChatSessions(
-  $filter: ModelChatSessionFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listChatSessions(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      createdAt
-      id
-      owner
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.ListChatSessionsQueryVariables,
-  APITypes.ListChatSessionsQuery
 >;
 export const listGardens = /* GraphQL */ `query ListGardens(
   $filter: ModelGardenFilterInput
@@ -361,10 +342,18 @@ export const listPastSteps = /* GraphQL */ `query ListPastSteps(
 >;
 export const listPlannedSteps = /* GraphQL */ `query ListPlannedSteps(
   $filter: ModelPlannedStepFilterInput
+  $id: ID
   $limit: Int
   $nextToken: String
+  $sortDirection: ModelSortDirection
 ) {
-  listPlannedSteps(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listPlannedSteps(
+    filter: $filter
+    id: $id
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
     items {
       createdAt
       gardenId

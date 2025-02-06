@@ -65,6 +65,7 @@ const StepType = z.object({
 
 export const plannedStepArrayType = z.object({
     steps: z.array(z.object({
+        id: z.string().optional().describe("To update an existing step, provide the id of the step"),
         step: StepType,
         plannedDate: zodStringDate,
     })),

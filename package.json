@@ -28,8 +28,8 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@aws-amplify/backend": "^1.12.0",
-    "@aws-amplify/backend-cli": "^1.4.6",
+    "@aws-amplify/backend": "^1.14.0",
+    "@aws-amplify/backend-cli": "^1.4.9",
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",

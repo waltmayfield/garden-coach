@@ -23,8 +23,11 @@ backend.addOutput({custom: {rootStackName: backend.stack.stackName}});
 ].forEach((resource) => {
   resource.addToRolePolicy(
     new iam.PolicyStatement({
-      actions: ['bedrock:InvokeModel'],
-      resources: ['*']
-    })
+      actions: ["bedrock:InvokeModel*"],
+      resources: [
+          `arn:aws:bedrock:${backend.stack.region}:${backend.stack.account}:inference-profile/*`,
+          `arn:aws:bedrock:us-*::foundation-model/*`,
+      ],
+  }),
   )
 })

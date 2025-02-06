@@ -1,4 +1,5 @@
 import { type ClientSchema, a, defineData, defineFunction } from '@aws-amplify/backend';
+import { GardenUnits } from '../functions/graphql/API';
 // import { createZodSchema } from './amplifyToZod'
 
 export const generateGardenPlanStepsFunction = defineFunction({
@@ -62,29 +63,39 @@ export const schema = a.schema({
     plantRows: a.ref('PlantRow').array(),
   }),
 
-  ChatSession: a.model({
-    messages: a.hasMany("ChatMessage", "chatSessionId"),
-  })
-    .authorization((allow) => [allow.owner(), allow.authenticated()]),
+  // ChatSession: a.model({
+  //   messages: a.hasMany("ChatMessage", "chatSessionId"),
+  // })
+  //   .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
   ChatMessage: a
     .model({
-      chatSessionId: a.id(),
-      session: a.belongsTo("ChatSession", "chatSessionId"),
+      gardenId: a.id(),
+      garden: a.belongsTo("Garden", 'gardenId'),
       content: a.customType({
         text: a.string(),
-        proposedSteps: a.ref('Step').array()
+        proposedSteps: a.ref('Step').array(),
+        // proposedGardenUpdate: a.ref('Garden'),
       }),
       role: a.enum(["human", "ai", "tool"]),
+      responseComplete: a.boolean(),
+
+      //auto-generated fields
       owner: a.string(),
-      createdAt: a.datetime()
+      createdAt: a.datetime(),
+      
+      //langchain fields
+      toolCallId: a.string(),
+      toolName: a.string(),
+      toolCalls: a.string()
     })
     .secondaryIndexes((index) => [
-      index("chatSessionId").sortKeys(["createdAt"])
+      index("gardenId").sortKeys(["createdAt"])
     ])
     .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
   PlannedStep: a.model({
+    id: a.id(),
     gardenId: a.id(),
     garden: a.belongsTo('Garden', 'gardenId'),
     plantRowId: a.id(),
@@ -117,6 +128,7 @@ export const schema = a.schema({
     plantedPlantRow: a.hasMany('PlantedPlantRow', 'gardenId'),
     plannedSteps: a.hasMany('PlannedStep', 'gardenId'),
     pastSteps: a.hasMany('PastStep', 'gardenId'),
+    messages: a.hasMany("ChatMessage", "gardenId"),
   })
     .authorization((allow) => [allow.owner(), allow.authenticated()]),
 

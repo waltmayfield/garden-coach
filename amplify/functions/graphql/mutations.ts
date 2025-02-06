@@ -13,22 +13,29 @@ export const createChatMessage = /* GraphQL */ `mutation CreateChatMessage(
   $input: CreateChatMessageInput!
 ) {
   createChatMessage(condition: $condition, input: $input) {
-    chatSessionId
     content {
       text
       __typename
     }
     createdAt
-    id
-    owner
-    role
-    session {
+    garden {
       createdAt
       id
+      name
+      objective
       owner
+      units
       updatedAt
       __typename
     }
+    gardenId
+    id
+    owner
+    responseComplete
+    role
+    toolCallId
+    toolCalls
+    toolName
     updatedAt
     __typename
   }
@@ -36,26 +43,6 @@ export const createChatMessage = /* GraphQL */ `mutation CreateChatMessage(
 ` as GeneratedMutation<
   APITypes.CreateChatMessageMutationVariables,
   APITypes.CreateChatMessageMutation
->;
-export const createChatSession = /* GraphQL */ `mutation CreateChatSession(
-  $condition: ModelChatSessionConditionInput
-  $input: CreateChatSessionInput!
-) {
-  createChatSession(condition: $condition, input: $input) {
-    createdAt
-    id
-    messages {
-      nextToken
-      __typename
-    }
-    owner
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.CreateChatSessionMutationVariables,
-  APITypes.CreateChatSessionMutation
 >;
 export const createGarden = /* GraphQL */ `mutation CreateGarden(
   $condition: ModelGardenConditionInput
@@ -68,6 +55,10 @@ export const createGarden = /* GraphQL */ `mutation CreateGarden(
       cityStateAndCountry
       lattitude
       longitude
+      __typename
+    }
+    messages {
+      nextToken
       __typename
     }
     name
@@ -239,22 +230,29 @@ export const deleteChatMessage = /* GraphQL */ `mutation DeleteChatMessage(
   $input: DeleteChatMessageInput!
 ) {
   deleteChatMessage(condition: $condition, input: $input) {
-    chatSessionId
     content {
       text
       __typename
     }
     createdAt
-    id
-    owner
-    role
-    session {
+    garden {
       createdAt
       id
+      name
+      objective
       owner
+      units
       updatedAt
       __typename
     }
+    gardenId
+    id
+    owner
+    responseComplete
+    role
+    toolCallId
+    toolCalls
+    toolName
     updatedAt
     __typename
   }
@@ -262,26 +260,6 @@ export const deleteChatMessage = /* GraphQL */ `mutation DeleteChatMessage(
 ` as GeneratedMutation<
   APITypes.DeleteChatMessageMutationVariables,
   APITypes.DeleteChatMessageMutation
->;
-export const deleteChatSession = /* GraphQL */ `mutation DeleteChatSession(
-  $condition: ModelChatSessionConditionInput
-  $input: DeleteChatSessionInput!
-) {
-  deleteChatSession(condition: $condition, input: $input) {
-    createdAt
-    id
-    messages {
-      nextToken
-      __typename
-    }
-    owner
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.DeleteChatSessionMutationVariables,
-  APITypes.DeleteChatSessionMutation
 >;
 export const deleteGarden = /* GraphQL */ `mutation DeleteGarden(
   $condition: ModelGardenConditionInput
@@ -294,6 +272,10 @@ export const deleteGarden = /* GraphQL */ `mutation DeleteGarden(
       cityStateAndCountry
       lattitude
       longitude
+      __typename
+    }
+    messages {
+      nextToken
       __typename
     }
     name
@@ -465,22 +447,29 @@ export const updateChatMessage = /* GraphQL */ `mutation UpdateChatMessage(
   $input: UpdateChatMessageInput!
 ) {
   updateChatMessage(condition: $condition, input: $input) {
-    chatSessionId
     content {
       text
       __typename
     }
     createdAt
-    id
-    owner
-    role
-    session {
+    garden {
       createdAt
       id
+      name
+      objective
       owner
+      units
       updatedAt
       __typename
     }
+    gardenId
+    id
+    owner
+    responseComplete
+    role
+    toolCallId
+    toolCalls
+    toolName
     updatedAt
     __typename
   }
@@ -488,26 +477,6 @@ export const updateChatMessage = /* GraphQL */ `mutation UpdateChatMessage(
 ` as GeneratedMutation<
   APITypes.UpdateChatMessageMutationVariables,
   APITypes.UpdateChatMessageMutation
->;
-export const updateChatSession = /* GraphQL */ `mutation UpdateChatSession(
-  $condition: ModelChatSessionConditionInput
-  $input: UpdateChatSessionInput!
-) {
-  updateChatSession(condition: $condition, input: $input) {
-    createdAt
-    id
-    messages {
-      nextToken
-      __typename
-    }
-    owner
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.UpdateChatSessionMutationVariables,
-  APITypes.UpdateChatSessionMutation
 >;
 export const updateGarden = /* GraphQL */ `mutation UpdateGarden(
   $condition: ModelGardenConditionInput
@@ -520,6 +489,10 @@ export const updateGarden = /* GraphQL */ `mutation UpdateGarden(
       cityStateAndCountry
       lattitude
       longitude
+      __typename
+    }
+    messages {
+      nextToken
       __typename
     }
     name
