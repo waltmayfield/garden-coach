@@ -175,7 +175,7 @@ function Page({
         <Box sx={{ flexGrow: 1, padding: 2 }}>
             <Box display="flex" flexDirection="column" gap={2}>
                 <Box display="flex" flexDirection="row" gap={2}>
-                    <Card>
+                    <Card sx={{ minWidth: 200 }}>
                         <CardContent>
                             <Typography variant="h5" component="div">
                                 {activeGarden.name}
@@ -232,7 +232,7 @@ function Page({
                 </Box>
                 {plannedSteps?.map((plannedStep, index) => (
                     <Box key={index} display="flex" flexDirection="row" gap={2}>
-                        <Card>
+                        <Card sx={{ minWidth: 200 }}>
                             <CardContent>
                                 <Typography variant="h6" component="div">
                                     {plannedStep.step?.title}
