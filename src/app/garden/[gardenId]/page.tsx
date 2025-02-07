@@ -38,9 +38,10 @@ function Page({
         if (newGardenResponse.data) setActiveGarden(newGardenResponse.data)
     }
 
-    const proccessPlannedSteps = (unproccessedPlanSteps: PlannedSteps) => {
-        if (activeGarden) {
-            console.log('unproccessedPlanSteps: ', unproccessedPlanSteps)
+    const proccessPlannedSteps = React.useCallback((params: { garden: GardenWithSvg, unproccessedPlanSteps: PlannedSteps }) => {
+        const { garden, unproccessedPlanSteps } = params
+        if (garden) {
+            // console.log('unproccessedPlanSteps: ', unproccessedPlanSteps)
             const uniquePlannedSteps = unproccessedPlanSteps.filter((step, index, self) =>
                 index === self.findIndex((s) => s.id === step.id)
             );
@@ -61,7 +62,7 @@ function Page({
                 return {
                     ...item,
                     gardenSvg: createGardenSVG({
-                        garden: activeGarden,
+                        garden: garden,
                         // plannedSteps: [item], 
                         plantRows: plantRows
                     })
@@ -77,15 +78,18 @@ function Page({
             )
         }
 
-    }
+    }, [])
 
     const setPlannedStepsAndAddSvg = (newPlannedSteps: PlannedSteps) => {
         setPlannedSteps(prev => {
-            const processedPlannedSteps = proccessPlannedSteps([
-                ...prev,
-                ...newPlannedSteps
+            const processedPlannedSteps = proccessPlannedSteps({
+                garden: activeGarden!,
+                unproccessedPlanSteps: [
+                    ...prev,
+                    ...newPlannedSteps
 
-            ])
+                ]
+            })
             if (processedPlannedSteps) return processedPlannedSteps
             else return prev
         });
@@ -148,11 +152,14 @@ function Page({
             const { data: newPlannedSteps } = await activeGarden.plannedSteps()
             // setPlannedStepsAndAddSvg(plannedSteps)
             setPlannedSteps(prev => {
-                const processedPlannedSteps = proccessPlannedSteps([
-                    ...prev,
-                    ...newPlannedSteps
+                const processedPlannedSteps = proccessPlannedSteps({
+                    garden: activeGarden,
+                    unproccessedPlanSteps: [
+                        ...prev,
+                        ...newPlannedSteps
 
-                ])
+                    ]
+                })
                 if (processedPlannedSteps) return processedPlannedSteps
                 else return prev
             });
