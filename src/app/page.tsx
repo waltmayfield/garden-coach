@@ -1,8 +1,17 @@
+"use client"
 import React from 'react';
 import { Container, Typography, Button, Box } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 
+import { useRouter } from 'next/navigation';
+
+import { generateClient } from "aws-amplify/data";
+import { type Schema } from "@/../amplify/data/resource";
+const amplifyClient = generateClient<Schema>();
+
 const LandingPage = () => {
+  const router = useRouter();
+
   return (
     <Container maxWidth="lg">
       <Box sx={{ textAlign: 'center', my: 5 }}>
@@ -12,7 +21,16 @@ const LandingPage = () => {
         <Typography variant="h5" component="h2" gutterBottom>
           Your personal guide to a beautiful garden
         </Typography>
-        <Button variant="contained" color="primary" size="large" sx={{ mt: 3 }} href="/create">
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          sx={{ mt: 3 }}
+          onClick={async () => {
+            const {data: newGarden} = await amplifyClient.models.Garden.create({});
+            router.push(`/garden/${newGarden!.id}`);
+          }}
+        >
           Get Started
         </Button>
         <Button variant="outlined" color="secondary" size="large" sx={{ mt: 2, ml: 2 }} href="/listGardens">

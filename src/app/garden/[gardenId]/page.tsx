@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { stringify } from 'yaml';
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
@@ -16,10 +16,19 @@ function Page({
 }: {
     params: Promise<{ gardenId: string }>
 }) {
-    const [activeGarden, setActiveGarden] = useState<GardenWithSvg>();
+    const [activeGarden, setActiveGarden] = useState<Schema["Garden"]["type"]>();
     const [plantedPlantRows, setPlantedPlantRows] = useState<Schema["PlantedPlantRow"]["createType"][]>([]);
     const [plannedSteps, setPlannedSteps] = useState<PlannedSteps>([]);
     // const [pastSteps, setPastSteps] = useState<Array<Schema["PastStep"]["createType"]>>();
+
+    const setActiveGardenAndUpload = async (newGarden: Schema["Garden"]["createType"]) => {
+        const gardenId = (await params).gardenId
+        const newGardenResponse = await amplifyClient.models.Garden.update({
+            id: gardenId,
+            ...newGarden
+        });
+        if (newGardenResponse.data) setActiveGarden(newGardenResponse.data)
+    }
 
     const proccessPlannedSteps = (unproccessedPlanSteps: PlannedSteps) => {
         if (activeGarden) {
@@ -39,7 +48,6 @@ function Page({
                 return {
                     ...item,
                     gardenSvg: createGardenSVG({ garden: activeGarden, plannedSteps: [item] })
-                    // gardenSvg: <GardenSVG garden={activeGarden!} plannedSteps={[item]} />
                 }
             })
 
@@ -71,6 +79,7 @@ function Page({
     const addPlantedPlantRowAndUpload = async (
         newPlantedPlantRow: Schema["PlantedPlantRow"]["createType"]
     ) => {
+        
         const createPlantedPlantRowResponse = await amplifyClient.models.PlantedPlantRow.create(newPlantedPlantRow)
         console.log('createPlantedPlantRowResponse: ', createPlantedPlantRowResponse)
         if (createPlantedPlantRowResponse.data) setPlantedPlantRows(prev => [...prev, createPlantedPlantRowResponse.data!])
@@ -105,7 +114,7 @@ function Page({
             if (plantedPlantRows) setPlantedPlantRows(plantedPlantRows)
         }
         fetchPlantedPlantRows();
-    }, [params])
+    }, [activeGarden])
 
     //Query the planned steps
     useEffect(() => {
@@ -225,9 +234,9 @@ function Page({
                                         <Typography variant="body2" color="text.secondary">
                                             Species: {row?.species}
                                         </Typography>
-                                        <Typography variant="body2" color="text.secondary">
+                                        {/* <Typography variant="body2" color="text.secondary">
                                             Location: {JSON.stringify(row?.location)}
-                                        </Typography>
+                                        </Typography> */}
                                         <Typography variant="body2" color="text.secondary">
                                             Expected Harvest: {row?.expectedHarvest?.date ? new Date(row.expectedHarvest.date).toLocaleDateString() : "Unknown"} - {row?.expectedHarvest?.amount} {row?.expectedHarvest?.unit}
                                         </Typography>
@@ -273,6 +282,8 @@ function Page({
             {/* Floating Chat Box */}
             <FloatingHidableChatBox
                 gardenId={activeGarden.id}
+                initialFullScreenStatus={activeGarden.objective === ""}
+                setGarden={setActiveGardenAndUpload}
                 setPlannedSteps={setPlannedStepsAndAddSvg}
             />
 

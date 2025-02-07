@@ -13,7 +13,7 @@ import { getConfiguredAmplifyClient } from "../../../utils/amplifyUtils";
 
 export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
     async (functionArgs) => {
-        const amplifyClient = getConfiguredAmplifyClient();
+        // const amplifyClient = getConfiguredAmplifyClient();
 
         // Functions must return strings
         let updateGardenInput: UpdateGardenInput = {
@@ -31,17 +31,18 @@ export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
             updateGardenInput.location!.longitude = gardenLatLong.lng
         }
 
-        const updateGardenResponse = await amplifyClient.graphql({
-            query: updateGarden,
-            variables: { input: updateGardenInput }
-        })
+        // const updateGardenResponse = await amplifyClient.graphql({
+        //     query: updateGarden,
+        //     variables: { input: updateGardenInput }
+        // })
 
-        console.log('updateGardenResponse:\n', updateGardenResponse.data.updateGarden)
-        return stringify(updateGardenResponse.data.updateGarden)
+        // console.log('updateGardenResponse:\n', updateGardenResponse.data.updateGarden)
+        // return stringify(updateGardenResponse.data.updateGarden)
+        return "Recommend garden update to the user"
     },
     {
-        name: "updateGarden",
-        description: "Updates the garden's attributes",
+        name: "recommendGardenUpdate",
+        description: "Recommend an update to the garden's attributes",
         schema: createGardenType,
     }
 );

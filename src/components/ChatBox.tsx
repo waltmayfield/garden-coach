@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, List, ListItem, ListItemText } from '@mui/material';
+import { Box, TextField, Button, List, ListItem, ListItemText, Typography } from '@mui/material';
 
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
@@ -12,7 +12,8 @@ const amplifyClient = generateClient<Schema>();
 
 const ChatBox = (params: {
   gardenId: string,
-  setPlannedSteps: (newPlannedSteps: PlannedSteps) => void
+  setPlannedSteps: (newPlannedSteps: PlannedSteps) => void,
+  setGarden: (newGarden: Schema["Garden"]["createType"]) => void,
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>('');
@@ -87,19 +88,28 @@ const ChatBox = (params: {
     }}>
       <List
         sx={{ flexGrow: 1, overflow: 'auto' }}
-        // ref={(el) => {
-        //   if (el) { // Scroll to the bottom when the list updates
-        //     el.scrollTop = el.scrollHeight;
-        //   }
-        // }}
+      // ref={(el) => {
+      //   if (el) { // Scroll to the bottom when the list updates
+      //     el.scrollTop = el.scrollHeight;
+      //   }
+      // }}
       >
         {messages.map((message, index) => (
           <ListItem key={index}>
-            <ChatMessage message={message} setPlannedSteps={params.setPlannedSteps} />
+            <ChatMessage 
+            message={message} 
+            setPlannedSteps={params.setPlannedSteps} 
+            setGarden={params.setGarden}
+            />
           </ListItem>
         ))}
       </List>
       {isLoading && <Box sx={{ textAlign: 'center', margin: '8px 0' }}>Loading...</Box>}
+      {messages.length === 0 &&
+        <Box sx={{ textAlign: 'center', margin: '8px 0' }}>
+          <Typography variant="body2">Tell me about your dream garden</Typography>
+        </Box>
+      }
       <TextField
         fullWidth
         multiline

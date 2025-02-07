@@ -6,13 +6,16 @@ import ChatBox from "./ChatBox"
 import { useState } from "react";
 import { Button } from "@mui/material";
 import { PlannedSteps } from "../../utils/types";
+import { Schema } from "../../amplify/data/resource";
 
-const FloatingHidableChatBox = (params: { 
-    gardenId: string, 
+const FloatingHidableChatBox = (params: {
+    gardenId: string,
+    initialFullScreenStatus: boolean,
+    setGarden: (newGarden: Schema["Garden"]["createType"]) => void,
     setPlannedSteps: (newPlannedSteps: PlannedSteps) => void
 }) => {
-    const [isFullScreen, setIsFullScreen] = useState(false);
-    const [isHidden, setIsHidden] = useState(true);
+    const [isFullScreen, setIsFullScreen] = useState(params.initialFullScreenStatus);
+    const [isHidden, setIsHidden] = useState(!params.initialFullScreenStatus);
 
     const toggleFullScreen = () => {
         setIsFullScreen(!isFullScreen);
@@ -55,7 +58,11 @@ const FloatingHidableChatBox = (params: {
                             Hide
                         </Button>
                     </Box>
-                    <ChatBox gardenId={params.gardenId} setPlannedSteps={params.setPlannedSteps}/>
+                    <ChatBox
+                        gardenId={params.gardenId}
+                        setGarden={params.setGarden}
+                        setPlannedSteps={params.setPlannedSteps}
+                    />
                 </>
             )}
         </Box>

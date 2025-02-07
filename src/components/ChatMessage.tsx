@@ -1,5 +1,6 @@
 import { useTheme } from '@mui/material/styles';
 import {
+    Box,
     Button,
     Card,
     CardContent,
@@ -12,12 +13,13 @@ import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
 
 import { Message, PlannedSteps } from '@/../utils/types';
-import { plannedStepArrayType } from '../../utils/amplifyStrucutedOutputs';
+import { createGardenType, plannedStepArrayType } from '../../utils/amplifyStrucutedOutputs';
 
 const amplifyClient = generateClient<Schema>();
 
-const ChatMessage = (params: { 
-    message: Message, 
+const ChatMessage = (params: {
+    message: Message,
+    setGarden: (newGarden: Schema["Garden"]["createType"]) => void,
     setPlannedSteps: (newPlannedSteps: PlannedSteps) => void
 }) => {
     //Render either ai or human messages based on the params.message.role
@@ -26,6 +28,8 @@ const ChatMessage = (params: {
 
     let messageStyle = {};
 
+    // let proposedGarden: z.infer<typeof createGardenType>
+    let proposedGarden: Schema["Garden"]["createType"] = {}
     const proposedSteps: PlannedSteps = []
 
     switch (params.message.role) {
@@ -34,19 +38,40 @@ const ChatMessage = (params: {
                 // console.log('Parsing tool calls: ', params.message.toolCalls)
                 const toolCalls = JSON.parse(params.message.toolCalls) as { name: string, args: any }[]
                 toolCalls.forEach((toolCall) => {
-                    if (toolCall.name === 'createGardenPlannedSteps') {
-                        (toolCall.args as z.infer<typeof plannedStepArrayType>)
-                            .steps.forEach((step, index) => {
-                                const stepWithId = {
-                                    ...step,
-                                    // id: params.message.id?.slice(-3) + String(index),
-                                    id: `${params.message.id?.slice(0,-1)}${index}`,
-                                    gardenId: params.message.gardenId,
-                                    // id: String(index),
-                                }
-                                proposedSteps.push(stepWithId)
-                            })
+                    switch (toolCall.name) {
+                        case 'createGardenPlannedSteps':
+                            (toolCall.args as z.infer<typeof plannedStepArrayType>)
+                                .steps.forEach((step, index) => {
+                                    const stepWithId = {
+                                        ...step,
+                                        // id: params.message.id?.slice(-3) + String(index),
+                                        id: `${params.message.id?.slice(0, -1)}${index}`,
+                                        gardenId: params.message.gardenId,
+                                        // id: String(index),
+                                    }
+                                    proposedSteps.push(stepWithId)
+                                })
+                            break
+                        case 'recommendGardenUpdate':
+                            proposedGarden = {
+                                ...(toolCall.args as z.infer<typeof createGardenType>),
+                                id: params.message.gardenId!,
+                            }
+                            break
                     }
+                    // if (toolCall.name === 'createGardenPlannedSteps') {
+                    //     (toolCall.args as z.infer<typeof plannedStepArrayType>)
+                    //         .steps.forEach((step, index) => {
+                    //             const stepWithId = {
+                    //                 ...step,
+                    //                 // id: params.message.id?.slice(-3) + String(index),
+                    //                 id: `${params.message.id?.slice(0, -1)}${index}`,
+                    //                 gardenId: params.message.gardenId,
+                    //                 // id: String(index),
+                    //             }
+                    //             proposedSteps.push(stepWithId)
+                    //         })
+                    // }
                 })
             }
         case 'tool':
@@ -71,7 +96,27 @@ const ChatMessage = (params: {
             <Typography variant="body1">
                 {params.message?.content?.text}
             </Typography>
-            {params.message.role === 'ai' && proposedSteps.length > 0 && (
+            { proposedGarden.id && (
+                <Box>
+                    <Typography variant="h6" component="div">
+                        {proposedGarden.name}
+                    </Typography>
+                    <Typography variant="body2">
+                        {proposedGarden.location?.cityStateAndCountry}
+                    </Typography>
+                    <Typography variant="body2">
+                        {proposedGarden.objective}
+                    </Typography>
+                    <Button
+                        onClick={() => {
+                            params.setGarden(proposedGarden);
+                        }}
+                    >
+                        Update Garden
+                    </Button>
+                </Box>
+            )}
+            {proposedSteps.length > 0 && (
                 <div style={{ display: 'flex', overflowX: 'auto', marginTop: theme.spacing(1) }}>
                     {proposedSteps.map((proposedStep, index) => (
                         <Card
