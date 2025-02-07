@@ -37,16 +37,6 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
                         stroke={speciesColorMap.get(row!.species!) || '#000000'}
                         strokeWidth={row!.plantSpacingInMeters || 0.1}
                     />
-                    {/* <text
-                        x={(row!.location!.start.x + row!.location!.end.x) / 2}
-                        y={(row!.location!.start.y + row!.location!.end.y) / 2}
-                        fontSize="0.5"
-                        fill="black"
-                        textAnchor="middle"
-                        transform={`rotate(${Math.atan2(row!.location!.end.y - row!.location!.start.y, row!.location!.end.x - row!.location!.start.x) * 180 / Math.PI}, ${(row!.location!.start.x + row!.location!.end.x) / 2}, ${(row!.location!.start.y + row!.location!.end.y) / 2})`}
-                        >
-                        {row!.species}
-                        </text> */}
                 </g>
             ))
         // );
@@ -57,8 +47,8 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
             <g className="legend">
                 {[...speciesColorMap.entries()].map(([species, color], index) => (
                     <g key={`legend-${index}`} transform={`translate(0, ${index * 0.5})`}>
-                        <rect x="5" y="1" width="1" height=".4" fill={color} />
-                        <text x="6" y="1.3" fontSize=".3" fill="black">{species}</text>
+                        <rect x="0.5" y="1" width="1" height=".4" fill={color} />
+                        <text x="1.5" y="1.3" fontSize=".3" fill="black">{species}</text>
                     </g>
                 ))}
             </g>
@@ -92,8 +82,6 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
                 {/* {renderLegend()} */}
             </svg>
             <svg height="500" viewBox="0 0 10 10">
-                {/* {renderPerimeter()}
-                {renderPlantRows()} */}
                 {renderLegend()}
             </svg>
         </Box>
