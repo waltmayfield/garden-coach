@@ -36,7 +36,7 @@ const ChatMessage = (params: {
         case 'ai':
             if (params.message.toolCalls && params.message.toolCalls !== '[]') {
                 // console.log('Parsing tool calls: ', params.message.toolCalls)
-                const toolCalls = JSON.parse(params.message.toolCalls) as { name: string, args: any }[]
+                const toolCalls = JSON.parse(params.message.toolCalls) as { name: string, args: unknown}[]
                 toolCalls.forEach((toolCall) => {
                     switch (toolCall.name) {
                         case 'createGardenPlannedSteps':

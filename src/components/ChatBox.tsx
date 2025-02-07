@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, TextField, Button, List, ListItem, Typography } from '@mui/material';
 
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";

@@ -80,8 +80,6 @@ function Page({
     }
 
     const setPlannedStepsAndAddSvg = (newPlannedSteps: PlannedSteps) => {
-        proccessPlannedSteps(newPlannedSteps);
-
         setPlannedSteps(prev => {
             const processedPlannedSteps = proccessPlannedSteps([
                 ...prev,
@@ -147,11 +145,20 @@ function Page({
     useEffect(() => {
         const fetchPlannedSteps = async () => {
             if (!activeGarden) return;
-            const { data: plannedSteps } = await activeGarden.plannedSteps()
-            setPlannedStepsAndAddSvg(plannedSteps)
+            const { data: newPlannedSteps } = await activeGarden.plannedSteps()
+            // setPlannedStepsAndAddSvg(plannedSteps)
+            setPlannedSteps(prev => {
+                const processedPlannedSteps = proccessPlannedSteps([
+                    ...prev,
+                    ...newPlannedSteps
+
+                ])
+                if (processedPlannedSteps) return processedPlannedSteps
+                else return prev
+            });
         }
         fetchPlannedSteps();
-    }, [activeGarden]);
+    }, [activeGarden, proccessPlannedSteps, setPlannedSteps]);
 
     if (!activeGarden || !activeGarden.id) {
         return <Typography variant="h6">Loading...</Typography>;
