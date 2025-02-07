@@ -4,46 +4,40 @@ import { Schema } from "../amplify/data/resource";
 
 interface GardenSVGProps {
     garden: Schema["Garden"]["createType"];
-    plannedSteps: Schema["PlannedStep"]["createType"][];
+    // plannedSteps: Schema["PlannedStep"]["createType"]["step"][""];
+    // plantRows?: Schema["PlantRow"]["type"][];
+    plantRows?: Schema["PlantedPlantRow"]["createType"]["info"][];
 }
 
 // const GardenSVG: React.FC<GardenSVGProps> = ({ garden, plannedSteps }) => {
-export const createGardenSVG = ({ garden, plannedSteps }: GardenSVGProps) => {
+export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
     const getSpeciesColorMap = () => {
         const map = new Map<string, string>();
-        plannedSteps.forEach(plannedStep => {
-            plannedStep.step?.plantRows?.forEach(row => {
-                if (row?.species && !map.has(row.species)) {
-                    const colors = ['#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-                    map.set(row.species, color);
-                }
-            });
+        plantRows?.forEach(row => {
+            if (row?.species && !map.has(row.species)) {
+                const colors = ['#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                map.set(row.species, color);
+            }
         });
         return map;
     };
     const speciesColorMap = getSpeciesColorMap()
 
     const renderPlantRows = () => {
-        return plannedSteps
-            .filter(plannedStep => (
-                plannedStep.step &&
-                plannedStep.step.plantRows
-            ))
-            .flatMap((plannedStep, stepIndex) =>
-                plannedStep.step!.plantRows!
-                    .filter(row => (row && row.location && row.species))
-                    .map((row, rowIndex) => (
-                        <g key={`step-${stepIndex}-row-${rowIndex}`}>
-                            <line
-                                x1={row!.location!.start.x}
-                                y1={row!.location!.start.y}
-                                x2={row!.location!.end.x}
-                                y2={row!.location!.end.y}
-                                stroke={speciesColorMap.get(row!.species!) || '#000000'}
-                                strokeWidth={row!.plantSpacingInMeters || 0.1}
-                            />
-                            {/* <text
+        if (plantRows) return plantRows
+            .filter(row => (row && row.location && row.species))
+            .map((row, rowIndex) => (
+                <g key={`row-${rowIndex}`}>
+                    <line
+                        x1={row!.location!.start.x}
+                        y1={row!.location!.start.y}
+                        x2={row!.location!.end.x}
+                        y2={row!.location!.end.y}
+                        stroke={speciesColorMap.get(row!.species!) || '#000000'}
+                        strokeWidth={row!.plantSpacingInMeters || 0.1}
+                    />
+                    {/* <text
                         x={(row!.location!.start.x + row!.location!.end.x) / 2}
                         y={(row!.location!.start.y + row!.location!.end.y) / 2}
                         fontSize="0.5"
@@ -53,9 +47,9 @@ export const createGardenSVG = ({ garden, plannedSteps }: GardenSVGProps) => {
                         >
                         {row!.species}
                         </text> */}
-                        </g>
-                    ))
-            );
+                </g>
+            ))
+        // );
     };
 
     const renderLegend = () => {
