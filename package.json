@@ -25,7 +25,9 @@
     "next": "15.1.4",
     "opencage-api-client": "^1.0.7",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^9.0.3",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.14.0",

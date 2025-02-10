@@ -17,6 +17,10 @@ import { type Schema } from "@/../amplify/data/resource";
 import { Message, PlannedSteps } from '@/../utils/types';
 import { createGardenType, plannedStepArrayType } from '../../utils/amplifyStrucutedOutputs';
 
+// import { MuiMarkdown } from 'mui-markdown';
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+
 const amplifyClient = generateClient<Schema>();
 
 const ChatMessage = (params: {
@@ -38,7 +42,7 @@ const ChatMessage = (params: {
         case 'ai':
             if (params.message.toolCalls && params.message.toolCalls !== '[]') {
                 // console.log('Parsing tool calls: ', params.message.toolCalls)
-                const toolCalls = JSON.parse(params.message.toolCalls) as { name: string, args: unknown}[]
+                const toolCalls = JSON.parse(params.message.toolCalls) as { name: string, args: unknown }[]
                 toolCalls.forEach((toolCall) => {
                     switch (toolCall.name) {
                         case 'createGardenPlannedSteps':
@@ -95,10 +99,17 @@ const ChatMessage = (params: {
 
     if (['human', 'ai'].includes(params.message.role || 'noRole')) return (
         <div style={messageStyle}>
-            <Typography variant="body1">
-                {params.message?.content?.text}
-            </Typography>
-            { proposedGarden.id && (
+            <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+            >
+                {params.message.content?.text}
+            </ReactMarkdown>
+
+            {/* <pre>
+                {params.message.content?.text}
+            </pre> */}
+            
+            {proposedGarden.id && (
                 <Box>
                     <Typography variant="h6" component="div">
                         {proposedGarden.name}

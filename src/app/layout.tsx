@@ -39,10 +39,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AppRouterCacheProvider>
-          <ConfigureAmplify/>
+          <ConfigureAmplify />
           <Providers>
             <ThemeProvider theme={theme}>
-              <CssBaseline/>
+              <CssBaseline />
               {children}
             </ThemeProvider>
           </Providers>
