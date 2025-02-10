@@ -1,11 +1,13 @@
-import { useTheme } from '@mui/material/styles';
 import {
     Box,
     Button,
     Card,
     CardContent,
     Typography,
+    Grid2 as Grid,
+    Paper
 } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
 
 import { z } from "zod";
 
@@ -16,6 +18,17 @@ import { Message, PlannedSteps } from '@/../utils/types';
 import { createGardenType, plannedStepArrayType } from '../../utils/amplifyStrucutedOutputs';
 
 const amplifyClient = generateClient<Schema>();
+
+const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    ...theme.applyStyles('dark', {
+      backgroundColor: '#1A2027',
+    }),
+  }));
 
 const ChatMessage = (params: {
     message: Message,
@@ -117,7 +130,8 @@ const ChatMessage = (params: {
                 </Box>
             )}
             {proposedSteps.length > 0 && (
-                <div style={{ display: 'flex', overflowX: 'auto', marginTop: theme.spacing(1) }}>
+                // <div style={{ display: 'flex', overflowX: 'auto', marginTop: theme.spacing(1) }}>
+                <Grid container spacing={2}>
                     {proposedSteps.map((proposedStep, index) => (
                         <Card
                             key={index}
@@ -153,7 +167,8 @@ const ChatMessage = (params: {
                             </CardContent>
                         </Card>
                     ))}
-                </div>
+                </Grid>
+                // </div>
             )}
             {/* <pre>
                 {JSON.stringify(params.message, null, 2)}

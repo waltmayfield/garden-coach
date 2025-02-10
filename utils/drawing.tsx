@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Grid2 as Grid } from "@mui/material";
 import { Schema } from "../amplify/data/resource";
 
 
@@ -47,8 +47,8 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
             <g className="legend">
                 {[...speciesColorMap.entries()].map(([species, color], index) => (
                     <g key={`legend-${index}`} transform={`translate(0, ${index * 0.5})`}>
-                        <rect x="0.5" y="1" width="1" height=".4" fill={color} />
-                        <text x="1.5" y="1.3" fontSize=".3" fill="black">{species}</text>
+                        <rect x="0" y="1" width="1" height=".4" fill={color} />
+                        <text x="1" y="1.3" fontSize=".3" fill="black">{species}</text>
                     </g>
                 ))}
             </g>
@@ -75,13 +75,27 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
     };
 
     return (
-        <Box display="flex" flexDirection="row" gap={0}>
-            <svg height="500" viewBox={getViewBox()}>
+        <Box 
+        display="flex" flexDirection="column" gap={1} height="100%">
+            <svg 
+            viewBox={getViewBox()} 
+            style={{ 
+                flexGrow: 1, 
+                width: '100%',
+                maxWidth: '200px',
+                // border: '1px solid black'
+            }}
+            >
                 {renderPerimeter()}
                 {renderPlantRows()}
-                {/* {renderLegend()} */}
             </svg>
-            <svg height="500" viewBox="0 0 10 10">
+            <svg 
+            viewBox="0 0 4 4" 
+            style={{ 
+                flexGrow: 1, 
+                width: '200px', 
+                // border: '1px solid black'
+                }}>
                 {renderLegend()}
             </svg>
         </Box>

@@ -5,7 +5,8 @@ import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 
-import FloatingHidableChatBox from '@/components/FloatingHidableChatBox';
+// import FloatingHidableChatBox from '@/components/FloatingHidableChatBox';
+import ChatBoxDrawer from '@/components/ChatBoxDrawer';
 import { PlannedSteps, GardenWithSvg } from '@/../utils/types';
 import { createGardenSVG } from '@/../utils/drawing';
 
@@ -319,12 +320,21 @@ function Page({
             </Box>
 
             {/* Floating Chat Box */}
-            <FloatingHidableChatBox
+            {/* <FloatingHidableChatBox
+                gardenId={activeGarden.id}
+                initialFullScreenStatus={activeGarden.objective === ""}
+                setGarden={setActiveGardenAndUpload}
+                setPlannedSteps={setPlannedStepsAndAddSvg}
+            /> */}
+
+            <ChatBoxDrawer
                 gardenId={activeGarden.id}
                 initialFullScreenStatus={activeGarden.objective === ""}
                 setGarden={setActiveGardenAndUpload}
                 setPlannedSteps={setPlannedStepsAndAddSvg}
             />
+
+
 
             {/* <pre>{JSON.stringify(activeGarden, null, 2)}</pre>
             <pre>{JSON.stringify(plannedSteps, null, 2)}</pre> */}

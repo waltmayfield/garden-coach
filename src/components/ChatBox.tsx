@@ -80,9 +80,9 @@ const ChatBox = (params: {
       width: '100%',
       height: '90%',
       maxHeight: '90%',
-      border: '1px solid #ccc',
-      borderRadius: '8px',
-      padding: '16px',
+      // border: '1px solid #ccc',
+      // borderRadius: '8px',
+      padding: '8px',
       display: 'flex',
       flexDirection: 'column'
     }}>
