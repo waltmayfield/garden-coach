@@ -81,9 +81,11 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
             viewBox={getViewBox()} 
             style={{ 
                 flexGrow: 1, 
+                flexShrink: 1,
                 width: '100%',
-                maxWidth: '200px',
-                // border: '1px solid black'
+                maxHeight: '500px',
+                maxWidth: '500px',
+                // border: '1px solid black',
             }}
             >
                 {renderPerimeter()}
