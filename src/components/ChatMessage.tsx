@@ -14,8 +14,8 @@ import { z } from "zod";
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
 
-import { Message, PlannedSteps } from '@/../utils/types';
-import { createGardenType, plannedStepArrayType } from '../../utils/amplifyStrucutedOutputs';
+import { Message, PlannedSteps, createGardenType, plannedStepArrayType } from '@/../utils/types';
+// import { createGardenType, plannedStepArrayType } from '../../utils/types';
 
 // import { MuiMarkdown } from 'mui-markdown';
 import ReactMarkdown from 'react-markdown'
@@ -40,14 +40,23 @@ const ChatMessage = (params: {
 
     switch (params.message.role) {
         case 'ai':
+            messageStyle = {
+                backgroundColor: theme.palette.grey[200],
+                padding: theme.spacing(1),
+                borderRadius: theme.shape.borderRadius,
+            };
             if (params.message.toolCalls && params.message.toolCalls !== '[]') {
                 // console.log('Parsing tool calls: ', params.message.toolCalls)
                 const toolCalls = JSON.parse(params.message.toolCalls) as { name: string, args: unknown }[]
-                toolCalls.forEach((toolCall) => {
+                // console.log('toolCalls: ', toolCalls)
+                for (const toolCall of toolCalls) {
+                    // toolCalls.forEach((toolCall) => {
                     switch (toolCall.name) {
                         case 'createGardenPlannedSteps':
-                            (toolCall.args as z.infer<typeof plannedStepArrayType>)
-                                .steps.forEach((step, index) => {
+                            // Verfiy schema using Zod verify
+                            const plannedStepParseResult = plannedStepArrayType.safeParse(toolCall.args);
+                            if (plannedStepParseResult.success) {
+                                plannedStepParseResult.data.steps?.forEach((step, index) => {
                                     const stepWithId = {
                                         ...step,
                                         // id: params.message.id?.slice(-3) + String(index),
@@ -57,35 +66,49 @@ const ChatMessage = (params: {
                                     }
                                     proposedSteps.push(stepWithId)
                                 })
+
+                            } else {
+                                console.log(
+                                    'Failed to parse planned steps:',
+                                    plannedStepParseResult.error,
+                                    "\nMessage Content: ",
+                                    params.message.content?.text,
+                                )
+                                return (
+                                    <div style={messageStyle}>
+                                        <p>
+                                            Failed to parse planned steps
+                                        </p>
+                                    </div>
+                                )
+                            }
                             break
                         case 'recommendGardenUpdate':
+                            const gardenVerifySchemaResult = createGardenType.safeParse(toolCall.args);
+                            if (gardenVerifySchemaResult.success) {
+                                proposedGarden = {
+                                    ...gardenVerifySchemaResult.data,
+                                    id: params.message.gardenId!,
+                                }
+                            } else {
+                                console.log(
+                                    'Failed to parse garden update:',
+                                    gardenVerifySchemaResult.error,
+                                    "\nMessage Content: ",
+                                    params.message.content?.text,
+                                )
+                            }
+
                             proposedGarden = {
                                 ...(toolCall.args as z.infer<typeof createGardenType>),
                                 id: params.message.gardenId!,
                             }
                             break
                     }
-                    // if (toolCall.name === 'createGardenPlannedSteps') {
-                    //     (toolCall.args as z.infer<typeof plannedStepArrayType>)
-                    //         .steps.forEach((step, index) => {
-                    //             const stepWithId = {
-                    //                 ...step,
-                    //                 // id: params.message.id?.slice(-3) + String(index),
-                    //                 id: `${params.message.id?.slice(0, -1)}${index}`,
-                    //                 gardenId: params.message.gardenId,
-                    //                 // id: String(index),
-                    //             }
-                    //             proposedSteps.push(stepWithId)
-                    //         })
-                    // }
-                })
+                }
             }
         case 'tool':
-            messageStyle = {
-                backgroundColor: theme.palette.grey[200],
-                padding: theme.spacing(1),
-                borderRadius: theme.shape.borderRadius,
-            };
+            
             break;
         case 'human':
             messageStyle = {
@@ -108,7 +131,7 @@ const ChatMessage = (params: {
             {/* <pre>
                 {params.message.content?.text}
             </pre> */}
-            
+
             {proposedGarden.id && (
                 <Box>
                     <Typography variant="h6" component="div">

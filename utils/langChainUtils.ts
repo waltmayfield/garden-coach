@@ -43,7 +43,7 @@ export const publishMessage = async (props: PublishMessageCommandInput) => {
     let input: APITypes.CreateChatMessageInput = {
         gardenId: props.gardenId,
         content: {
-            text: messageTextContent || "AI Message:\n"
+            text: messageTextContent || ""
         },
         owner: props.owner,
         toolCallId: "",

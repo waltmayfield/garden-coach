@@ -7,7 +7,7 @@ import { AppSyncResolverEvent } from 'aws-lambda';
 import { getConfiguredAmplifyClient } from '../utils'
 import { Schema } from '../../amplify/data/resource';
 
-import { generateGardenPlanSteps } from '../../utils/amplifyStrucutedOutputs';
+// import { generateGardenPlanSteps } from '../../utils/amplifyStrucutedOutputs';
 import { setAmplifyClientEnvVars } from '../../utils/testUtils';
 
 import { handler } from '../../amplify/functions/generateGarden/generateGardenHandler'

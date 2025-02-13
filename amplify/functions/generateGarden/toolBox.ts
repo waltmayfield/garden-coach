@@ -1,35 +1,39 @@
 import { tool } from "@langchain/core/tools";
-import { z } from "zod";
-import { stringify } from "yaml";
+// import { z } from "zod";
+// import { stringify } from "yaml";
 
-import { geocode } from '../../../utils/weather';
+// import { geocode } from '../../../utils/weather';
 
-import { Schema } from '../../../amplify/data/resource';
-import { createGardenType, plannedStepArrayType } from "../../../utils/amplifyStrucutedOutputs";
-import { createPlannedStepForGarden } from '../../../utils/graphqlStatements'
-import { UpdateGardenInput, UpdatePlannedStepInput, CreatePlannedStepInput } from "../graphql/API";
-import { updateGarden, updatePlannedStep } from "../graphql/mutations";
-import { getConfiguredAmplifyClient } from "../../../utils/amplifyUtils";
+// import { Schema } from '../../../amplify/data/resource';
+import { createGardenType, plannedStepArrayType } from "../../../utils/types";
+// import { createPlannedStepForGarden } from '../../../utils/graphqlStatements'
+// import { UpdateGardenInput, UpdatePlannedStepInput, CreatePlannedStepInput } from "../graphql/API";
+// import { updateGarden, updatePlannedStep } from "../graphql/mutations";
+// import { getConfiguredAmplifyClient } from "../../../utils/amplifyUtils";
 
 export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
-    async (functionArgs) => {
-        // const amplifyClient = getConfiguredAmplifyClient();
-
-        // Functions must return strings
-        let updateGardenInput: UpdateGardenInput = {
-            id: props.gardenId,
-            ...(functionArgs as Partial<UpdateGardenInput>)
+    async (proposedGarden) => {
+        // Verify that the functionArgs are valid
+        const verifySchemaResult = createGardenType.safeParse(proposedGarden)
+        if (!verifySchemaResult.success) {
+            throw new Error(`Invalid proposed garden: ${verifySchemaResult.error}`)
         }
 
-        if (
-            (typeof functionArgs.location?.lattitude) !== 'number' ||
-            (typeof functionArgs.location?.longitude) !== 'number'
-        ) {
-            console.log("Geocoding garden location: ", functionArgs.location.cityStateAndCountry)
-            const gardenLatLong = await geocode(functionArgs.location.cityStateAndCountry)
-            updateGardenInput.location!.lattitude = gardenLatLong.lat
-            updateGardenInput.location!.longitude = gardenLatLong.lng
-        }
+        // // Functions must return strings
+        // let updateGardenInput: UpdateGardenInput = {
+        //     id: props.gardenId,
+        //     ...(proposedGarden as Partial<UpdateGardenInput>)
+        // }
+
+        // if (
+        //     (typeof proposedGarden.location?.lattitude) !== 'number' ||
+        //     (typeof proposedGarden.location?.longitude) !== 'number'
+        // ) {
+        //     console.log("Geocoding garden location: ", proposedGarden.location.cityStateAndCountry)
+        //     const gardenLatLong = await geocode(proposedGarden.location.cityStateAndCountry)
+        //     updateGardenInput.location!.lattitude = gardenLatLong.lat
+        //     updateGardenInput.location!.longitude = gardenLatLong.lng
+        // }
 
         // const updateGardenResponse = await amplifyClient.graphql({
         //     query: updateGarden,
@@ -49,29 +53,12 @@ export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
 
 export const createGardenPlanToolBuilder = (props: {gardenId: string, owner: string}) => tool(
     async ({steps}) => {
-        // const { gardenId, owner } = props;
-        // const amplifyClient = getConfiguredAmplifyClient();
 
-        // for (const plannedStep of steps) {
-        //         const stepInput: Schema["PlannedStep"]["createType"] = {
-        //             gardenId: gardenId,
-        //             owner: owner,
-        //             step: plannedStep.step,
-        //             plannedDate: plannedStep.plannedDate
-        //         }
-        //         console.log("Step Input:\n", stringify(stepInput))
-        //         const createStepResponse = await amplifyClient.graphql({
-        //             query: createPlannedStepForGarden,
-        //             variables: { input: stepInput as CreatePlannedStepInput }
-        //         })//.catch((error) => console.error("Error creating new step: ", stringify(error)))
-        
-        //         console.log("Created new step: ", createStepResponse)
-        //         // .then(
-        //         //     (response) => console.log("Created new step: ", response)
-        //         // ).catch(
-        //         //     (error) => console.error("Error creating new step: ", error)
-        //         // )
-        //     }
+        const verifySchemaResult = plannedStepArrayType.safeParse({steps})
+        if (!verifySchemaResult.success) {
+            throw new Error(`Invalid proposed steps: ${verifySchemaResult.error}`)
+        }
+
         return "Send planned step recommendations to the user"
     },
     {

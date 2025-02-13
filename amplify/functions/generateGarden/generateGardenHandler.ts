@@ -77,6 +77,7 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
                     content: `
                     You are a helpful garden planner. Update the garden based on the user's request. 
                     Create planned steps to fill the garden over the course of a year. Fill the garden with plants each season.
+                    Response chat message text content should be in markdown format.
 
                     If the user wants to update the garden or add planned steps, but hasn't provided enough details, ask for more information.
 

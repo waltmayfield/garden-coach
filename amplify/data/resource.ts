@@ -2,16 +2,16 @@ import { type ClientSchema, a, defineData, defineFunction } from '@aws-amplify/b
 import { GardenUnits } from '../functions/graphql/API';
 // import { createZodSchema } from './amplifyToZod'
 
-export const generateGardenPlanStepsFunction = defineFunction({
-  name: 'generateGardenPlanSteps',
-  entry: '../functions/generateGardenPlanStepsHandler.ts',
-  timeoutSeconds: 900,
-  environment: {
-    MODEL_ID: 'us.anthropic.claude-3-5-sonnet-20241022-v2:0'
-    // MODEL_ID: 'us.anthropic.claude-3-sonnet-20240229-v1:0',
-    // MODEL_ID: 'us.amazon.nova-pro-v1:0'
-  }
-});
+// export const generateGardenPlanStepsFunction = defineFunction({
+//   name: 'generateGardenPlanSteps',
+//   entry: '../functions/generateGardenPlanStepsHandler.ts',
+//   timeoutSeconds: 900,
+//   environment: {
+//     MODEL_ID: 'us.anthropic.claude-3-5-sonnet-20241022-v2:0'
+//     // MODEL_ID: 'us.anthropic.claude-3-sonnet-20240229-v1:0',
+//     // MODEL_ID: 'us.amazon.nova-pro-v1:0'
+//   }
+// });
 
 export const generateGardenFunction = defineFunction({
   name: 'generateGarden',
@@ -147,15 +147,15 @@ export const schema = a.schema({
     .handler(a.handler.function(generateGardenFunction).async())
     .authorization((allow) => [allow.authenticated()]),
 
-  generateGardenPlanSteps: a.query()
-    .arguments({ gardenId: a.id().required() })
-    // .returns(a.ref('Step').array())
-    .handler(a.handler.function(generateGardenPlanStepsFunction).async())
-    .authorization((allow) => [allow.authenticated()]),
+  // generateGardenPlanSteps: a.query()
+  //   .arguments({ gardenId: a.id().required() })
+  //   // .returns(a.ref('Step').array())
+  //   .handler(a.handler.function(generateGardenPlanStepsFunction).async())
+  //   .authorization((allow) => [allow.authenticated()]),
   
 })
   .authorization((allow) => [
-    allow.resource(generateGardenPlanStepsFunction),
+    // allow.resource(generateGardenPlanStepsFunction),
     allow.resource(generateGardenFunction)
   ]);
 

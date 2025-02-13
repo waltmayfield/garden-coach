@@ -20,12 +20,35 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-ol {
-  list-style: decimal;
-  padding-left: 2rem;
+ul, ol {
+  margin: 1em 0;
+  padding-left: 40px;
 }
 
 ul {
-  list-style: disc;
-  padding-left: 2rem;
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+blockquote {
+  margin: 1em 0;
+  padding-left: 20px;
+  border-left: 5px solid #ccc;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
 }
