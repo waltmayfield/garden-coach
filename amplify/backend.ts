@@ -10,9 +10,10 @@ import {
 const backend = defineBackend({
   auth,
   data,
-  generateGardenFunction,
-  // generateGardenPlanStepsFunction
+  generateGardenFunction
 });
+
+backend.stack.tags.setTag('Project', 'garden-planner');
 
 backend.addOutput({custom: {rootStackName: backend.stack.stackName}});
 

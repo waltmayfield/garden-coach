@@ -1,11 +1,12 @@
 import { tool } from "@langchain/core/tools";
 // import { z } from "zod";
-// import { stringify } from "yaml";
+import { stringify } from "yaml";
 
 // import { geocode } from '../../../utils/weather';
 
 // import { Schema } from '../../../amplify/data/resource';
 import { createGardenType, plannedStepArrayType } from "../../../utils/types";
+
 // import { createPlannedStepForGarden } from '../../../utils/graphqlStatements'
 // import { UpdateGardenInput, UpdatePlannedStepInput, CreatePlannedStepInput } from "../graphql/API";
 // import { updateGarden, updatePlannedStep } from "../graphql/mutations";
@@ -13,10 +14,13 @@ import { createGardenType, plannedStepArrayType } from "../../../utils/types";
 
 export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
     async (proposedGarden) => {
+        console.log('proposedGarden:\n', proposedGarden)
         // Verify that the functionArgs are valid
         const verifySchemaResult = createGardenType.safeParse(proposedGarden)
         if (!verifySchemaResult.success) {
-            throw new Error(`Invalid proposed garden: ${verifySchemaResult.error}`)
+            // console.log(`Invalid proposed garden: ${JSON.stringify(verifySchemaResult.error)}`)
+            throw new Error(`Invalid proposed garden: ${JSON.stringify(verifySchemaResult.error, null, 2)}`)
+            // return `Invalid proposed garden: ${JSON.stringify(verifySchemaResult.error)}`
         }
 
         // // Functions must return strings
@@ -53,10 +57,12 @@ export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
 
 export const createGardenPlanToolBuilder = (props: {gardenId: string, owner: string}) => tool(
     async ({steps}) => {
-
+        console.log('Proposed steps:\n', steps)
         const verifySchemaResult = plannedStepArrayType.safeParse({steps})
         if (!verifySchemaResult.success) {
-            throw new Error(`Invalid proposed steps: ${verifySchemaResult.error}`)
+            throw new Error(`Invalid proposed steps: ${JSON.stringify(verifySchemaResult.error, null, 2)}`)
+            // console.log(`Invalid proposed steps:\n${JSON.stringify(verifySchemaResult.error)}`)
+            // return `Invalid proposed steps:\n${JSON.stringify(verifySchemaResult.error)}`
         }
 
         return "Send planned step recommendations to the user"

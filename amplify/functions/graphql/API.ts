@@ -176,6 +176,22 @@ export enum ChatMessageRole {
 }
 
 
+export type DummyModelToAddIamDirective = {
+  __typename: "DummyModelToAddIamDirective",
+  createdAt: string,
+  id: string,
+  owner?: string | null,
+  responseStreamChunk?: ResponseStreamChunk | null,
+  updatedAt: string,
+};
+
+export type ResponseStreamChunk = {
+  __typename: "ResponseStreamChunk",
+  chunkText: string,
+  gardenId: string,
+  index: number,
+};
+
 export type ModelStringKeyConditionInput = {
   beginsWith?: string | null,
   between?: Array< string | null > | null,
@@ -275,6 +291,22 @@ export enum ModelSortDirection {
   DESC = "DESC",
 }
 
+
+export type ModelDummyModelToAddIamDirectiveFilterInput = {
+  and?: Array< ModelDummyModelToAddIamDirectiveFilterInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  id?: ModelIDInput | null,
+  not?: ModelDummyModelToAddIamDirectiveFilterInput | null,
+  or?: Array< ModelDummyModelToAddIamDirectiveFilterInput | null > | null,
+  owner?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelDummyModelToAddIamDirectiveConnection = {
+  __typename: "ModelDummyModelToAddIamDirectiveConnection",
+  items:  Array<DummyModelToAddIamDirective | null >,
+  nextToken?: string | null,
+};
 
 export type ModelGardenFilterInput = {
   and?: Array< ModelGardenFilterInput | null > | null,
@@ -403,6 +435,26 @@ export type XYInput = {
   y: number,
 };
 
+export type ModelDummyModelToAddIamDirectiveConditionInput = {
+  and?: Array< ModelDummyModelToAddIamDirectiveConditionInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  not?: ModelDummyModelToAddIamDirectiveConditionInput | null,
+  or?: Array< ModelDummyModelToAddIamDirectiveConditionInput | null > | null,
+  owner?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type CreateDummyModelToAddIamDirectiveInput = {
+  id?: string | null,
+  responseStreamChunk?: ResponseStreamChunkInput | null,
+};
+
+export type ResponseStreamChunkInput = {
+  chunkText: string,
+  gardenId: string,
+  index: number,
+};
+
 export type ModelGardenConditionInput = {
   and?: Array< ModelGardenConditionInput | null > | null,
   createdAt?: ModelStringInput | null,
@@ -495,6 +547,10 @@ export type DeleteChatMessageInput = {
   id: string,
 };
 
+export type DeleteDummyModelToAddIamDirectiveInput = {
+  id: string,
+};
+
 export type DeleteGardenInput = {
   id: string,
 };
@@ -522,6 +578,11 @@ export type UpdateChatMessageInput = {
   toolCallId?: string | null,
   toolCalls?: string | null,
   toolName?: string | null,
+};
+
+export type UpdateDummyModelToAddIamDirectiveInput = {
+  id: string,
+  responseStreamChunk?: ResponseStreamChunkInput | null,
 };
 
 export type UpdateGardenInput = {
@@ -609,6 +670,15 @@ export type ModelSubscriptionBooleanInput = {
   ne?: boolean | null,
 };
 
+export type ModelSubscriptionDummyModelToAddIamDirectiveFilterInput = {
+  and?: Array< ModelSubscriptionDummyModelToAddIamDirectiveFilterInput | null > | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  or?: Array< ModelSubscriptionDummyModelToAddIamDirectiveFilterInput | null > | null,
+  owner?: ModelStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+};
+
 export type ModelSubscriptionGardenFilterInput = {
   and?: Array< ModelSubscriptionGardenFilterInput | null > | null,
   createdAt?: ModelSubscriptionStringInput | null,
@@ -668,17 +738,6 @@ export type GenerateGardenQuery = {
   } | null,
 };
 
-export type GenerateGardenPlanStepsQueryVariables = {
-  gardenId: string,
-};
-
-export type GenerateGardenPlanStepsQuery = {
-  generateGardenPlanSteps?:  {
-    __typename: "EventInvocationResponse",
-    success: boolean,
-  } | null,
-};
-
 export type GetChatMessageQueryVariables = {
   id: string,
 };
@@ -709,6 +768,26 @@ export type GetChatMessageQuery = {
     toolCallId?: string | null,
     toolCalls?: string | null,
     toolName?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type GetDummyModelToAddIamDirectiveQueryVariables = {
+  id: string,
+};
+
+export type GetDummyModelToAddIamDirectiveQuery = {
+  getDummyModelToAddIamDirective?:  {
+    __typename: "DummyModelToAddIamDirective",
+    createdAt: string,
+    id: string,
+    owner?: string | null,
+    responseStreamChunk?:  {
+      __typename: "ResponseStreamChunk",
+      chunkText: string,
+      gardenId: string,
+      index: number,
+    } | null,
     updatedAt: string,
   } | null,
 };
@@ -941,6 +1020,26 @@ export type ListChatMessagesQuery = {
   } | null,
 };
 
+export type ListDummyModelToAddIamDirectivesQueryVariables = {
+  filter?: ModelDummyModelToAddIamDirectiveFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListDummyModelToAddIamDirectivesQuery = {
+  listDummyModelToAddIamDirectives?:  {
+    __typename: "ModelDummyModelToAddIamDirectiveConnection",
+    items:  Array< {
+      __typename: "DummyModelToAddIamDirective",
+      createdAt: string,
+      id: string,
+      owner?: string | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type ListGardensQueryVariables = {
   filter?: ModelGardenFilterInput | null,
   limit?: number | null,
@@ -1065,6 +1164,27 @@ export type CreateChatMessageMutation = {
     toolCallId?: string | null,
     toolCalls?: string | null,
     toolName?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateDummyModelToAddIamDirectiveMutationVariables = {
+  condition?: ModelDummyModelToAddIamDirectiveConditionInput | null,
+  input: CreateDummyModelToAddIamDirectiveInput,
+};
+
+export type CreateDummyModelToAddIamDirectiveMutation = {
+  createDummyModelToAddIamDirective?:  {
+    __typename: "DummyModelToAddIamDirective",
+    createdAt: string,
+    id: string,
+    owner?: string | null,
+    responseStreamChunk?:  {
+      __typename: "ResponseStreamChunk",
+      chunkText: string,
+      gardenId: string,
+      index: number,
+    } | null,
     updatedAt: string,
   } | null,
 };
@@ -1281,6 +1401,27 @@ export type DeleteChatMessageMutation = {
   } | null,
 };
 
+export type DeleteDummyModelToAddIamDirectiveMutationVariables = {
+  condition?: ModelDummyModelToAddIamDirectiveConditionInput | null,
+  input: DeleteDummyModelToAddIamDirectiveInput,
+};
+
+export type DeleteDummyModelToAddIamDirectiveMutation = {
+  deleteDummyModelToAddIamDirective?:  {
+    __typename: "DummyModelToAddIamDirective",
+    createdAt: string,
+    id: string,
+    owner?: string | null,
+    responseStreamChunk?:  {
+      __typename: "ResponseStreamChunk",
+      chunkText: string,
+      gardenId: string,
+      index: number,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type DeleteGardenMutationVariables = {
   condition?: ModelGardenConditionInput | null,
   input: DeleteGardenInput,
@@ -1458,6 +1599,21 @@ export type DeletePlantedPlantRowMutation = {
   } | null,
 };
 
+export type PublishResponseStreamChunkMutationVariables = {
+  chunkText: string,
+  gardenId: string,
+  index: number,
+};
+
+export type PublishResponseStreamChunkMutation = {
+  publishResponseStreamChunk?:  {
+    __typename: "ResponseStreamChunk",
+    chunkText: string,
+    gardenId: string,
+    index: number,
+  } | null,
+};
+
 export type UpdateChatMessageMutationVariables = {
   condition?: ModelChatMessageConditionInput | null,
   input: UpdateChatMessageInput,
@@ -1489,6 +1645,27 @@ export type UpdateChatMessageMutation = {
     toolCallId?: string | null,
     toolCalls?: string | null,
     toolName?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateDummyModelToAddIamDirectiveMutationVariables = {
+  condition?: ModelDummyModelToAddIamDirectiveConditionInput | null,
+  input: UpdateDummyModelToAddIamDirectiveInput,
+};
+
+export type UpdateDummyModelToAddIamDirectiveMutation = {
+  updateDummyModelToAddIamDirective?:  {
+    __typename: "DummyModelToAddIamDirective",
+    createdAt: string,
+    id: string,
+    owner?: string | null,
+    responseStreamChunk?:  {
+      __typename: "ResponseStreamChunk",
+      chunkText: string,
+      gardenId: string,
+      index: number,
+    } | null,
     updatedAt: string,
   } | null,
 };
@@ -1705,6 +1882,27 @@ export type OnCreateChatMessageSubscription = {
   } | null,
 };
 
+export type OnCreateDummyModelToAddIamDirectiveSubscriptionVariables = {
+  filter?: ModelSubscriptionDummyModelToAddIamDirectiveFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnCreateDummyModelToAddIamDirectiveSubscription = {
+  onCreateDummyModelToAddIamDirective?:  {
+    __typename: "DummyModelToAddIamDirective",
+    createdAt: string,
+    id: string,
+    owner?: string | null,
+    responseStreamChunk?:  {
+      __typename: "ResponseStreamChunk",
+      chunkText: string,
+      gardenId: string,
+      index: number,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnCreateGardenSubscriptionVariables = {
   filter?: ModelSubscriptionGardenFilterInput | null,
   owner?: string | null,
@@ -1913,6 +2111,27 @@ export type OnDeleteChatMessageSubscription = {
     toolCallId?: string | null,
     toolCalls?: string | null,
     toolName?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteDummyModelToAddIamDirectiveSubscriptionVariables = {
+  filter?: ModelSubscriptionDummyModelToAddIamDirectiveFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnDeleteDummyModelToAddIamDirectiveSubscription = {
+  onDeleteDummyModelToAddIamDirective?:  {
+    __typename: "DummyModelToAddIamDirective",
+    createdAt: string,
+    id: string,
+    owner?: string | null,
+    responseStreamChunk?:  {
+      __typename: "ResponseStreamChunk",
+      chunkText: string,
+      gardenId: string,
+      index: number,
+    } | null,
     updatedAt: string,
   } | null,
 };
@@ -2129,6 +2348,27 @@ export type OnUpdateChatMessageSubscription = {
   } | null,
 };
 
+export type OnUpdateDummyModelToAddIamDirectiveSubscriptionVariables = {
+  filter?: ModelSubscriptionDummyModelToAddIamDirectiveFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnUpdateDummyModelToAddIamDirectiveSubscription = {
+  onUpdateDummyModelToAddIamDirective?:  {
+    __typename: "DummyModelToAddIamDirective",
+    createdAt: string,
+    id: string,
+    owner?: string | null,
+    responseStreamChunk?:  {
+      __typename: "ResponseStreamChunk",
+      chunkText: string,
+      gardenId: string,
+      index: number,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnUpdateGardenSubscriptionVariables = {
   filter?: ModelSubscriptionGardenFilterInput | null,
   owner?: string | null,
@@ -2303,5 +2543,18 @@ export type OnUpdatePlantedPlantRowSubscription = {
       nextToken?: string | null,
     } | null,
     updatedAt: string,
+  } | null,
+};
+
+export type RecieveResponseStreamChunkSubscriptionVariables = {
+  gardenId: string,
+};
+
+export type RecieveResponseStreamChunkSubscription = {
+  recieveResponseStreamChunk?:  {
+    __typename: "ResponseStreamChunk",
+    chunkText: string,
+    gardenId: string,
+    index: number,
   } | null,
 };

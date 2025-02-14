@@ -44,6 +44,28 @@ export const createChatMessage = /* GraphQL */ `mutation CreateChatMessage(
   APITypes.CreateChatMessageMutationVariables,
   APITypes.CreateChatMessageMutation
 >;
+export const createDummyModelToAddIamDirective = /* GraphQL */ `mutation CreateDummyModelToAddIamDirective(
+  $condition: ModelDummyModelToAddIamDirectiveConditionInput
+  $input: CreateDummyModelToAddIamDirectiveInput!
+) {
+  createDummyModelToAddIamDirective(condition: $condition, input: $input) {
+    createdAt
+    id
+    owner
+    responseStreamChunk {
+      chunkText
+      gardenId
+      index
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateDummyModelToAddIamDirectiveMutationVariables,
+  APITypes.CreateDummyModelToAddIamDirectiveMutation
+>;
 export const createGarden = /* GraphQL */ `mutation CreateGarden(
   $condition: ModelGardenConditionInput
   $input: CreateGardenInput!
@@ -261,6 +283,28 @@ export const deleteChatMessage = /* GraphQL */ `mutation DeleteChatMessage(
   APITypes.DeleteChatMessageMutationVariables,
   APITypes.DeleteChatMessageMutation
 >;
+export const deleteDummyModelToAddIamDirective = /* GraphQL */ `mutation DeleteDummyModelToAddIamDirective(
+  $condition: ModelDummyModelToAddIamDirectiveConditionInput
+  $input: DeleteDummyModelToAddIamDirectiveInput!
+) {
+  deleteDummyModelToAddIamDirective(condition: $condition, input: $input) {
+    createdAt
+    id
+    owner
+    responseStreamChunk {
+      chunkText
+      gardenId
+      index
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteDummyModelToAddIamDirectiveMutationVariables,
+  APITypes.DeleteDummyModelToAddIamDirectiveMutation
+>;
 export const deleteGarden = /* GraphQL */ `mutation DeleteGarden(
   $condition: ModelGardenConditionInput
   $input: DeleteGardenInput!
@@ -442,6 +486,26 @@ export const deletePlantedPlantRow = /* GraphQL */ `mutation DeletePlantedPlantR
   APITypes.DeletePlantedPlantRowMutationVariables,
   APITypes.DeletePlantedPlantRowMutation
 >;
+export const publishResponseStreamChunk = /* GraphQL */ `mutation PublishResponseStreamChunk(
+  $chunkText: String!
+  $gardenId: String!
+  $index: Int!
+) {
+  publishResponseStreamChunk(
+    chunkText: $chunkText
+    gardenId: $gardenId
+    index: $index
+  ) {
+    chunkText
+    gardenId
+    index
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.PublishResponseStreamChunkMutationVariables,
+  APITypes.PublishResponseStreamChunkMutation
+>;
 export const updateChatMessage = /* GraphQL */ `mutation UpdateChatMessage(
   $condition: ModelChatMessageConditionInput
   $input: UpdateChatMessageInput!
@@ -477,6 +541,28 @@ export const updateChatMessage = /* GraphQL */ `mutation UpdateChatMessage(
 ` as GeneratedMutation<
   APITypes.UpdateChatMessageMutationVariables,
   APITypes.UpdateChatMessageMutation
+>;
+export const updateDummyModelToAddIamDirective = /* GraphQL */ `mutation UpdateDummyModelToAddIamDirective(
+  $condition: ModelDummyModelToAddIamDirectiveConditionInput
+  $input: UpdateDummyModelToAddIamDirectiveInput!
+) {
+  updateDummyModelToAddIamDirective(condition: $condition, input: $input) {
+    createdAt
+    id
+    owner
+    responseStreamChunk {
+      chunkText
+      gardenId
+      index
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateDummyModelToAddIamDirectiveMutationVariables,
+  APITypes.UpdateDummyModelToAddIamDirectiveMutation
 >;
 export const updateGarden = /* GraphQL */ `mutation UpdateGarden(
   $condition: ModelGardenConditionInput

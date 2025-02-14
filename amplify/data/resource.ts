@@ -83,7 +83,7 @@ export const schema = a.schema({
       //auto-generated fields
       owner: a.string(),
       createdAt: a.datetime(),
-      
+
       //langchain fields
       toolCallId: a.string(),
       toolName: a.string(),
@@ -93,6 +93,18 @@ export const schema = a.schema({
       index("gardenId").sortKeys(["createdAt"])
     ])
     .authorization((allow) => [allow.owner(), allow.authenticated()]),
+
+  //These assets enable token level streaming from the model
+  ResponseStreamChunk: a.customType({
+    chunkText: a.string().required(),
+    index: a.integer().required(),
+    gardenId: a.string().required()
+  }),
+
+  DummyModelToAddIamDirective: a.model({//This is required to add the IAM directive to the ResponseStreamChunk type
+    responseStreamChunk: a.ref('ResponseStreamChunk')
+  })
+    .authorization((allow) => [allow.owner()]),
 
   PlannedStep: a.model({
     id: a.id(),
@@ -141,6 +153,24 @@ export const schema = a.schema({
   })
     .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
+  publishResponseStreamChunk: a.mutation()
+    .arguments({
+      chunkText: a.string().required(),
+      index: a.integer().required(),
+      gardenId: a.string().required(),
+    })
+    .returns(a.ref('ResponseStreamChunk'))
+    // .returns(a.string())
+    .handler(a.handler.custom({ entry: './publishMessageStreamChunk.js' }))
+    .authorization(allow => [allow.authenticated()]),
+
+  recieveResponseStreamChunk: a
+    .subscription()
+    .for(a.ref('publishResponseStreamChunk'))
+    .arguments({ gardenId: a.string().required() })
+    .handler(a.handler.custom({ entry: './receiveMessageStreamChunk.js' }))
+    .authorization(allow => [allow.authenticated()]),
+
   generateGarden: a.query()
     .arguments({ gardenId: a.id().required(), userInput: a.string().required() })
     // .returns(a.ref('Garden'))
@@ -152,7 +182,7 @@ export const schema = a.schema({
   //   // .returns(a.ref('Step').array())
   //   .handler(a.handler.function(generateGardenPlanStepsFunction).async())
   //   .authorization((allow) => [allow.authenticated()]),
-  
+
 })
   .authorization((allow) => [
     // allow.resource(generateGardenPlanStepsFunction),

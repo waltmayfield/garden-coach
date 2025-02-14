@@ -44,6 +44,28 @@ export const onCreateChatMessage = /* GraphQL */ `subscription OnCreateChatMessa
   APITypes.OnCreateChatMessageSubscriptionVariables,
   APITypes.OnCreateChatMessageSubscription
 >;
+export const onCreateDummyModelToAddIamDirective = /* GraphQL */ `subscription OnCreateDummyModelToAddIamDirective(
+  $filter: ModelSubscriptionDummyModelToAddIamDirectiveFilterInput
+  $owner: String
+) {
+  onCreateDummyModelToAddIamDirective(filter: $filter, owner: $owner) {
+    createdAt
+    id
+    owner
+    responseStreamChunk {
+      chunkText
+      gardenId
+      index
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateDummyModelToAddIamDirectiveSubscriptionVariables,
+  APITypes.OnCreateDummyModelToAddIamDirectiveSubscription
+>;
 export const onCreateGarden = /* GraphQL */ `subscription OnCreateGarden(
   $filter: ModelSubscriptionGardenFilterInput
   $owner: String
@@ -260,6 +282,28 @@ export const onDeleteChatMessage = /* GraphQL */ `subscription OnDeleteChatMessa
 ` as GeneratedSubscription<
   APITypes.OnDeleteChatMessageSubscriptionVariables,
   APITypes.OnDeleteChatMessageSubscription
+>;
+export const onDeleteDummyModelToAddIamDirective = /* GraphQL */ `subscription OnDeleteDummyModelToAddIamDirective(
+  $filter: ModelSubscriptionDummyModelToAddIamDirectiveFilterInput
+  $owner: String
+) {
+  onDeleteDummyModelToAddIamDirective(filter: $filter, owner: $owner) {
+    createdAt
+    id
+    owner
+    responseStreamChunk {
+      chunkText
+      gardenId
+      index
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteDummyModelToAddIamDirectiveSubscriptionVariables,
+  APITypes.OnDeleteDummyModelToAddIamDirectiveSubscription
 >;
 export const onDeleteGarden = /* GraphQL */ `subscription OnDeleteGarden(
   $filter: ModelSubscriptionGardenFilterInput
@@ -478,6 +522,28 @@ export const onUpdateChatMessage = /* GraphQL */ `subscription OnUpdateChatMessa
   APITypes.OnUpdateChatMessageSubscriptionVariables,
   APITypes.OnUpdateChatMessageSubscription
 >;
+export const onUpdateDummyModelToAddIamDirective = /* GraphQL */ `subscription OnUpdateDummyModelToAddIamDirective(
+  $filter: ModelSubscriptionDummyModelToAddIamDirectiveFilterInput
+  $owner: String
+) {
+  onUpdateDummyModelToAddIamDirective(filter: $filter, owner: $owner) {
+    createdAt
+    id
+    owner
+    responseStreamChunk {
+      chunkText
+      gardenId
+      index
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateDummyModelToAddIamDirectiveSubscriptionVariables,
+  APITypes.OnUpdateDummyModelToAddIamDirectiveSubscription
+>;
 export const onUpdateGarden = /* GraphQL */ `subscription OnUpdateGarden(
   $filter: ModelSubscriptionGardenFilterInput
   $owner: String
@@ -658,4 +724,16 @@ export const onUpdatePlantedPlantRow = /* GraphQL */ `subscription OnUpdatePlant
 ` as GeneratedSubscription<
   APITypes.OnUpdatePlantedPlantRowSubscriptionVariables,
   APITypes.OnUpdatePlantedPlantRowSubscription
+>;
+export const recieveResponseStreamChunk = /* GraphQL */ `subscription RecieveResponseStreamChunk($gardenId: String!) {
+  recieveResponseStreamChunk(gardenId: $gardenId) {
+    chunkText
+    gardenId
+    index
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.RecieveResponseStreamChunkSubscriptionVariables,
+  APITypes.RecieveResponseStreamChunkSubscription
 >;

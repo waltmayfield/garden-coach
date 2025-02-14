@@ -3,10 +3,10 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationInput: InputType;
   __generatedMutationOutput: OutputType;
 };
-type GeneratedQuery<InputType, OutputType> = string & {
-  __generatedQueryInput: InputType;
-  __generatedQueryOutput: OutputType;
-};
+// type GeneratedQuery<InputType, OutputType> = string & {
+//   __generatedQueryInput: InputType;
+//   __generatedQueryOutput: OutputType;
+// };
 
 
 export const createChatMessage = /* GraphQL */ `mutation CreateChatMessage(
@@ -18,6 +18,7 @@ export const createChatMessage = /* GraphQL */ `mutation CreateChatMessage(
     content {
       text
     }
+    responseComplete
     toolCallId
     toolName
     toolCalls
@@ -61,12 +62,20 @@ export const createPlannedStepForGarden = /* GraphQL */ `mutation CreatePlannedS
   APITypes.CreatePlannedStepMutation
 >;
 
-export const generateGardenPlanSteps = /* GraphQL */ `query GenerateGardenPlanSteps($gardenId: ID!) {
-  generateGardenPlanSteps(gardenId: $gardenId) {
+export const publishResponseStreamChunk = /* GraphQL */ `mutation PublishResponseStreamChunk(
+  $chunkText: String!
+  $gardenId: String!
+  $index: Int!
+) {
+  publishResponseStreamChunk(
+    chunkText: $chunkText
+    gardenId: $gardenId
+    index: $index
+  ) {
     __typename
   }
 }
-` as GeneratedQuery<
-  APITypes.GenerateGardenPlanStepsQueryVariables,
-  APITypes.GenerateGardenPlanStepsQuery
+` as GeneratedMutation<
+  APITypes.PublishResponseStreamChunkMutationVariables,
+  APITypes.PublishResponseStreamChunkMutation
 >;

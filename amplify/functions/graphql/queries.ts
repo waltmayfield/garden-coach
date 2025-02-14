@@ -18,16 +18,6 @@ export const generateGarden = /* GraphQL */ `query GenerateGarden($gardenId: ID!
   APITypes.GenerateGardenQueryVariables,
   APITypes.GenerateGardenQuery
 >;
-export const generateGardenPlanSteps = /* GraphQL */ `query GenerateGardenPlanSteps($gardenId: ID!) {
-  generateGardenPlanSteps(gardenId: $gardenId) {
-    success
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GenerateGardenPlanStepsQueryVariables,
-  APITypes.GenerateGardenPlanStepsQuery
->;
 export const getChatMessage = /* GraphQL */ `query GetChatMessage($id: ID!) {
   getChatMessage(id: $id) {
     content {
@@ -60,6 +50,25 @@ export const getChatMessage = /* GraphQL */ `query GetChatMessage($id: ID!) {
 ` as GeneratedQuery<
   APITypes.GetChatMessageQueryVariables,
   APITypes.GetChatMessageQuery
+>;
+export const getDummyModelToAddIamDirective = /* GraphQL */ `query GetDummyModelToAddIamDirective($id: ID!) {
+  getDummyModelToAddIamDirective(id: $id) {
+    createdAt
+    id
+    owner
+    responseStreamChunk {
+      chunkText
+      gardenId
+      index
+      __typename
+    }
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetDummyModelToAddIamDirectiveQueryVariables,
+  APITypes.GetDummyModelToAddIamDirectiveQuery
 >;
 export const getGarden = /* GraphQL */ `query GetGarden($id: ID!) {
   getGarden(id: $id) {
@@ -290,6 +299,31 @@ export const listChatMessages = /* GraphQL */ `query ListChatMessages(
 ` as GeneratedQuery<
   APITypes.ListChatMessagesQueryVariables,
   APITypes.ListChatMessagesQuery
+>;
+export const listDummyModelToAddIamDirectives = /* GraphQL */ `query ListDummyModelToAddIamDirectives(
+  $filter: ModelDummyModelToAddIamDirectiveFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listDummyModelToAddIamDirectives(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      createdAt
+      id
+      owner
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListDummyModelToAddIamDirectivesQueryVariables,
+  APITypes.ListDummyModelToAddIamDirectivesQuery
 >;
 export const listGardens = /* GraphQL */ `query ListGardens(
   $filter: ModelGardenFilterInput

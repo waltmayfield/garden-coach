@@ -49,26 +49,34 @@ export const publishMessage = async (props: PublishMessageCommandInput) => {
         toolCallId: "",
         toolCalls: "[]",
         toolName: "",
-        responseComplete: props.responseComplete || false
+        // responseComplete: props.responseComplete || false
     }
 
     console.log('Message type: ', props.message.getType())
 
     switch (props.message.getType()) {
         case "ai":
+            const toolCalls = (props.message as AIMessageChunk).tool_calls
             input = { 
                 ...input, 
                 role: APITypes.ChatMessageRole.ai, 
-                toolCalls: JSON.stringify((props.message as AIMessageChunk).tool_calls) 
+                toolCalls: JSON.stringify(toolCalls),
+                responseComplete: ( //If the AI message has no tool calls, set responseComplete to true
+                    !toolCalls || 
+                    toolCalls?.length === 0
+                )
             }
 
-            //If the AI message has no tool calls, set responseComplete to true
-            if (!(props.message as AIMessageChunk).tool_calls) {
-                input = { 
-                    ...input, 
-                    responseComplete: true
-                 }
-            }
+            // //If the AI message has no tool calls, set responseComplete to true
+            // if (
+            //     !toolCalls || 
+            //     toolCalls?.length === 0
+            // ) {
+            //     input = { 
+            //         ...input, 
+            //         responseComplete: true
+            //      }
+            // }
             break;
         case "tool":
             input = { 
