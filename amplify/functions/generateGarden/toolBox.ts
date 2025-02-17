@@ -18,7 +18,7 @@ export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
         // Verify that the functionArgs are valid
         const verifySchemaResult = createGardenType.safeParse(proposedGarden)
         if (!verifySchemaResult.success) {
-            // console.log(`Invalid proposed garden: ${JSON.stringify(verifySchemaResult.error)}`)
+            console.log(`Invalid proposed garden: ${JSON.stringify(verifySchemaResult.error)}`)
             throw new Error(`Invalid proposed garden: ${JSON.stringify(verifySchemaResult.error, null, 2)}`)
             // return `Invalid proposed garden: ${JSON.stringify(verifySchemaResult.error)}`
         }
@@ -60,8 +60,8 @@ export const createGardenPlanToolBuilder = (props: {gardenId: string, owner: str
         console.log('Proposed steps:\n', steps)
         const verifySchemaResult = plannedStepArrayType.safeParse({steps})
         if (!verifySchemaResult.success) {
+            console.log(`Invalid proposed steps:\n${JSON.stringify(verifySchemaResult.error)}`)
             throw new Error(`Invalid proposed steps: ${JSON.stringify(verifySchemaResult.error, null, 2)}`)
-            // console.log(`Invalid proposed steps:\n${JSON.stringify(verifySchemaResult.error)}`)
             // return `Invalid proposed steps:\n${JSON.stringify(verifySchemaResult.error)}`
         }
 

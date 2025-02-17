@@ -208,7 +208,11 @@ function Page({
                                                 Plant Date: {row.info?.plantDate ? new Date(row.info?.plantDate).toLocaleDateString() : "Unknown"}
                                             </Typography>
                                             <Typography variant="body2" color="text.secondary">
-                                                Expected Harvest: {row.info?.expectedHarvest?.date ? new Date(row.info?.expectedHarvest.date).toLocaleDateString() : "Unknown"} - {row.info?.expectedHarvest?.amount} {row.info?.expectedHarvest?.unit}
+                                                Expected Harvest: {
+                                                    row.info?.harvest?.first ?
+                                                        new Date(row.info?.harvest.first).toLocaleDateString()
+                                                        : "Unknown"
+                                                } - {row.info?.harvest?.amount} {row.info?.harvest?.unit}
                                             </Typography>
                                             <Button
                                                 variant="contained"
@@ -268,7 +272,7 @@ function Page({
                                             Location: {JSON.stringify(row?.location)}
                                         </Typography> */}
                                         <Typography variant="body2" color="text.secondary">
-                                            Expected Harvest: {row?.expectedHarvest?.date ? new Date(row.expectedHarvest.date).toLocaleDateString() : "Unknown"} - {row?.expectedHarvest?.amount} {row?.expectedHarvest?.unit}
+                                            Expected Harvest: {row?.harvest?.first ? new Date(row.harvest.first).toLocaleDateString() : "Unknown"} - {row?.harvest?.amount} {row?.harvest?.unit}
                                         </Typography>
                                         <Button
                                             variant="contained"
@@ -276,21 +280,21 @@ function Page({
                                             onClick={async () => {
                                                 if (!row) return;
                                                 const daysToHarvest = (
-                                                    row.expectedHarvest?.date &&
+                                                    row.harvest?.first &&
                                                     plannedStep.plannedDate
-                                                ) && Math.ceil((new Date(row.expectedHarvest.date).getTime() - new Date(plannedStep.plannedDate).getTime()) / (1000 * 60 * 60 * 24));
+                                                ) && Math.ceil((new Date(row.harvest.first).getTime() - new Date(plannedStep.plannedDate).getTime()) / (1000 * 60 * 60 * 24));
                                                 console.log(`
                                                     Plant Date: ${plannedStep.plannedDate}
-                                                    Expected Harvest: ${row.expectedHarvest?.date}
+                                                    Expected Harvest: ${row.harvest?.first}
                                                     Days to harvest: `, daysToHarvest);
                                                 const newPlantedPlantRow: Schema["PlantedPlantRow"]["createType"] = {
                                                     gardenId: activeGarden.id,
                                                     info: {
                                                         ...row,
                                                         plantDate: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
-                                                        expectedHarvest: {
-                                                            ...row.expectedHarvest,
-                                                            date: new Date(new Date().setDate(new Date().getDate() + Number(daysToHarvest))).toISOString().split('T')[0],
+                                                        harvest: {
+                                                            ...row.harvest,
+                                                            first: new Date(new Date().setDate(new Date().getDate() + Number(daysToHarvest))).toISOString().split('T')[0],
                                                         }
                                                     }
                                                 };
@@ -329,7 +333,7 @@ function Page({
 
             <ChatBoxDrawer
                 gardenId={activeGarden.id}
-                initialFullScreenStatus={activeGarden.objective === ""}
+                initialFullScreenStatus={plannedSteps.length === 0}
                 setGarden={setActiveGardenAndUpload}
                 setPlannedSteps={setPlannedStepsAndAddSvg}
             />

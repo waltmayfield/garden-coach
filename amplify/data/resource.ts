@@ -18,7 +18,8 @@ export const generateGardenFunction = defineFunction({
   entry: '../functions/generateGarden/generateGardenHandler.ts',
   timeoutSeconds: 900,
   environment: {
-    MODEL_ID: 'us.anthropic.claude-3-5-sonnet-20241022-v2:0'
+    // MODEL_ID: 'us.anthropic.claude-3-5-sonnet-20241022-v2:0'
+    MODEL_ID: 'us.anthropic.claude-3-5-haiku-20241022-v1:0'
     // MODEL_ID: 'us.anthropic.claude-3-sonnet-20240229-v1:0',
     // MODEL_ID: 'us.amazon.nova-pro-v1:0'
   }
@@ -30,8 +31,9 @@ export const schema = a.schema({
     y: a.float().required(),
   }),
 
-  expectedHarvest: a.customType({
-    date: a.date(),
+  harvest: a.customType({
+    first: a.date(),
+    last: a.date(),
     amount: a.float(),
     unit: a.string(),
   }),
@@ -52,7 +54,8 @@ export const schema = a.schema({
     species: a.string(),
     plantSpacingInMeters: a.float(),
     plantDate: a.date(),
-    expectedHarvest: a.ref('expectedHarvest')
+    harvest: a.ref('harvest'),
+    perrenial: a.boolean(),
   }),
 
   Step: a.customType({

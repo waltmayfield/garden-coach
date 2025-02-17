@@ -36,19 +36,19 @@ const plantRowType = z.object({
     }),
     species: z.string(),
     plantSpacingInMeters: z.number(),
-    // plantDate: zodStringDate,
-    expectedHarvest: z.object({
-        date: zodStringDate,
+    harvest: z.object({
+        first: zodStringDate,
+        last: zodStringDate,
         amount: z.number(),
         unit: z.string()
-    })
+    }),
+    perrenial: z.boolean(),
 })
 
 const stepType = z.object({
     title: z.string(),
     description: z.string(),
     role: z.enum(['ai', 'human']),
-    // resources: z.array(z.string()),
     plantRows: z.array(plantRowType),
 
 })
@@ -59,7 +59,7 @@ export const plannedStepArrayType = z.object({
         step: stepType,
         plannedDate: zodStringDate,
     })),
-    explaination: z.string(),
+    explaination: z.string().optional(),
 })
 
 export type PlannedStepArray = z.infer<typeof plannedStepArrayType>
@@ -80,9 +80,14 @@ export type Message = (
     Schema["ChatMessage"]["createType"]
 )
 
-export type PublishMessageCommandInput = { 
-    gardenId: string, 
-    owner: string, 
-    message: HumanMessage | AIMessage | ToolMessage, 
+export type PublishMessageCommandInput = {
+    gardenId: string,
+    owner: string,
+    message: HumanMessage | AIMessage | ToolMessage,
     responseComplete?: boolean,
+}
+
+const typeChecks = () =>{
+    const garden: Schema["Garden"]["createType"] = {} as Garden;
+    const step: Schema["PlannedStep"]["createType"]["step"] = {} as PlannedStepArray["steps"][number]["step"]
 }

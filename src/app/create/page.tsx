@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Container, TextField, Typography } from '@mui/material';
+import { Container, List, ListItem, TextField, Typography } from '@mui/material';
 import { Authenticator } from '@aws-amplify/ui-react';
 
 import {
@@ -10,6 +10,7 @@ import {
 
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
+import { defaultPrompts } from '@/constants/defaultPrompts';
 const amplifyClient = generateClient<Schema>();
 
 const CreatePage = () => {
@@ -20,17 +21,31 @@ const CreatePage = () => {
         setGardenObjective(event.target.value);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (userInput: string) => {
         try {
             const newGarden = await amplifyClient.models.Garden.create({});
-            const generateGardenResponse = amplifyClient.queries.generateGarden({ 
+            // const generateGardenResponse = amplifyClient.queries.generateGarden({ 
+            //     gardenId: newGarden.data!.id,
+            //     userInput: gardenObjective
+            // })
+            // console.log('generateGardenResponse:\n', generateGardenResponse)
+
+            const newMessage: Schema['ChatMessage']['createType'] = {
+                role: 'human',
+                content: {
+                    text: userInput
+                },
+                gardenId: newGarden.data!.id
+            }
+            await amplifyClient.models.ChatMessage.create(newMessage)
+
+            const invokeResponse = await amplifyClient.queries.generateGarden({
                 gardenId: newGarden.data!.id,
-                userInput: gardenObjective
+                userInput: userInput
             })
-            console.log('generateGardenResponse:\n', generateGardenResponse)
-            
+
             router.push(`/garden/${newGarden.data!.id}`);
-            // await amplifyClient.createGarden({ name: gardenName });
+
             alert("Garden created successfully!");
         } catch (error) {
             console.error("Error creating garden:", error);
@@ -52,7 +67,18 @@ const CreatePage = () => {
                     value={gardenObjective}
                     onChange={handleInputChange}
                 />
-                <Button onClick={handleSubmit}>Submit</Button>
+                <List>
+                    {defaultPrompts.map((prompt, index) => (
+                        <ListItem key={index}>
+                            <Button
+                                onClick={() => handleSubmit(prompt)}
+                            >
+                                {prompt}
+                            </Button>
+                        </ListItem>
+                    ))}
+                </List>
+                <Button onClick={() => handleSubmit(gardenObjective)}>Submit</Button>
             </Container>
         </Authenticator>
     );

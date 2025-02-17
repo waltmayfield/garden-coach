@@ -123,7 +123,7 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
                             gardenId: event.arguments.gardenId
                         }
                     })
-                    console.log('published chunk response:\n', JSON.stringify(publishChunkResponse, null, 2))
+                    // console.log('published chunk response:\n', JSON.stringify(publishChunkResponse, null, 2))
                     if (publishChunkResponse.errors) console.log('Error publishing response chunk:\n', publishChunkResponse.errors)
                     break;
                 case "on_tool_end":
