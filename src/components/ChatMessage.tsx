@@ -74,13 +74,13 @@ const ChatMessage = (params: {
                                     "\nMessage Content: ",
                                     params.message.content?.text,
                                 )
-                                return (
-                                    <div style={messageStyle}>
-                                        <p>
-                                            Failed to parse planned steps
-                                        </p>
-                                    </div>
-                                )
+                                // return (
+                                //     <div style={messageStyle}>
+                                //         <p>
+                                //             Failed to parse planned steps
+                                //         </p>
+                                //     </div>
+                                // )
                             }
                             break
                         case 'recommendGardenUpdate':
@@ -90,6 +90,11 @@ const ChatMessage = (params: {
                                     ...gardenVerifySchemaResult.data,
                                     id: params.message.gardenId!,
                                 }
+
+                                proposedGarden = {
+                                    ...(toolCall.args as z.infer<typeof createGardenType>),
+                                    id: params.message.gardenId!,
+                                }
                             } else {
                                 console.log(
                                     'Failed to parse garden update:',
@@ -97,12 +102,17 @@ const ChatMessage = (params: {
                                     "\nMessage Content: ",
                                     params.message.content?.text,
                                 )
+                                // return (
+                                //     <div style={messageStyle}>
+                                //         <p>
+                                //             Failed to parse garden update
+                                //         </p>
+                                //     </div>
+                                // )
+
                             }
 
-                            proposedGarden = {
-                                ...(toolCall.args as z.infer<typeof createGardenType>),
-                                id: params.message.gardenId!,
-                            }
+                            
                             break
                     }
                 }

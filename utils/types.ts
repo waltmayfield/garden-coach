@@ -35,11 +35,11 @@ const plantRowType = z.object({
         end: xY
     }),
     species: z.string(),
-    plantSpacingInMeters: z.number(),
+    plantSpacingInMeters: z.number().int(),
     harvest: z.object({
         first: zodStringDate,
-        last: zodStringDate,
-        amount: z.number(),
+        days: z.number().int().describe("What is the maximum number of days over which harvest can occur?"),
+        amount: z.number().int(),
         unit: z.string()
     }),
     perrenial: z.boolean(),

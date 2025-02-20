@@ -62,7 +62,7 @@ const ChatBox = (params: {
 
     messageSubscriptionHandler()
 
-  }, [params])
+  }, [params.gardenId])
 
   //Subscribe to the response stream chunks for the garden
   useEffect(() => {
@@ -108,7 +108,7 @@ const ChatBox = (params: {
     }
 
     responseStreamChunkSubscriptionHandler()
-  }, [params])
+  }, [params.gardenId])
 
   useEffect(() => {
     if (listRef.current) {

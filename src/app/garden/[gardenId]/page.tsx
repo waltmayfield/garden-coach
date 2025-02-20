@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import { Bar } from 'react-chartjs-2';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 // import FloatingHidableChatBox from '@/components/FloatingHidableChatBox';
 import ChatBoxDrawer from '@/components/ChatBoxDrawer';
@@ -11,6 +14,77 @@ import { PlannedSteps, GardenWithSvg } from '@/../utils/types';
 import { createGardenSVG } from '@/../utils/drawing';
 
 const amplifyClient = generateClient<Schema>();
+
+type WeeklyHarvest = { [week: string]: { [species: string]: number } };
+
+
+function getWeekNumber(date: Date): number {
+    const startOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDaysOfYear = (date.getTime() - startOfYear.getTime()) / 86400000;
+    return Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
+}
+
+function getFirstDayOfWeek(weekNumber: number, year: number): Date {
+    const firstDayOfYear = new Date(year, 0, 1);
+    const daysOffset = (weekNumber - 1) * 7;
+    const firstDayOfWeek = new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysOffset));
+    
+    // Adjust to the first day of the week (assuming Sunday as the first day of the week)
+    const dayOfWeek = firstDayOfWeek.getDay();
+    const firstDay = new Date(firstDayOfWeek.setDate(firstDayOfWeek.getDate() - dayOfWeek));
+    
+    return firstDay;
+}
+
+const getWeeklyHarvestData = (plantRows: Schema["PlantedPlantRow"]["createType"]["info"][]) => {
+    const weeklyHarvest: WeeklyHarvest = {};
+
+    plantRows.forEach(row => {
+        if (row && row.harvest?.first && row.harvest?.amount && row.species) {
+            const harvestDate = new Date(row.harvest.first);
+            const harvestDays = row.harvest.days || 1;
+            const weeks = Math.ceil(harvestDays / 7);
+            const amountPerWeek = row.harvest.amount / weeks;
+
+            for (let i = 0; i < weeks; i++) {
+                const weekDate = new Date(harvestDate);
+                weekDate.setDate(harvestDate.getDate() + (i * 7));
+                // const week = `${weekDate.getFullYear()}-W${Math.ceil(weekDate.getDate() / 7)}`;
+                // const week = weekDate.toISOString().split('T')[0];
+                // const week = getWeekNumber(weekDate).toString();
+                const week = getFirstDayOfWeek(getWeekNumber(weekDate), weekDate.getFullYear()).toISOString().split('T')[0];
+
+                if (!weeklyHarvest[week]) {
+                    weeklyHarvest[week] = {};
+                }
+
+                if (!weeklyHarvest[week][row.species]) {
+                    weeklyHarvest[week][row.species] = 0;
+                }
+
+                weeklyHarvest[week][row.species] += amountPerWeek;
+            }
+        }
+    });
+
+    return weeklyHarvest;
+};
+
+const getChartData = (weeklyHarvest: WeeklyHarvest) => {
+    const labels = Object.keys(weeklyHarvest).sort();
+    const species = [...new Set(Object.values(weeklyHarvest).flatMap(week => Object.keys(week)))];
+
+    const datasets = species.map(speciesName => ({
+        label: speciesName,
+        data: labels.map(week => weeklyHarvest[week][speciesName] || 0),
+        backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+    }));
+
+    return {
+        labels,
+        datasets,
+    };
+};
 
 function Page({
     params,
@@ -158,7 +232,6 @@ function Page({
                     unproccessedPlanSteps: [
                         ...prev,
                         ...newPlannedSteps
-
                     ]
                 })
                 if (processedPlannedSteps) return processedPlannedSteps
@@ -235,6 +308,34 @@ function Page({
                     </Card>
                     {activeGardenSvg}
                 </Box>
+
+
+                <Box mt={5}>
+                    <Typography variant="h6" component="div">
+                        Forecasted Harvest by Week
+                    </Typography>
+                    <Bar
+                        data={getChartData(getWeeklyHarvestData(plantedPlantRows.map(row => row.info)))}
+                        options={{
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Week',
+                                    },
+                                },
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Units',
+                                    },
+                                },
+                            },
+                        }}
+                    />
+                </Box>
+
                 {plannedSteps?.map((plannedStep, index) => (
                     <Box key={index} display="flex" flexDirection="row" gap={2}>
                         <Card sx={{ minWidth: 200 }}>
@@ -268,11 +369,12 @@ function Page({
                                         <Typography variant="body2" color="text.secondary">
                                             Species: {row?.species}
                                         </Typography>
-                                        {/* <Typography variant="body2" color="text.secondary">
-                                            Location: {JSON.stringify(row?.location)}
-                                        </Typography> */}
                                         <Typography variant="body2" color="text.secondary">
-                                            Expected Harvest: {row?.harvest?.first ? new Date(row.harvest.first).toLocaleDateString() : "Unknown"} - {row?.harvest?.amount} {row?.harvest?.unit}
+                                            Expected Harvest: {
+                                                row?.harvest?.first ?
+                                                    new Date(row?.harvest.first).toLocaleDateString()
+                                                    : "Unknown"
+                                            } - {row?.harvest?.amount} {row?.harvest?.unit}
                                         </Typography>
                                         <Button
                                             variant="contained"
@@ -304,6 +406,9 @@ function Page({
                                         >
                                             Add to Planted Rows
                                         </Button>
+                                        <pre>
+                                            {JSON.stringify(row, null, 2)}
+                                        </pre>
                                     </Box>
                                 ))}
                             </CardContent>
@@ -322,6 +427,8 @@ function Page({
                     </Box>
                 ))}
             </Box>
+
+
 
             {/* Floating Chat Box */}
             {/* <FloatingHidableChatBox

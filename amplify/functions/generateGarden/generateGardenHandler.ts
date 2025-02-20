@@ -45,7 +45,12 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
 
         if (!garden) throw new Error("Failed to fetch garden data");
 
-        const gardenString = stringify(garden.getGarden)
+        // const gardenString = stringify(garden.getGarden)
+        const gardenString = stringify({
+            name: garden.getGarden?.name,
+            location: garden.getGarden?.location,
+            perimeterPoints: garden.getGarden?.perimeterPoints
+        })
 
         const { data: plannedSteps } = await amplifyClient.graphql({
             query: listPlannedSteps,
@@ -54,6 +59,7 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
 
         if (!plannedSteps) throw new Error("Failed to fetch planned steps");
 
+        //TODO: Fix this so that it retrieves the step part of the planned steps
         const plannedStepsString = plannedSteps.listPlannedSteps.items.map((step) => stringify(step)).join('\n')
 
         const agentModel = new ChatBedrockConverse({
@@ -77,7 +83,8 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
                 new SystemMessage({
                     content: `
                     You are a helpful garden planner. Update the garden based on the user's request. 
-                    Create planned steps to fill the garden over the course of a year. Fill the garden with plants each season.
+                    Take advantage of all the available space when making a plan.
+                    Plant rows should be aligned with one of the sides of the garden.
                     Response chat message text content should be in markdown format.
 
                     If the user wants to update the garden or add planned steps, but hasn't provided enough details, ask for more information.
@@ -128,6 +135,7 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
                     break;
                 case "on_tool_end":
                 case "on_chat_model_end":
+                    chunkIndex = 0 //reset the stream chunk index
                     const streamChunk = streamEvent.data.output as ToolMessage | AIMessageChunk
                     console.log('received on chat model end:\n', stringifyLimitStringLength(streamChunk))
                     await publishMessage({

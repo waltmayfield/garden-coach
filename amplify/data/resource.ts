@@ -33,7 +33,7 @@ export const schema = a.schema({
 
   harvest: a.customType({
     first: a.date(),
-    last: a.date(),
+    days: a.integer(),
     amount: a.float(),
     unit: a.string(),
   }),

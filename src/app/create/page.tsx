@@ -44,6 +44,8 @@ const CreatePage = () => {
                 userInput: userInput
             })
 
+            console.log('invokeResponse:\n', invokeResponse)
+
             router.push(`/garden/${newGarden.data!.id}`);
 
             alert("Garden created successfully!");
@@ -67,18 +69,20 @@ const CreatePage = () => {
                     value={gardenObjective}
                     onChange={handleInputChange}
                 />
+                <Button onClick={() => handleSubmit(gardenObjective)}>Submit</Button>
                 <List>
                     {defaultPrompts.map((prompt, index) => (
                         <ListItem key={index}>
                             <Button
-                                onClick={() => handleSubmit(prompt)}
+                                // onClick={() => handleSubmit(prompt)}
+                                onClick={() => setGardenObjective(prompt)}
                             >
                                 {prompt}
                             </Button>
                         </ListItem>
                     ))}
                 </List>
-                <Button onClick={() => handleSubmit(gardenObjective)}>Submit</Button>
+                
             </Container>
         </Authenticator>
     );
