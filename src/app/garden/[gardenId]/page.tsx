@@ -74,10 +74,23 @@ const getChartData = (weeklyHarvest: WeeklyHarvest) => {
     const labels = Object.keys(weeklyHarvest).sort();
     const species = [...new Set(Object.values(weeklyHarvest).flatMap(week => Object.keys(week)))];
 
-    const datasets = species.map(speciesName => ({
+    const colorPalette = [
+        "#8BC34A", // Light Green
+        "#FFEB3B", // Yellow
+        "#FF9800", // Orange
+        "#FF5722", // Deep Orange
+        "#795548", // Brown
+        "#4CAF50", // Green
+        "#CDDC39", // Lime
+        "#FFC107", // Amber
+        "#FFEB3B", // Yellow
+        "#FF9800", // Orange
+    ];
+
+    const datasets = species.map((speciesName, index) => ({
         label: speciesName,
         data: labels.map(week => weeklyHarvest[week][speciesName] || 0),
-        backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+        backgroundColor: colorPalette[index % colorPalette.length],
     }));
 
     return {
@@ -183,7 +196,6 @@ function Page({
         await amplifyClient.models.PlantedPlantRow.delete({ id: id })
         setPlantedPlantRows(prev => prev?.filter(row => row.id !== id))
     }
-
 
     //Query the garden
     useEffect(() => {
@@ -315,7 +327,10 @@ function Page({
                         Forecasted Harvest by Week
                     </Typography>
                     <Bar
-                        data={getChartData(getWeeklyHarvestData(plantedPlantRows.map(row => row.info)))}
+                        data={getChartData(getWeeklyHarvestData([
+                            ...plantedPlantRows.map(row => row.info),
+                            ...plannedSteps.map(step => step.step?.plantRows || []).flat()
+                        ]))}
                         options={{
                             responsive: true,
                             scales: {
@@ -324,12 +339,14 @@ function Page({
                                         display: true,
                                         text: 'Week',
                                     },
+                                    stacked: true,
                                 },
                                 y: {
                                     title: {
                                         display: true,
                                         text: 'Units',
                                     },
+                                    stacked: true,
                                 },
                             },
                         }}
@@ -406,9 +423,9 @@ function Page({
                                         >
                                             Add to Planted Rows
                                         </Button>
-                                        <pre>
+                                        {/* <pre>
                                             {JSON.stringify(row, null, 2)}
-                                        </pre>
+                                        </pre> */}
                                     </Box>
                                 ))}
                             </CardContent>

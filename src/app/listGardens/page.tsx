@@ -14,19 +14,21 @@ const Page = () => {
     useEffect(() => {
         const fetchGardens = async () => {
             const result = await amplifyClient.models.Garden.list();
-            setGardens(result.data);
+            const sortedGardens = result.data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            setGardens(sortedGardens);
         };
         fetchGardens();
     }, []);
 
     return (
-        <Authenticator>
+        // <Authenticator>
             <Box>
                 {gardens.map(garden => (
                     <Card key={garden.id}>
                         <CardContent>
                             <Typography variant="h5">{garden.name}</Typography>
                             <Typography variant="body1">{garden.location?.cityStateAndCountry}</Typography>
+                            <Typography variant="body2">{garden.objective}</Typography>
                             <Box mt={2}>
                                 <Button variant="contained" color="primary" href={`/garden/${garden.id}`}>
                                     View Garden
@@ -49,7 +51,7 @@ const Page = () => {
                     </Card>
                 ))}
             </Box>
-        </Authenticator>
+        // </Authenticator>
     );
 }
 

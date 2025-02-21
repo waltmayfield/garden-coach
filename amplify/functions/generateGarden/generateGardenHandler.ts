@@ -6,6 +6,7 @@ import { stringify } from "yaml";
 // import { getAmplifyDataClientConfig } from '@aws-amplify/backend/function/runtime';
 // import { env } from '$amplify/env/generateGarden';
 import { getConfiguredAmplifyClient } from '../../../utils/amplifyUtils';
+import { getWeatherForecast, geocode } from '../../../utils/weather';
 // import { GraphqlOutput } from '@aws-amplify/backend-output-schemas';
 
 import { ChatBedrockConverse } from "@langchain/aws";
@@ -19,7 +20,7 @@ import { Calculator } from "@langchain/community/tools/calculator";
 // import { publishResponseStreamChunk } from '../../../utils/graphqlStatements'
 // import { createGarden, updateGarden } from '../graphql/mutations';
 import { getGarden, listPlannedSteps } from '../graphql/queries';
-import { publishResponseStreamChunk } from "../graphql/mutations";
+import { publishResponseStreamChunk, updateGarden } from "../graphql/mutations";
 // import { CreateGardenInput, UpdateGardenInput } from "../graphql/API";
 
 import { Schema } from '../../data/resource';
@@ -38,7 +39,7 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
 
         const amplifyClient = getConfiguredAmplifyClient();
 
-        const { data: garden } = await amplifyClient.graphql({
+        const { data: { getGarden: garden } } = await amplifyClient.graphql({
             query: getGarden,
             variables: { id: event.arguments.gardenId }
         })
@@ -47,9 +48,9 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
 
         // const gardenString = stringify(garden.getGarden)
         const gardenString = stringify({
-            name: garden.getGarden?.name,
-            location: garden.getGarden?.location,
-            perimeterPoints: garden.getGarden?.perimeterPoints
+            name: garden.name,
+            location: garden.location,
+            perimeterPoints: garden.perimeterPoints
         })
 
         const { data: plannedSteps } = await amplifyClient.graphql({
@@ -58,9 +59,41 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
         })
 
         if (!plannedSteps) throw new Error("Failed to fetch planned steps");
-
         //TODO: Fix this so that it retrieves the step part of the planned steps
         const plannedStepsString = plannedSteps.listPlannedSteps.items.map((step) => stringify(step)).join('\n')
+
+        // if (!garden.location) throw new Error("Garden location is missing");
+        // Get the forecast for the garden location
+        if (
+            garden.location && garden.location.cityStateAndCountry && (
+                (typeof garden.location?.lattitude) !== 'number' ||
+                (typeof garden.location?.longitude) !== 'number'
+            )
+        ) {
+            console.log("Geocoding garden location: ", garden.location!.cityStateAndCountry)
+            const gardenLatLong = await geocode(garden.location!.cityStateAndCountry)
+            garden.location!.lattitude = gardenLatLong.lat
+            garden.location!.longitude = gardenLatLong.lng
+
+            amplifyClient.graphql({
+                query: updateGarden,
+                variables: { input: garden }
+            }).then(
+                (response) => console.log("Updated garden with geocoded location: ", response)
+            ).catch(
+                (error) => console.error("Error updating garden with geocoded location: ", error)
+            )
+        }
+
+        let forecastString = "No forecast available"
+        if (garden.location && garden.location.lattitude && garden.location.longitude) {
+            console.log("Getting forecast for garden location: ", garden.location)
+            const forecast = await getWeatherForecast({
+                lattitude: garden.location.lattitude,   
+                longitude: garden.location.longitude
+            })
+            forecastString = stringify(forecast)
+        }
 
         const agentModel = new ChatBedrockConverse({
             model: process.env.MODEL_ID,
@@ -83,11 +116,16 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
                 new SystemMessage({
                     content: `
                     You are a helpful garden planner. Update the garden based on the user's request. 
-                    Take advantage of all the available space when making a plan.
-                    Plant rows should be aligned with one of the sides of the garden.
+                    Try to use all of the available space for each planting step.
+                    Don't make diagaional rows. Plant rows should be aligned with one of the sides of the garden.
                     Response chat message text content should be in markdown format.
+                    Today's date is ${new Date().toLocaleDateString()}. Recommend planting steps over the next year based on the current garden and user requests.
 
                     If the user wants to update the garden or add planned steps, but hasn't provided enough details, ask for more information.
+
+                    <weatherForecast>
+                    ${forecastString}
+                    </weatherForecast>
 
                     <currentGardenAttriburtes>
                     ${gardenString}
@@ -96,8 +134,8 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
                     <currentPlannedSteps>
                     ${plannedStepsString}
                     </currentPlannedSteps>
-                    
-                    `,
+
+                    `.replace(/^\s+/gm, ''), //This trims the whitespace from the beginning of each line
                 }),
                 new HumanMessage({
                     content: event.arguments.userInput
