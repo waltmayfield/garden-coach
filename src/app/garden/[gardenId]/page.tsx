@@ -282,47 +282,47 @@ function Page({
                                     </Typography>
                                 ) : (
                                     <Grid container spacing={2}>{
-                                    plantedPlantRows.map((row, index) => (
-                                        // <Box key={index} mt={1}>
-                                        <Card
-                                            key={index}
-                                        >
-                                            <CardContent>
+                                        plantedPlantRows.map((row, index) => (
+                                            // <Box key={index} mt={1}>
+                                            <Card
+                                                key={index}
+                                            >
+                                                <CardContent>
 
-                                                <Typography variant="body2" color="text.secondary">
-                                                    Species: {row.info?.species}
-                                                </Typography>
-                                                {/* <Typography variant="body2" color="text.secondary">
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        Species: {row.info?.species}
+                                                    </Typography>
+                                                    {/* <Typography variant="body2" color="text.secondary">
                                                 Spacing: {JSON.stringify(row.info?.plantSpacingInMeters)}
                                             </Typography> */}
-                                                <Typography variant="body2" color="text.secondary">
-                                                    Plant Date: {row.info?.plantDate ? new Date(row.info?.plantDate).toLocaleDateString() : "Unknown"}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    Expected Harvest: {
-                                                        row.info?.harvest?.first ?
-                                                            new Date(row.info?.harvest.first).toLocaleDateString()
-                                                            : "Unknown"
-                                                    } - {row.info?.harvest?.amount} {row.info?.harvest?.unit}
-                                                </Typography>
-                                            </CardContent>
-                                            <CardActions>
-                                            <Button
-                                                    // variant="contained"
-                                                    // color="secondary"
-                                                    onClick={async () => {
-                                                        if (row.id) {
-                                                            await deletePlantedPlantRowAndUpload(row.id);
-                                                        }
-                                                    }}
-                                                >
-                                                    X
-                                                </Button>
-                                            </CardActions>
-                                        </Card>
-                                        // </Box>
-                                    ))
-                                }</Grid>
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        Plant Date: {row.info?.plantDate ? new Date(row.info?.plantDate).toLocaleDateString() : "Unknown"}
+                                                    </Typography>
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        Expected Harvest: {
+                                                            row.info?.harvest?.first ?
+                                                                new Date(row.info?.harvest.first).toLocaleDateString()
+                                                                : "Unknown"
+                                                        } - {row.info?.harvest?.amount} {row.info?.harvest?.unit}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button
+                                                        // variant="contained"
+                                                        // color="secondary"
+                                                        onClick={async () => {
+                                                            if (row.id) {
+                                                                await deletePlantedPlantRowAndUpload(row.id);
+                                                            }
+                                                        }}
+                                                    >
+                                                        X
+                                                    </Button>
+                                                </CardActions>
+                                            </Card>
+                                            // </Box>
+                                        ))
+                                    }</Grid>
                                 )}
                             </Box>
                             <Box mt={2}>
@@ -398,67 +398,77 @@ function Page({
                                         setPlannedSteps(prev => prev?.filter(step => step.id !== plannedStep.id));
                                     }}
                                 >
-                                    Delete
+                                    X
                                 </Button>
-                                <Box mt="2" flexDirection={"column"}>
+                                {/* <Box mt="2" flexDirection={"column"}> */}
+                                <Grid container spacing={2}>
                                     {plannedStep.step?.plantRows?.map((row, rowIndex) => (
-                                        <Box key={rowIndex} mt={2}>
-                                            <Typography variant="body2" color="text.secondary">
-                                                Species: {row?.species}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                Expected Harvest: {
-                                                    row?.harvest?.first ?
-                                                        new Date(row?.harvest.first).toLocaleDateString()
-                                                        : "Unknown"
-                                                } - {row?.harvest?.amount} {row?.harvest?.unit}
-                                            </Typography>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={async () => {
-                                                    if (!row) return;
-                                                    const daysToHarvest = (
-                                                        row.harvest?.first &&
-                                                        plannedStep.plannedDate
-                                                    ) && Math.ceil((new Date(row.harvest.first).getTime() - new Date(plannedStep.plannedDate).getTime()) / (1000 * 60 * 60 * 24));
-                                                    console.log(`
+                                        // <Box key={rowIndex} mt={2}>
+                                        <Card key={rowIndex}>
+                                            <CardContent>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    Species: {row?.species}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    Expected Harvest: {
+                                                        row?.harvest?.first ?
+                                                            new Date(row?.harvest.first).toLocaleDateString()
+                                                            : "Unknown"
+                                                    } - {row?.harvest?.amount} {row?.harvest?.unit}
+                                                </Typography>
+
+                                                {/* <pre>
+                                            {JSON.stringify(row, null, 2)}
+                                        </pre> */}
+                                                {/* </Box> */}
+                                            </CardContent>
+                                            <CardActions>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={async () => {
+                                                        if (!row) return;
+                                                        const daysToHarvest = (
+                                                            row.harvest?.first &&
+                                                            plannedStep.plannedDate
+                                                        ) && Math.ceil((new Date(row.harvest.first).getTime() - new Date(plannedStep.plannedDate).getTime()) / (1000 * 60 * 60 * 24));
+                                                        console.log(`
                                                     Plant Date: ${plannedStep.plannedDate}
                                                     Expected Harvest: ${row.harvest?.first}
                                                     Days to harvest: `, daysToHarvest);
-                                                    const newPlantedPlantRow: Schema["PlantedPlantRow"]["createType"] = {
-                                                        gardenId: activeGarden.id,
-                                                        info: {
-                                                            ...row,
-                                                            plantDate: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
-                                                            harvest: {
-                                                                ...row.harvest,
-                                                                first: new Date(new Date().setDate(new Date().getDate() + Number(daysToHarvest))).toISOString().split('T')[0],
+                                                        const newPlantedPlantRow: Schema["PlantedPlantRow"]["createType"] = {
+                                                            gardenId: activeGarden.id,
+                                                            info: {
+                                                                ...row,
+                                                                plantDate: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
+                                                                harvest: {
+                                                                    ...row.harvest,
+                                                                    first: new Date(new Date().setDate(new Date().getDate() + Number(daysToHarvest))).toISOString().split('T')[0],
+                                                                }
                                                             }
-                                                        }
-                                                    };
-                                                    console.log("Creating new planted plant row:\n", newPlantedPlantRow);
-                                                    await addPlantedPlantRowAndUpload(newPlantedPlantRow);
-                                                }}
-                                            >
-                                                Add to Planted Rows
-                                            </Button>
-                                            {/* <pre>
-                                            {JSON.stringify(row, null, 2)}
-                                        </pre> */}
-                                        </Box>
+                                                        };
+                                                        console.log("Creating new planted plant row:\n", newPlantedPlantRow);
+                                                        await addPlantedPlantRowAndUpload(newPlantedPlantRow);
+                                                    }}
+                                                >
+                                                    +
+                                                </Button>
+                                            </CardActions>
+                                        </Card>
                                     ))}
-                                    <Box mt={5}>
-                                        {(
-                                            plannedStep.step &&
-                                            plannedStep.step.plantRows &&
-                                            plannedStep.step?.plantRows?.length > 0
-                                        ) && (
-                                                // <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} />
-                                                plannedStep.gardenSvg
-                                            )}
-                                        {/* <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} /> */}
-                                    </Box>
+
+                                </Grid>
+                                {/* </Box> */}
+                                <Box mt={5}>
+                                    {(
+                                        plannedStep.step &&
+                                        plannedStep.step.plantRows &&
+                                        plannedStep.step?.plantRows?.length > 0
+                                    ) && (
+                                            // <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} />
+                                            plannedStep.gardenSvg
+                                        )}
+                                    {/* <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} /> */}
                                 </Box>
                             </CardContent>
                         </Card>
