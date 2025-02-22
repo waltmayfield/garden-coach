@@ -8,6 +8,7 @@ import theme from '../theme';
 
 import ConfigureAmplify from '@/components/ConfigureAmplify';
 import Providers from '@/components/Providers';
+import TopNavBar from '@/components/TopNavBar';
 
 import "./globals.css";
 
@@ -43,6 +44,7 @@ export default function RootLayout({
           <Providers>
             <ThemeProvider theme={theme}>
               <CssBaseline />
+              <TopNavBar />
               {children}
             </ThemeProvider>
           </Providers>

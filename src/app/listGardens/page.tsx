@@ -21,7 +21,7 @@ const Page = () => {
     }, []);
 
     return (
-        // <Authenticator>
+        <Authenticator>
             <Box>
                 {gardens.map(garden => (
                     <Card key={garden.id}>
@@ -51,7 +51,7 @@ const Page = () => {
                     </Card>
                 ))}
             </Box>
-        // </Authenticator>
+        </Authenticator>
     );
 }
 
