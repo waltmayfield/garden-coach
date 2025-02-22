@@ -68,12 +68,12 @@ const ChatMessage = (params: {
                                 })
 
                             } else {
-                                console.log(
-                                    'Failed to parse planned steps:',
-                                    plannedStepParseResult.error,
-                                    "\nMessage Content: ",
-                                    params.message.content?.text,
-                                )
+                                // console.log(
+                                //     'Failed to parse planned steps:',
+                                //     plannedStepParseResult.error,
+                                //     "\nMessage Content: ",
+                                //     params.message.content?.text,
+                                // )
                                 // return (
                                 //     <div style={messageStyle}>
                                 //         <p>
@@ -96,12 +96,12 @@ const ChatMessage = (params: {
                                     id: params.message.gardenId!,
                                 }
                             } else {
-                                console.log(
-                                    'Failed to parse garden update:',
-                                    gardenVerifySchemaResult.error,
-                                    "\nMessage Content: ",
-                                    params.message.content?.text,
-                                )
+                                // console.log(
+                                //     'Failed to parse garden update:',
+                                //     gardenVerifySchemaResult.error,
+                                //     "\nMessage Content: ",
+                                //     params.message.content?.text,
+                                // )
                                 // return (
                                 //     <div style={messageStyle}>
                                 //         <p>

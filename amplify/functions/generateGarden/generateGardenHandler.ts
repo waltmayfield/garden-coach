@@ -19,7 +19,7 @@ import { Calculator } from "@langchain/community/tools/calculator";
 // import { generateGardenPlanSteps } from './graphql/queries';
 // import { publishResponseStreamChunk } from '../../../utils/graphqlStatements'
 // import { createGarden, updateGarden } from '../graphql/mutations';
-import { getGarden, listPlannedSteps } from '../graphql/queries';
+import { getGarden, listPlannedSteps, getPlannedStep } from '../graphql/queries';
 import { publishResponseStreamChunk, updateGarden } from "../graphql/mutations";
 // import { CreateGardenInput, UpdateGardenInput } from "../graphql/API";
 
@@ -60,7 +60,29 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
 
         if (!plannedSteps) throw new Error("Failed to fetch planned steps");
         //TODO: Fix this so that it retrieves the step part of the planned steps
-        const plannedStepsString = plannedSteps.listPlannedSteps.items.map((step) => stringify(step)).join('\n')
+        let plannedStepsString = ""
+
+        for (const step of plannedSteps.listPlannedSteps.items) {
+            const { data: { getPlannedStep: stepData } } = await amplifyClient.graphql({
+                query: getPlannedStep,
+                variables: { id: step.id }
+            })
+            // stepData?.step.
+            if (!stepData) throw new Error("Failed to fetch planned step")
+            plannedStepsString += stringify({
+                title: stepData?.step?.title,
+            })
+        }
+
+        // const plannedStepsString = plannedSteps.listPlannedSteps.items.map(await (step) => {
+        //     const getStepResponse = await amplifyClient.graphql({
+        //         query: getPlannedStep,
+        //         variables: { id: step.id }
+        //     })
+        //     if (!getStepResponse) throw new Error("Failed to fetch planned step")
+
+        //     return stringify(step)
+        // }).join('\n')
 
         // if (!garden.location) throw new Error("Garden location is missing");
         // Get the forecast for the garden location
@@ -89,7 +111,7 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
         if (garden.location && garden.location.lattitude && garden.location.longitude) {
             console.log("Getting forecast for garden location: ", garden.location)
             const forecast = await getWeatherForecast({
-                lattitude: garden.location.lattitude,   
+                lattitude: garden.location.lattitude,
                 longitude: garden.location.longitude
             })
             forecastString = stringify(forecast)
@@ -111,31 +133,33 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
             tools: agentTools,
         });
 
+        let systemMessageContent = `
+            You are a helpful garden planner. Update the garden based on the user's request. 
+            Try to use all of the available space for each planting step.
+            Don't make diagaional rows. Plant rows should be aligned with one of the sides of the garden.
+            Response chat message text content should be in markdown format.
+            Today's date is ${new Date().toLocaleDateString()}. Recommend planting steps over the next year based on the current garden and user requests.
+
+            If the user wants to update the garden or add planned steps, but hasn't provided enough details, ask for more information.
+
+            <weatherForecast>
+            ${forecastString}
+            </weatherForecast>
+
+            <currentGardenAttriburtes>
+            ${gardenString}
+            </currentGardenAttriburtes>
+
+            <currentPlannedSteps>
+            ${plannedStepsString}
+            </currentPlannedSteps>
+
+        `.replace(/^\s+/gm, '') //This trims the whitespace from the beginning of each line
+
         const input = {
             messages: [
                 new SystemMessage({
-                    content: `
-                    You are a helpful garden planner. Update the garden based on the user's request. 
-                    Try to use all of the available space for each planting step.
-                    Don't make diagaional rows. Plant rows should be aligned with one of the sides of the garden.
-                    Response chat message text content should be in markdown format.
-                    Today's date is ${new Date().toLocaleDateString()}. Recommend planting steps over the next year based on the current garden and user requests.
-
-                    If the user wants to update the garden or add planned steps, but hasn't provided enough details, ask for more information.
-
-                    <weatherForecast>
-                    ${forecastString}
-                    </weatherForecast>
-
-                    <currentGardenAttriburtes>
-                    ${gardenString}
-                    </currentGardenAttriburtes>
-
-                    <currentPlannedSteps>
-                    ${plannedStepsString}
-                    </currentPlannedSteps>
-
-                    `.replace(/^\s+/gm, ''), //This trims the whitespace from the beginning of each line
+                    content: systemMessageContent
                 }),
                 new HumanMessage({
                     content: event.arguments.userInput

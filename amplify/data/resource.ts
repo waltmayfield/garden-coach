@@ -75,9 +75,11 @@ export const schema = a.schema({
     .model({
       gardenId: a.id(),
       garden: a.belongsTo("Garden", 'gardenId'),
+
+      //Chat message fields
       content: a.customType({
         text: a.string(),
-        proposedSteps: a.ref('Step').array(),
+        // proposedSteps: a.ref('Step').array(),
         // proposedGardenUpdate: a.ref('Garden'),
       }),
       role: a.enum(["human", "ai", "tool"]),
@@ -90,7 +92,10 @@ export const schema = a.schema({
       //langchain fields
       toolCallId: a.string(),
       toolName: a.string(),
-      toolCalls: a.string()
+      toolCalls: a.string(),
+
+      //context fields
+      contextStepId: a.string(),
     })
     .secondaryIndexes((index) => [
       index("gardenId").sortKeys(["createdAt"])

@@ -12,6 +12,7 @@ Chart.register(...registerables);
 import ChatBoxDrawer from '@/components/ChatBoxDrawer';
 import { PlannedSteps, GardenWithSvg } from '@/../utils/types';
 import { createGardenSVG } from '@/../utils/drawing';
+import { sendMessage } from '@/../utils/amplifyUtils';
 
 const amplifyClient = generateClient<Schema>();
 
@@ -473,6 +474,39 @@ function Page({
                                 >
                                     X
                                 </Button>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={async () => {
+                                        const userUpdateMessagePrompt = prompt("Edit the step:", "");
+                                        
+                                        if (userUpdateMessagePrompt !== null && plannedStep.step) {
+
+                                            const newMessage: Schema['ChatMessage']['createType'] = {
+                                                role: 'human',
+                                                content: {
+                                                    text: `Update the step with title ${plannedStep.step?.title}. ` + userUpdateMessagePrompt
+                                                },
+                                                gardenId: activeGarden.id,
+                                                contextStepId: plannedStep.id
+                                            }
+
+                                            await sendMessage({
+                                                gardenId: activeGarden.id,
+                                                newMessage: newMessage
+                                            })
+
+                                            // TODO: find a way to open the chat box
+
+
+                                            // Implement the logic to update the planned step
+                                            // console.log(`Editing planned step: ${plannedStep.id}`, updatedStep);
+                                            // You can call a function to update the planned step in the backend
+                                        }
+                                    }}
+                                >
+                                    Edit
+                                </Button>
                             </CardActions>
                         </Card>
 
@@ -492,7 +526,7 @@ function Page({
 
             <ChatBoxDrawer
                 gardenId={activeGarden.id}
-                initialFullScreenStatus={plannedSteps.length === 0}
+                initialFullScreenStatus={false}//{activeGarden && plannedSteps.length === 0}
                 setGarden={setActiveGardenAndUpload}
                 setPlannedSteps={setPlannedStepsAndAddSvg}
             />

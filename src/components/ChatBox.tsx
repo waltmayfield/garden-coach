@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Box, TextField, Button, List, ListItem, Typography } from '@mui/material';
 
-import { generateClient } from "aws-amplify/data";
-import { type Schema } from "@/../amplify/data/resource";
-import { combineAndSortMessages } from '../../utils/amplifyUtils';
+
+import { combineAndSortMessages, sendMessage } from '../../utils/amplifyUtils';
 import { Message, PlannedSteps } from '../../utils/types';
 
 import ChatMessage from './ChatMessage';
 
 import { defaultPrompts } from '@/constants/defaultPrompts';
 
+import { generateClient } from "aws-amplify/data";
+import { type Schema } from "@/../amplify/data/resource";
 const amplifyClient = generateClient<Schema>();
 
 const ChatBox = (params: {
@@ -35,7 +36,7 @@ const ChatBox = (params: {
         }
       }).subscribe({
         next: ({ items }) => {
-          console.log('Received new messages: ', items)
+          // console.log('Received new messages: ', items)
           //If any of the items have the isResposeComplete flag set to true, set isLoading to false
           // const isResponseComplete = items.some((message) => message.responseComplete)
           // if (isResponseComplete) setIsLoading(false)
@@ -71,7 +72,7 @@ const ChatBox = (params: {
       const responseStreamChunkSub = amplifyClient.subscriptions.recieveResponseStreamChunk({ gardenId: params.gardenId }).subscribe({
         error: (error) => console.error('Error subscribing stream chunks: ', error),
         next: (newChunk) => {
-          console.log('Received new response stream chunk: ', newChunk)
+          // console.log('Received new response stream chunk: ', newChunk)
           setResponseStreamChunks((prevChunks) => {
             //Now Insert the new chunk into the correct position in the array
             if (newChunk.index >= 0 && newChunk.index < prevChunks.length) {
@@ -127,19 +128,25 @@ const ChatBox = (params: {
         },
         gardenId: params.gardenId
       }
-      const { data: newMessageData } = await amplifyClient.models.ChatMessage.create(newMessage)
+
+      const { newMessageData } = await sendMessage({
+        gardenId: params.gardenId,
+        newMessage: newMessage
+      })
+
+      // const { data: newMessageData } = await amplifyClient.models.ChatMessage.create(newMessage)
       if (newMessageData) setMessages([...messages, {
         ...newMessage,
         id: newMessageData.id,
         createdAt: newMessageData.createdAt
       }]);
 
-      const invokeResponse = await amplifyClient.queries.generateGarden({
-        gardenId: params.gardenId,
-        userInput: userInput
-      })
+      // const invokeResponse = await amplifyClient.queries.generateGarden({
+      //   gardenId: params.gardenId,
+      //   userInput: userInput
+      // })
 
-      console.log('invokeResponse: ', invokeResponse)
+      // console.log('invokeResponse: ', invokeResponse)
 
       setUserInput('');
     }
@@ -181,7 +188,7 @@ const ChatBox = (params: {
             {defaultPrompts.map((prompt, index) => (
               <ListItem key={index}>
                 <Button
-                onClick={() => handleSend(prompt)}
+                  onClick={() => handleSend(prompt)}
                 >
                   {prompt}
                 </Button>
