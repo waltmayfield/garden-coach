@@ -388,18 +388,7 @@ function Page({
                                 <Typography variant="body2" color="text.secondary">
                                     {plannedStep.step?.description}
                                 </Typography>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={async () => {
-                                        await amplifyClient.models.PlannedStep.delete({
-                                            id: plannedStep.id!
-                                        });
-                                        setPlannedSteps(prev => prev?.filter(step => step.id !== plannedStep.id));
-                                    }}
-                                >
-                                    X
-                                </Button>
+
                                 {/* <Box mt="2" flexDirection={"column"}> */}
                                 <Grid container spacing={2}>
                                     {plannedStep.step?.plantRows?.map((row, rowIndex) => (
@@ -471,6 +460,20 @@ function Page({
                                     {/* <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} /> */}
                                 </Box>
                             </CardContent>
+                            <CardActions>
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={async () => {
+                                        await amplifyClient.models.PlannedStep.delete({
+                                            id: plannedStep.id!
+                                        });
+                                        setPlannedSteps(prev => prev?.filter(step => step.id !== plannedStep.id));
+                                    }}
+                                >
+                                    X
+                                </Button>
+                            </CardActions>
                         </Card>
 
                     </Box>
