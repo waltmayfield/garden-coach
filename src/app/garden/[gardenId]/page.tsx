@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 // import { stringify } from 'yaml';
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, Grid2 as Grid, Typography } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
@@ -28,11 +28,11 @@ function getFirstDayOfWeek(weekNumber: number, year: number): Date {
     const firstDayOfYear = new Date(year, 0, 1);
     const daysOffset = (weekNumber - 1) * 7;
     const firstDayOfWeek = new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + daysOffset));
-    
+
     // Adjust to the first day of the week (assuming Sunday as the first day of the week)
     const dayOfWeek = firstDayOfWeek.getDay();
     const firstDay = new Date(firstDayOfWeek.setDate(firstDayOfWeek.getDate() - dayOfWeek));
-    
+
     return firstDay;
 }
 
@@ -281,76 +281,95 @@ function Page({
                                         No plants have been planted yet.
                                     </Typography>
                                 ) : (
+                                    <Grid container spacing={2}>{
                                     plantedPlantRows.map((row, index) => (
-                                        <Box key={index} mt={1}>
-                                            <Typography variant="body2" color="text.secondary">
-                                                Species: {row.info?.species}
-                                            </Typography>
-                                            {/* <Typography variant="body2" color="text.secondary">
+                                        // <Box key={index} mt={1}>
+                                        <Card
+                                            key={index}
+                                        >
+                                            <CardContent>
+
+                                                <Typography variant="body2" color="text.secondary">
+                                                    Species: {row.info?.species}
+                                                </Typography>
+                                                {/* <Typography variant="body2" color="text.secondary">
                                                 Spacing: {JSON.stringify(row.info?.plantSpacingInMeters)}
                                             </Typography> */}
-                                            <Typography variant="body2" color="text.secondary">
-                                                Plant Date: {row.info?.plantDate ? new Date(row.info?.plantDate).toLocaleDateString() : "Unknown"}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                Expected Harvest: {
-                                                    row.info?.harvest?.first ?
-                                                        new Date(row.info?.harvest.first).toLocaleDateString()
-                                                        : "Unknown"
-                                                } - {row.info?.harvest?.amount} {row.info?.harvest?.unit}
-                                            </Typography>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    Plant Date: {row.info?.plantDate ? new Date(row.info?.plantDate).toLocaleDateString() : "Unknown"}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    Expected Harvest: {
+                                                        row.info?.harvest?.first ?
+                                                            new Date(row.info?.harvest.first).toLocaleDateString()
+                                                            : "Unknown"
+                                                    } - {row.info?.harvest?.amount} {row.info?.harvest?.unit}
+                                                </Typography>
+                                            </CardContent>
+                                            <CardActions>
                                             <Button
-                                                variant="contained"
-                                                color="secondary"
-                                                onClick={async () => {
-                                                    if (row.id) {
-                                                        await deletePlantedPlantRowAndUpload(row.id);
-                                                    }
-                                                }}
-                                            >
-                                                Delete
-                                            </Button>
-                                        </Box>
+                                                    // variant="contained"
+                                                    // color="secondary"
+                                                    onClick={async () => {
+                                                        if (row.id) {
+                                                            await deletePlantedPlantRowAndUpload(row.id);
+                                                        }
+                                                    }}
+                                                >
+                                                    X
+                                                </Button>
+                                            </CardActions>
+                                        </Card>
+                                        // </Box>
                                     ))
+                                }</Grid>
                                 )}
+                            </Box>
+                            <Box mt={2}>
+                                {activeGardenSvg}
                             </Box>
 
                         </CardContent>
 
                     </Card>
-                    {activeGardenSvg}
+
+
                 </Box>
 
 
-                <Box mt={5}>
+                <Box mt={5} sx={{ overflowX: 'auto' }}>
                     <Typography variant="h6" component="div">
                         Forecasted Harvest by Week
                     </Typography>
-                    <Bar
-                        data={getChartData(getWeeklyHarvestData([
-                            ...plantedPlantRows.map(row => row.info),
-                            ...plannedSteps.map(step => step.step?.plantRows || []).flat()
-                        ]))}
-                        options={{
-                            responsive: true,
-                            scales: {
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Week',
+                    <Box sx={{ minHeight: 300 }}>
+                        {/* <Box> */}
+                        <Bar
+                            data={getChartData(getWeeklyHarvestData([
+                                ...plantedPlantRows.map(row => row.info),
+                                ...plannedSteps.map(step => step.step?.plantRows || []).flat()
+                            ]))}
+                            options={{
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: 'Week',
+                                        },
+                                        stacked: true,
                                     },
-                                    stacked: true,
-                                },
-                                y: {
-                                    title: {
-                                        display: true,
-                                        text: 'Units',
+                                    y: {
+                                        title: {
+                                            display: true,
+                                            text: 'Units',
+                                        },
+                                        stacked: true,
                                     },
-                                    stacked: true,
                                 },
-                            },
-                        }}
-                    />
+                            }}
+                        />
+                    </Box>
                 </Box>
 
                 {plannedSteps?.map((plannedStep, index) => (
@@ -381,66 +400,69 @@ function Page({
                                 >
                                     Delete
                                 </Button>
-                                {plannedStep.step?.plantRows?.map((row, rowIndex) => (
-                                    <Box key={rowIndex} mt={2}>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Species: {row?.species}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Expected Harvest: {
-                                                row?.harvest?.first ?
-                                                    new Date(row?.harvest.first).toLocaleDateString()
-                                                    : "Unknown"
-                                            } - {row?.harvest?.amount} {row?.harvest?.unit}
-                                        </Typography>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={async () => {
-                                                if (!row) return;
-                                                const daysToHarvest = (
-                                                    row.harvest?.first &&
-                                                    plannedStep.plannedDate
-                                                ) && Math.ceil((new Date(row.harvest.first).getTime() - new Date(plannedStep.plannedDate).getTime()) / (1000 * 60 * 60 * 24));
-                                                console.log(`
+                                <Box mt="2" flexDirection={"column"}>
+                                    {plannedStep.step?.plantRows?.map((row, rowIndex) => (
+                                        <Box key={rowIndex} mt={2}>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Species: {row?.species}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Expected Harvest: {
+                                                    row?.harvest?.first ?
+                                                        new Date(row?.harvest.first).toLocaleDateString()
+                                                        : "Unknown"
+                                                } - {row?.harvest?.amount} {row?.harvest?.unit}
+                                            </Typography>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={async () => {
+                                                    if (!row) return;
+                                                    const daysToHarvest = (
+                                                        row.harvest?.first &&
+                                                        plannedStep.plannedDate
+                                                    ) && Math.ceil((new Date(row.harvest.first).getTime() - new Date(plannedStep.plannedDate).getTime()) / (1000 * 60 * 60 * 24));
+                                                    console.log(`
                                                     Plant Date: ${plannedStep.plannedDate}
                                                     Expected Harvest: ${row.harvest?.first}
                                                     Days to harvest: `, daysToHarvest);
-                                                const newPlantedPlantRow: Schema["PlantedPlantRow"]["createType"] = {
-                                                    gardenId: activeGarden.id,
-                                                    info: {
-                                                        ...row,
-                                                        plantDate: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
-                                                        harvest: {
-                                                            ...row.harvest,
-                                                            first: new Date(new Date().setDate(new Date().getDate() + Number(daysToHarvest))).toISOString().split('T')[0],
+                                                    const newPlantedPlantRow: Schema["PlantedPlantRow"]["createType"] = {
+                                                        gardenId: activeGarden.id,
+                                                        info: {
+                                                            ...row,
+                                                            plantDate: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
+                                                            harvest: {
+                                                                ...row.harvest,
+                                                                first: new Date(new Date().setDate(new Date().getDate() + Number(daysToHarvest))).toISOString().split('T')[0],
+                                                            }
                                                         }
-                                                    }
-                                                };
-                                                console.log("Creating new planted plant row:\n", newPlantedPlantRow);
-                                                await addPlantedPlantRowAndUpload(newPlantedPlantRow);
-                                            }}
-                                        >
-                                            Add to Planted Rows
-                                        </Button>
-                                        {/* <pre>
+                                                    };
+                                                    console.log("Creating new planted plant row:\n", newPlantedPlantRow);
+                                                    await addPlantedPlantRowAndUpload(newPlantedPlantRow);
+                                                }}
+                                            >
+                                                Add to Planted Rows
+                                            </Button>
+                                            {/* <pre>
                                             {JSON.stringify(row, null, 2)}
                                         </pre> */}
+                                        </Box>
+                                    ))}
+                                    <Box mt={5}>
+                                        {(
+                                            plannedStep.step &&
+                                            plannedStep.step.plantRows &&
+                                            plannedStep.step?.plantRows?.length > 0
+                                        ) && (
+                                                // <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} />
+                                                plannedStep.gardenSvg
+                                            )}
+                                        {/* <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} /> */}
                                     </Box>
-                                ))}
+                                </Box>
                             </CardContent>
                         </Card>
-                        <Box mt={5}>
-                            {(
-                                plannedStep.step &&
-                                plannedStep.step.plantRows &&
-                                plannedStep.step?.plantRows?.length > 0
-                            ) && (
-                                    // <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} />
-                                    plannedStep.gardenSvg
-                                )}
-                            {/* <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} /> */}
-                        </Box>
+
                     </Box>
                 ))}
             </Box>

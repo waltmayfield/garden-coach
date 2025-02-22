@@ -24,22 +24,36 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
     };
     const speciesColorMap = getSpeciesColorMap()
 
+    const shouldSwitchXY = () => {
+        if (!garden.perimeterPoints) return false;
+        const xValues = garden.perimeterPoints.map(point => point!.x);
+        const yValues = garden.perimeterPoints.map(point => point!.y);
+        return Math.max(...yValues) > Math.max(...xValues);
+    };
+
+    const switchXY = (point: { x: number, y: number }) => {
+        return shouldSwitchXY() ? { x: point.y, y: point.x } : point;
+    };
+
     const renderPlantRows = () => {
         if (plantRows) return plantRows
             .filter(row => (row && row.location && row.species))
-            .map((row, rowIndex) => (
-                <g key={`row-${rowIndex}`}>
-                    <line
-                        x1={row!.location!.start.x}
-                        y1={row!.location!.start.y}
-                        x2={row!.location!.end.x}
-                        y2={row!.location!.end.y}
-                        stroke={speciesColorMap.get(row!.species!) || '#000000'}
-                        strokeWidth={row!.plantSpacingInMeters || 0.1}
-                    />
-                </g>
-            ))
-        // );
+            .map((row, rowIndex) => {
+                const start = switchXY(row!.location!.start);
+                const end = switchXY(row!.location!.end);
+                return (
+                    <g key={`row-${rowIndex}`}>
+                        <line
+                            x1={start.x}
+                            y1={start.y}
+                            x2={end.x}
+                            y2={end.y}
+                            stroke={speciesColorMap.get(row!.species!) || '#000000'}
+                            strokeWidth={row!.plantSpacingInMeters || 0.1}
+                        />
+                    </g>
+                );
+            });
     };
 
     const renderLegend = () => {
@@ -59,7 +73,10 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
 
     const renderPerimeter = () => {
         if (!garden.perimeterPoints) return;
-        const points = garden.perimeterPoints.filter(point => point).map(point => `${point!.x},${point!.y}`).join(' ');
+        const points = garden.perimeterPoints.filter(point => point).map(point => {
+            const switchedPoint = switchXY(point!);
+            return `${switchedPoint.x},${switchedPoint.y}`;
+        }).join(' ');
         return <polygon points={points} fill="saddlebrown" strokeWidth="0" stroke="black" />;
     };
 
@@ -71,7 +88,8 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
         const maxX = Math.max(...xValues);
         const minY = Math.min(...yValues);
         const maxY = Math.max(...yValues);
-        return `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
+        return shouldSwitchXY() ? `${minY} ${minX} ${maxY - minY} ${maxX - minX}` : `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
+        // return `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
     };
 
     return (
@@ -82,7 +100,7 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
             style={{ 
                 flexGrow: 1, 
                 flexShrink: 1,
-                width: '100%',
+                // width: '100%',
                 maxHeight: '500px',
                 maxWidth: '500px',
                 // border: '1px solid black',
