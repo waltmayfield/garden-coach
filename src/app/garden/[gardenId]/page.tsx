@@ -10,6 +10,8 @@ Chart.register(...registerables);
 
 // import FloatingHidableChatBox from '@/components/FloatingHidableChatBox';
 import ChatBoxDrawer from '@/components/ChatBoxDrawer';
+import PlantRowCardContent from '@/components/PlantRowCardContent';
+
 import { PlannedSteps, GardenWithSvg } from '@/../utils/types';
 import { createGardenSVG } from '@/../utils/drawing';
 import { sendMessage } from '@/../utils/amplifyUtils';
@@ -288,25 +290,7 @@ function Page({
                                             <Card
                                                 key={index}
                                             >
-                                                <CardContent>
-
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        Species: {row.info?.species}
-                                                    </Typography>
-                                                    {/* <Typography variant="body2" color="text.secondary">
-                                                Spacing: {JSON.stringify(row.info?.plantSpacingInMeters)}
-                                            </Typography> */}
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        Plant Date: {row.info?.plantDate ? new Date(row.info?.plantDate).toLocaleDateString() : "Unknown"}
-                                                    </Typography>
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        Expected Harvest: {
-                                                            row.info?.harvest?.first ?
-                                                                new Date(row.info?.harvest.first).toLocaleDateString()
-                                                                : "Unknown"
-                                                        } - {row.info?.harvest?.amount} {row.info?.harvest?.unit}
-                                                    </Typography>
-                                                </CardContent>
+                                                <PlantRowCardContent row={row.info} />
                                                 <CardActions>
                                                     <Button
                                                         // variant="contained"
@@ -395,23 +379,7 @@ function Page({
                                     {plannedStep.step?.plantRows?.map((row, rowIndex) => (
                                         // <Box key={rowIndex} mt={2}>
                                         <Card key={rowIndex}>
-                                            <CardContent>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    Species: {row?.species}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    Expected Harvest: {
-                                                        row?.harvest?.first ?
-                                                            new Date(row?.harvest.first).toLocaleDateString()
-                                                            : "Unknown"
-                                                    } - {row?.harvest?.amount} {row?.harvest?.unit}
-                                                </Typography>
-
-                                                {/* <pre>
-                                            {JSON.stringify(row, null, 2)}
-                                        </pre> */}
-                                                {/* </Box> */}
-                                            </CardContent>
+                                            <PlantRowCardContent row={row} />
                                             <CardActions>
                                                 <Button
                                                     variant="contained"

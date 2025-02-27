@@ -1,6 +1,6 @@
 export const defaultPrompts = [
     `In my 2 x 8 meter garden plot in Austin TX, I want to grow ingredients for a mediterranean diet.`,
-    `Maximize the yield of vegtables from my 2 x 8 meter garden plot in Austin TX.`
+    `Maximize the yield of vegetables from my 2 x 8 meter garden plot in Austin TX.`
 ]
 
 

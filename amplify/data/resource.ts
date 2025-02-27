@@ -52,6 +52,7 @@ export const schema = a.schema({
   PlantRow: a.customType({
     location: a.ref('rowLocation'),
     species: a.string(),
+    variety: a.string(),
     plantSpacingInMeters: a.float(),
     plantDate: a.date(),
     harvest: a.ref('harvest'),

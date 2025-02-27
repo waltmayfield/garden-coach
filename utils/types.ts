@@ -35,6 +35,7 @@ const plantRowType = z.object({
         end: xY
     }),
     species: z.string(),
+    variety: z.string(),
     plantSpacingInMeters: z.number().int(),
     harvest: z.object({
         first: zodStringDate,

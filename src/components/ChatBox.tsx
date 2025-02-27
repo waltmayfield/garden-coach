@@ -9,6 +9,7 @@ import ChatMessage from './ChatMessage';
 
 import { defaultPrompts } from '@/constants/defaultPrompts';
 
+
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
 const amplifyClient = generateClient<Schema>();
@@ -111,11 +112,7 @@ const ChatBox = (params: {
     responseStreamChunkSubscriptionHandler()
   }, [params.gardenId])
 
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.scrollTop = listRef.current.scrollHeight;
-    }
-  }, [messages, streamChunkMessage]);
+
 
   const handleSend = useCallback(async (userMessage: string) => {
     if (userMessage.trim()) {
@@ -157,29 +154,32 @@ const ChatBox = (params: {
       width: '100%',
       height: '90%',
       maxHeight: '90%',
-      // border: '1px solid #ccc',
-      // borderRadius: '8px',
       padding: '8px',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      overflowY: 'hidden'
     }}>
-      <List
-        sx={{ flexGrow: 1, overflow: 'auto' }}
-        ref={listRef}
-      >
-        {[
-          ...messages,
-          ...(streamChunkMessage ? [streamChunkMessage] : [])
-        ].map((message) => (
-          <ListItem key={message.id}>
-            <ChatMessage
-              message={message}
-              setPlannedSteps={params.setPlannedSteps}
-              setGarden={params.setGarden}
-            />
-          </ListItem>
-        ))}
-      </List>
+      <Box sx={{
+        flexGrow: 1,
+        overflowY: 'auto',
+        flexDirection: 'column-reverse',
+        display: 'flex',
+      }}>
+        <List>
+          {[
+            ...messages,
+            ...(streamChunkMessage ? [streamChunkMessage] : [])
+          ].map((message) => (
+            <ListItem key={message.id}>
+              <ChatMessage
+                message={message}
+                setPlannedSteps={params.setPlannedSteps}
+                setGarden={params.setGarden}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
       {isLoading && <Box sx={{ textAlign: 'center', margin: '8px 0' }}>Loading...</Box>}
       {messages.length === 0 &&
         <Box sx={{ textAlign: 'center', margin: '8px 0' }}>
