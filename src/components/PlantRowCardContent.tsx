@@ -10,7 +10,7 @@ const PlantRowCardContent = ({ row }: { row: Schema["PlantedPlantRow"]["createTy
         Species: {row?.species}
       </Typography>
       {/* <Typography variant="body2" color="text.secondary">
-        Spacing: {JSON.stringify(row.info?.plantSpacingInMeters)}
+        Spacing: {JSON.stringify(row?.plantSpacingInMeters)}
       </Typography> */}
       <Typography variant="body2" color="text.secondary">
         Plant Date: {row?.plantDate ? new Date(row.plantDate).toLocaleDateString() : "Unknown"}

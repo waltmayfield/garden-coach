@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Box, TextField, Button, List, ListItem, Typography } from '@mui/material';
 
 
@@ -8,7 +8,6 @@ import { Message, PlannedSteps } from '../../utils/types';
 import ChatMessage from './ChatMessage';
 
 import { defaultPrompts } from '@/constants/defaultPrompts';
-
 
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
@@ -25,7 +24,6 @@ const ChatBox = (params: {
   const [streamChunkMessage, setStreamChunkMessage] = useState<Message>();
   const [userInput, setUserInput] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const listRef = useRef<HTMLUListElement>(null);
 
   //Subscribe to the chat messages for the garden
   useEffect(() => {
@@ -147,7 +145,7 @@ const ChatBox = (params: {
 
       setUserInput('');
     }
-  }, [userInput, messages, params.gardenId]);
+  }, [messages, params.gardenId]);
 
   return (
     <Box sx={{
