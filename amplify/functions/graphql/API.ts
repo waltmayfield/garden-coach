@@ -10,6 +10,7 @@ export type EventInvocationResponse = {
 export type ChatMessage = {
   __typename: "ChatMessage",
   content?: ChatMessageContent | null,
+  contextStepId?: string | null,
   createdAt?: string | null,
   garden?: Garden | null,
   gardenId?: string | null,
@@ -25,52 +26,8 @@ export type ChatMessage = {
 
 export type ChatMessageContent = {
   __typename: "ChatMessageContent",
-  proposedSteps?:  Array<Step | null > | null,
   text?: string | null,
 };
-
-export type Step = {
-  __typename: "Step",
-  description?: string | null,
-  plantRows?:  Array<PlantRow | null > | null,
-  result?: string | null,
-  role?: StepRole | null,
-  title: string,
-};
-
-export type PlantRow = {
-  __typename: "PlantRow",
-  expectedHarvest?: expectedHarvest | null,
-  location?: rowLocation | null,
-  plantDate?: string | null,
-  plantSpacingInMeters?: number | null,
-  species?: string | null,
-};
-
-export type expectedHarvest = {
-  __typename: "expectedHarvest",
-  amount?: number | null,
-  date?: string | null,
-  unit?: string | null,
-};
-
-export type rowLocation = {
-  __typename: "rowLocation",
-  end: XY,
-  start: XY,
-};
-
-export type XY = {
-  __typename: "XY",
-  x: number,
-  y: number,
-};
-
-export enum StepRole {
-  ai = "ai",
-  human = "human",
-}
-
 
 export type Garden = {
   __typename: "Garden",
@@ -101,6 +58,12 @@ export type ModelChatMessageConnection = {
   __typename: "ModelChatMessageConnection",
   items:  Array<ChatMessage | null >,
   nextToken?: string | null,
+};
+
+export type XY = {
+  __typename: "XY",
+  x: number,
+  y: number,
 };
 
 export type ModelPastStepConnection = {
@@ -137,6 +100,31 @@ export type PlantedPlantRow = {
   updatedAt: string,
 };
 
+export type PlantRow = {
+  __typename: "PlantRow",
+  harvest?: harvest | null,
+  location?: rowLocation | null,
+  perrenial?: boolean | null,
+  plantDate?: string | null,
+  rowSpacingCm?: number | null,
+  species?: string | null,
+  variety?: string | null,
+};
+
+export type harvest = {
+  __typename: "harvest",
+  amount?: number | null,
+  first?: string | null,
+  unit?: string | null,
+  window?: number | null,
+};
+
+export type rowLocation = {
+  __typename: "rowLocation",
+  end: XY,
+  start: XY,
+};
+
 export type ModelPlannedStepConnection = {
   __typename: "ModelPlannedStepConnection",
   items:  Array<PlannedStep | null >,
@@ -156,6 +144,21 @@ export type PlannedStep = {
   step?: Step | null,
   updatedAt: string,
 };
+
+export type Step = {
+  __typename: "Step",
+  description?: string | null,
+  plantRows?:  Array<PlantRow | null > | null,
+  result?: string | null,
+  role?: StepRole | null,
+  title: string,
+};
+
+export enum StepRole {
+  ai = "ai",
+  human = "human",
+}
+
 
 export type ModelPlantedPlantRowConnection = {
   __typename: "ModelPlantedPlantRowConnection",
@@ -204,6 +207,7 @@ export type ModelStringKeyConditionInput = {
 
 export type ModelChatMessageFilterInput = {
   and?: Array< ModelChatMessageFilterInput | null > | null,
+  contextStepId?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   gardenId?: ModelIDInput | null,
   id?: ModelIDInput | null,
@@ -372,6 +376,7 @@ export type ModelPlantedPlantRowFilterInput = {
 
 export type ModelChatMessageConditionInput = {
   and?: Array< ModelChatMessageConditionInput | null > | null,
+  contextStepId?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   gardenId?: ModelIDInput | null,
   not?: ModelChatMessageConditionInput | null,
@@ -387,6 +392,7 @@ export type ModelChatMessageConditionInput = {
 
 export type CreateChatMessageInput = {
   content?: ChatMessageContentInput | null,
+  contextStepId?: string | null,
   createdAt?: string | null,
   gardenId?: string | null,
   id?: string | null,
@@ -399,40 +405,7 @@ export type CreateChatMessageInput = {
 };
 
 export type ChatMessageContentInput = {
-  proposedSteps?: Array< StepInput | null > | null,
   text?: string | null,
-};
-
-export type StepInput = {
-  description?: string | null,
-  plantRows?: Array< PlantRowInput | null > | null,
-  result?: string | null,
-  role?: StepRole | null,
-  title: string,
-};
-
-export type PlantRowInput = {
-  expectedHarvest?: ExpectedHarvestInput | null,
-  location?: RowLocationInput | null,
-  plantDate?: string | null,
-  plantSpacingInMeters?: number | null,
-  species?: string | null,
-};
-
-export type ExpectedHarvestInput = {
-  amount?: number | null,
-  date?: string | null,
-  unit?: string | null,
-};
-
-export type RowLocationInput = {
-  end: XYInput,
-  start: XYInput,
-};
-
-export type XYInput = {
-  x: number,
-  y: number,
 };
 
 export type ModelDummyModelToAddIamDirectiveConditionInput = {
@@ -483,6 +456,11 @@ export type LatLongLocationInput = {
   longitude?: number | null,
 };
 
+export type XYInput = {
+  x: number,
+  y: number,
+};
+
 export type ModelPastStepConditionInput = {
   and?: Array< ModelPastStepConditionInput | null > | null,
   completedDate?: ModelStringInput | null,
@@ -504,6 +482,36 @@ export type CreatePastStepInput = {
   owner?: string | null,
   plantRowId?: string | null,
   step?: StepInput | null,
+};
+
+export type StepInput = {
+  description?: string | null,
+  plantRows?: Array< PlantRowInput | null > | null,
+  result?: string | null,
+  role?: StepRole | null,
+  title: string,
+};
+
+export type PlantRowInput = {
+  harvest?: HarvestInput | null,
+  location?: RowLocationInput | null,
+  perrenial?: boolean | null,
+  plantDate?: string | null,
+  rowSpacingCm?: number | null,
+  species?: string | null,
+  variety?: string | null,
+};
+
+export type HarvestInput = {
+  amount?: number | null,
+  first?: string | null,
+  unit?: string | null,
+  window?: number | null,
+};
+
+export type RowLocationInput = {
+  end: XYInput,
+  start: XYInput,
 };
 
 export type ModelPlannedStepConditionInput = {
@@ -569,6 +577,7 @@ export type DeletePlantedPlantRowInput = {
 
 export type UpdateChatMessageInput = {
   content?: ChatMessageContentInput | null,
+  contextStepId?: string | null,
   createdAt?: string | null,
   gardenId?: string | null,
   id: string,
@@ -622,6 +631,7 @@ export type UpdatePlantedPlantRowInput = {
 
 export type ModelSubscriptionChatMessageFilterInput = {
   and?: Array< ModelSubscriptionChatMessageFilterInput | null > | null,
+  contextStepId?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   gardenId?: ModelSubscriptionIDInput | null,
   id?: ModelSubscriptionIDInput | null,
@@ -749,6 +759,7 @@ export type GetChatMessageQuery = {
       __typename: "ChatMessageContent",
       text?: string | null,
     } | null,
+    contextStepId?: string | null,
     createdAt?: string | null,
     garden?:  {
       __typename: "Garden",
@@ -948,9 +959,11 @@ export type GetPlantedPlantRowQuery = {
     id: string,
     info?:  {
       __typename: "PlantRow",
+      perrenial?: boolean | null,
       plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
+      rowSpacingCm?: number | null,
       species?: string | null,
+      variety?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -979,6 +992,7 @@ export type ListChatMessageByGardenIdAndCreatedAtQuery = {
     __typename: "ModelChatMessageConnection",
     items:  Array< {
       __typename: "ChatMessage",
+      contextStepId?: string | null,
       createdAt?: string | null,
       gardenId?: string | null,
       id: string,
@@ -1005,6 +1019,7 @@ export type ListChatMessagesQuery = {
     __typename: "ModelChatMessageConnection",
     items:  Array< {
       __typename: "ChatMessage",
+      contextStepId?: string | null,
       createdAt?: string | null,
       gardenId?: string | null,
       id: string,
@@ -1145,6 +1160,7 @@ export type CreateChatMessageMutation = {
       __typename: "ChatMessageContent",
       text?: string | null,
     } | null,
+    contextStepId?: string | null,
     createdAt?: string | null,
     garden?:  {
       __typename: "Garden",
@@ -1349,9 +1365,11 @@ export type CreatePlantedPlantRowMutation = {
     id: string,
     info?:  {
       __typename: "PlantRow",
+      perrenial?: boolean | null,
       plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
+      rowSpacingCm?: number | null,
       species?: string | null,
+      variety?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1378,6 +1396,7 @@ export type DeleteChatMessageMutation = {
       __typename: "ChatMessageContent",
       text?: string | null,
     } | null,
+    contextStepId?: string | null,
     createdAt?: string | null,
     garden?:  {
       __typename: "Garden",
@@ -1582,9 +1601,11 @@ export type DeletePlantedPlantRowMutation = {
     id: string,
     info?:  {
       __typename: "PlantRow",
+      perrenial?: boolean | null,
       plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
+      rowSpacingCm?: number | null,
       species?: string | null,
+      variety?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1626,6 +1647,7 @@ export type UpdateChatMessageMutation = {
       __typename: "ChatMessageContent",
       text?: string | null,
     } | null,
+    contextStepId?: string | null,
     createdAt?: string | null,
     garden?:  {
       __typename: "Garden",
@@ -1830,9 +1852,11 @@ export type UpdatePlantedPlantRowMutation = {
     id: string,
     info?:  {
       __typename: "PlantRow",
+      perrenial?: boolean | null,
       plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
+      rowSpacingCm?: number | null,
       species?: string | null,
+      variety?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -1859,6 +1883,7 @@ export type OnCreateChatMessageSubscription = {
       __typename: "ChatMessageContent",
       text?: string | null,
     } | null,
+    contextStepId?: string | null,
     createdAt?: string | null,
     garden?:  {
       __typename: "Garden",
@@ -2063,9 +2088,11 @@ export type OnCreatePlantedPlantRowSubscription = {
     id: string,
     info?:  {
       __typename: "PlantRow",
+      perrenial?: boolean | null,
       plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
+      rowSpacingCm?: number | null,
       species?: string | null,
+      variety?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -2092,6 +2119,7 @@ export type OnDeleteChatMessageSubscription = {
       __typename: "ChatMessageContent",
       text?: string | null,
     } | null,
+    contextStepId?: string | null,
     createdAt?: string | null,
     garden?:  {
       __typename: "Garden",
@@ -2296,9 +2324,11 @@ export type OnDeletePlantedPlantRowSubscription = {
     id: string,
     info?:  {
       __typename: "PlantRow",
+      perrenial?: boolean | null,
       plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
+      rowSpacingCm?: number | null,
       species?: string | null,
+      variety?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {
@@ -2325,6 +2355,7 @@ export type OnUpdateChatMessageSubscription = {
       __typename: "ChatMessageContent",
       text?: string | null,
     } | null,
+    contextStepId?: string | null,
     createdAt?: string | null,
     garden?:  {
       __typename: "Garden",
@@ -2529,9 +2560,11 @@ export type OnUpdatePlantedPlantRowSubscription = {
     id: string,
     info?:  {
       __typename: "PlantRow",
+      perrenial?: boolean | null,
       plantDate?: string | null,
-      plantSpacingInMeters?: number | null,
+      rowSpacingCm?: number | null,
       species?: string | null,
+      variety?: string | null,
     } | null,
     owner?: string | null,
     pastSteps?:  {

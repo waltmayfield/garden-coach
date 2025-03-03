@@ -24,6 +24,7 @@ export const getChatMessage = /* GraphQL */ `query GetChatMessage($id: ID!) {
       text
       __typename
     }
+    contextStepId
     createdAt
     garden {
       createdAt
@@ -214,9 +215,11 @@ export const getPlantedPlantRow = /* GraphQL */ `query GetPlantedPlantRow($id: I
     gardenId
     id
     info {
+      perrenial
       plantDate
-      plantSpacingInMeters
+      rowSpacingCm
       species
+      variety
       __typename
     }
     owner
@@ -253,6 +256,7 @@ export const listChatMessageByGardenIdAndCreatedAt = /* GraphQL */ `query ListCh
     sortDirection: $sortDirection
   ) {
     items {
+      contextStepId
       createdAt
       gardenId
       id
@@ -280,6 +284,7 @@ export const listChatMessages = /* GraphQL */ `query ListChatMessages(
 ) {
   listChatMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      contextStepId
       createdAt
       gardenId
       id

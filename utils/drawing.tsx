@@ -49,7 +49,7 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
                             x2={end.x}
                             y2={end.y}
                             stroke={speciesColorMap.get(row!.species!) || '#000000'}
-                            strokeWidth={row!.plantSpacingInMeters || 0.1}
+                            strokeWidth={(row!.rowSpacingCm || 0.1) / 100}
                         />
                     </g>
                 );

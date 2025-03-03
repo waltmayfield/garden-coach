@@ -156,10 +156,10 @@ const main = async () => {
                   "y": 8
                 }
               },
-              "plantSpacingInMeters": 0.3,
+              "rowSpacingCm": 30,
               "plantDate": "2025-08-15",
-              "expectedHarvest": {
-                "date": "2025-10-15",
+              "harvest": {
+                "first": "2025-10-15",
                 "amount": 10,
                 "unit": "kg"
               }

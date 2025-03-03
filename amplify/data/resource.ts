@@ -33,7 +33,7 @@ export const schema = a.schema({
 
   harvest: a.customType({
     first: a.date(),
-    days: a.integer(),
+    window: a.integer(),
     amount: a.float(),
     unit: a.string(),
   }),
@@ -53,7 +53,7 @@ export const schema = a.schema({
     location: a.ref('rowLocation'),
     species: a.string(),
     variety: a.string(),
-    plantSpacingInMeters: a.float(),
+    rowSpacingCm: a.float(),
     plantDate: a.date(),
     harvest: a.ref('harvest'),
     perrenial: a.boolean(),

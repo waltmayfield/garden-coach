@@ -1,4 +1,4 @@
-import { Box, SwipeableDrawer, Button, Typography } from "@mui/material"
+import { Box, Drawer, Button, Typography } from "@mui/material"
 import { styled, useTheme } from '@mui/material/styles';
 
 import { useState } from "react";
@@ -55,11 +55,11 @@ const ChatBoxDrawer = (params: {
                 <>
 
 
-                    <SwipeableDrawer
+                    <Drawer
                         anchor="bottom"
                         open={true}
                         onClose={() => setHidden(true)}
-                        onOpen={() => setHidden(false)}
+                        // onOpen={() => setHidden(false)}
                     >
                         <DrawerHeader
                             sx={{
@@ -83,7 +83,7 @@ const ChatBoxDrawer = (params: {
                             setGarden={params.setGarden}
                             setPlannedSteps={params.setPlannedSteps}
                         />
-                    </SwipeableDrawer>
+                    </Drawer>
                 </>
             )}
         </Box>

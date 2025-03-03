@@ -11,6 +11,7 @@ Chart.register(...registerables);
 // import FloatingHidableChatBox from '@/components/FloatingHidableChatBox';
 import ChatBoxDrawer from '@/components/ChatBoxDrawer';
 import PlantRowCardContent from '@/components/PlantRowCardContent';
+import EditableTextBox from '@/components/EditableTextBox';
 
 import { PlannedSteps, GardenWithSvg } from '@/../utils/types';
 import { createGardenSVG } from '@/../utils/drawing';
@@ -45,7 +46,7 @@ const getWeeklyHarvestData = (plantRows: Schema["PlantedPlantRow"]["createType"]
     plantRows.forEach(row => {
         if (row && row.harvest?.first && row.harvest?.amount && row.species) {
             const harvestDate = new Date(row.harvest.first);
-            const harvestDays = row.harvest.days || 1;
+            const harvestDays = row.harvest.window || 1;
             const weeks = Math.ceil(harvestDays / 7);
             const amountPerWeek = row.harvest.amount / weeks;
 
@@ -112,8 +113,27 @@ function Page({
     const [plantedPlantRows, setPlantedPlantRows] = useState<Schema["PlantedPlantRow"]["createType"][]>([]);
     const [plannedSteps, setPlannedSteps] = useState<PlannedSteps>([]);
     // const [pastSteps, setPastSteps] = useState<Array<Schema["PastStep"]["createType"]>>();
+    // const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
+    // const [editValues, setEditValues] = useState<{ [key: string]: string }>({});
+
+    // const handleDoubleClick = (field: string, value: string) => {
+    //     setIsEditing(prev => ({ ...prev, [field]: true }));
+    //     setEditValues(prev => ({ ...prev, [field]: value }));
+    // };
+
+    // const handleChange = (field: string, value: string) => {
+    //     setEditValues(prev => ({ ...prev, [field]: value }));
+    // };
+
+    // const handleBlur = async (field: string, updateFunction: (value: string) => Promise<void>) => {
+    //     setIsEditing(prev => ({ ...prev, [field]: false }));
+    //     await updateFunction(editValues[field]);
+    // };
+
+
 
     const setActiveGardenAndUpload = async (newGarden: Schema["Garden"]["createType"]) => {
+        // console.log('New Garden for Update: ', newGarden)
         const gardenId = (await params).gardenId
         const newGardenResponse = await amplifyClient.models.Garden.update({
             id: gardenId,
@@ -128,6 +148,54 @@ function Page({
 
         if (newGardenResponse.data) setActiveGarden(newGardenResponse.data)
     }
+
+    // const updatePlannedStep = async (updatedStep: Schema["PlannedStep"]["createType"]) => {
+    //     const { data: newPlannedStep } = await amplifyClient.models.PlannedStep.update({
+    //         id: updatedStep.id,
+    //         ...updatedStep
+    //     });
+    //     if (newPlannedStep) {
+    //         // response.data.
+    //         // setPlannedSteps(prev => prev.filter(step => step !== null).map(step => step!.id === updatedStep.id ? response.data : step as PlannedSteps[number]));
+    //         setPlannedSteps(prev => ({
+    //             ...prev.filter(step => step.id !== updatedStep.id),
+    //             newPlannedStep
+    //         }))
+    //     }
+    // };
+
+    // const updatePlantedPlantRow = async (updatedRow: Schema["PlantedPlantRow"]["createType"]) => {
+    //     const response = await amplifyClient.models.PlantedPlantRow.update({
+    //         id: updatedRow.id!,
+    //         ...updatedRow
+    //     });
+    //     if (response.data) {
+    //         setPlantedPlantRows(prev => prev.map(row => row.id === updatedRow.id ? response.data! : row));
+    //     }
+    // };
+
+    // const updateGardenField = async (field: string, value: string) => {
+    //     const updatedGarden = { ...activeGarden, [field]: value };
+    //     await setActiveGardenAndUpload(updatedGarden);
+    // };
+
+    // const updatePlantedPlantRowField = async (id: string, field: string, value: string) => {
+    //     const updatedRow = plantedPlantRows.find(row => row.id === id);
+    //     if (updatedRow) {
+    //         if (updatedRow.info) {
+    //             (updatedRow.info as any)[field] = value;
+    //         }
+    //         await updatePlantedPlantRow(updatedRow);
+    //     }
+    // };
+
+    // const updatePlannedStepField = async (id: string, field: string, value: string) => {
+    //     const updatedStep = plannedSteps.find(step => step.id === id);
+    //     if (updatedStep) {
+    //         updatedStep.step[field] = value;
+    //         await updatePlannedStep(updatedStep);
+    //     }
+    // };
 
     const proccessPlannedSteps = React.useCallback((params: { garden: GardenWithSvg, unproccessedPlanSteps: PlannedSteps }) => {
         const { garden, unproccessedPlanSteps } = params
@@ -266,15 +334,41 @@ function Page({
                 <Box display="flex" flexDirection="row" gap={2}>
                     <Card sx={{ minWidth: 200 }}>
                         <CardContent>
-                            <Typography variant="h5" component="div">
+                            <EditableTextBox
+                                object={activeGarden}
+                                fieldPath="name"
+                                onUpdate={setActiveGardenAndUpload}
+                                typographyVariant="h5"
+                            />
+                            <EditableTextBox
+                                object={activeGarden}
+                                fieldPath="objective"
+                                onUpdate={setActiveGardenAndUpload}
+                                typographyVariant="body2"
+                            />
+                            
+                            {/* <Typography variant="h5" component="div">
                                 {activeGarden.name}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            </Typography> */}
+                            {/* <Typography variant="body2" color="text.secondary">
                                 {activeGarden.objective}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            </Typography> */}
+                            {/* <Typography variant="body2" color="text.secondary">
                                 Location: {activeGarden.location?.cityStateAndCountry || "Unknown"}
-                            </Typography>
+                            </Typography> */}
+                            <Box display="flex" flexDirection="row" alignItems="center" gap={1}>
+                                <Typography variant="body2" color="text.secondary">
+                                    Location:
+                                </Typography>
+                                <EditableTextBox
+                                    object={activeGarden}
+                                    fieldPath={['location', 'cityStateAndCountry']}
+                                    onUpdate={setActiveGardenAndUpload}
+                                    typographyVariant="body2"
+                                    typographyColor = "text.secondary"
+                                />
+                            </Box>
+
                             <Box mt={2}>
                                 <Typography variant="h6" component="div">
                                     Planted Rows
@@ -364,9 +458,9 @@ function Page({
                                 <Typography variant="h6" component="div">
                                     {plannedStep.step?.title}
                                 </Typography>
-                                {/* <Typography variant="body2">
+                                <Typography variant="body2">
                                     {plannedStep.id}
-                                </Typography> */}
+                                </Typography>
                                 <Typography variant="body2" color="text.secondary">
                                     {plannedStep.plannedDate ? new Date(plannedStep.plannedDate).toLocaleDateString() : "Unknown"}
                                 </Typography>
@@ -447,13 +541,13 @@ function Page({
                                     color="primary"
                                     onClick={async () => {
                                         const userUpdateMessagePrompt = prompt("Edit the step:", "");
-                                        
+
                                         if (userUpdateMessagePrompt !== null && plannedStep.step) {
 
                                             const newMessage: Schema['ChatMessage']['createType'] = {
                                                 role: 'human',
                                                 content: {
-                                                    text: `Update the step with title ${plannedStep.step?.title}. ` + userUpdateMessagePrompt
+                                                    text: `Create a new version the step with title ${plannedStep.step?.title}. ` + userUpdateMessagePrompt
                                                 },
                                                 gardenId: activeGarden.id,
                                                 contextStepId: plannedStep.id

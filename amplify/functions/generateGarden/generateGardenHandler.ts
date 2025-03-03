@@ -1,25 +1,16 @@
-// import { z } from "zod";
 import { stringify } from "yaml";
 
-// import { Amplify } from 'aws-amplify';
-// import { generateClient } from 'aws-amplify/data';
-// import { getAmplifyDataClientConfig } from '@aws-amplify/backend/function/runtime';
-// import { env } from '$amplify/env/generateGarden';
 import { getConfiguredAmplifyClient } from '../../../utils/amplifyUtils';
 import { getWeatherForecast, geocode } from '../../../utils/weather';
-// import { GraphqlOutput } from '@aws-amplify/backend-output-schemas';
 
 import { ChatBedrockConverse } from "@langchain/aws";
 import { HumanMessage, AIMessage, ToolMessage, BaseMessage, MessageContentText, SystemMessage, AIMessageChunk } from "@langchain/core/messages";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { Calculator } from "@langchain/community/tools/calculator";
 
-// import { AppSyncIdentityCognito, AppSyncIdentityOIDC } from 'aws-lambda';
-
-// import { generateGardenPlanSteps } from './graphql/queries';
-// import { publishResponseStreamChunk } from '../../../utils/graphqlStatements'
+import { listPlannedSteps } from '../../../utils/graphqlStatements'
 // import { createGarden, updateGarden } from '../graphql/mutations';
-import { getGarden, listPlannedSteps, getPlannedStep } from '../graphql/queries';
+import { getGarden, getPlannedStep } from '../graphql/queries';
 import { publishResponseStreamChunk, updateGarden } from "../graphql/mutations";
 // import { CreateGardenInput, UpdateGardenInput } from "../graphql/API";
 
@@ -28,6 +19,8 @@ import { Schema } from '../../data/resource';
 // import { generateGarden } from '../../../utils/amplifyStrucutedOutputs';
 import { getLangChainMessageTextContent, publishMessage, stringifyLimitStringLength } from '../../../utils/langChainUtils';
 import { createGardenInfoToolBuilder, createGardenPlanToolBuilder } from "./toolBox";
+
+import { plantSpacing } from '../../../src/constants/plantSpacing'
 
 export const handler: Schema["generateGarden"]["functionHandler"] = async (event, context) => {
     console.log('event:\n', JSON.stringify(event, null, 2))
@@ -57,32 +50,9 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
             query: listPlannedSteps,
             variables: { filter: { gardenId: { eq: event.arguments.gardenId } } }
         })
-
         if (!plannedSteps) throw new Error("Failed to fetch planned steps");
-        //TODO: Fix this so that it retrieves the step part of the planned steps
-        let plannedStepsString = ""
-
-        for (const step of plannedSteps.listPlannedSteps.items) {
-            const { data: { getPlannedStep: stepData } } = await amplifyClient.graphql({
-                query: getPlannedStep,
-                variables: { id: step.id }
-            })
-            // stepData?.step.
-            if (!stepData) throw new Error("Failed to fetch planned step")
-            plannedStepsString += stringify({
-                title: stepData?.step?.title,
-            })
-        }
-
-        // const plannedStepsString = plannedSteps.listPlannedSteps.items.map(await (step) => {
-        //     const getStepResponse = await amplifyClient.graphql({
-        //         query: getPlannedStep,
-        //         variables: { id: step.id }
-        //     })
-        //     if (!getStepResponse) throw new Error("Failed to fetch planned step")
-
-        //     return stringify(step)
-        // }).join('\n')
+        const plannedStepsString = plannedSteps.listPlannedSteps.items
+            .map(({ owner, createdAt, id, ...step }) => stringify(step)).join('\n')
 
         // if (!garden.location) throw new Error("Garden location is missing");
         // Get the forecast for the garden location
@@ -134,27 +104,30 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
         });
 
         let systemMessageContent = `
-            You are a helpful garden planner. Update the garden based on the user's request. 
-            Try to use all of the available space for each planting step.
-            Don't make diagaional rows. Plant rows should be aligned with one of the sides of the garden.
-            Response chat message text content should be in markdown format.
-            Today's date is ${new Date().toLocaleDateString()}. Recommend planting steps over the next year based on the current garden and user requests.
+You are a helpful garden planner. Update the garden based on the user's request. 
+Try to use all of the available space for each planting step.
+Don't make diagaional rows. Plant rows should be aligned with one of the sides of the garden.
+Response chat message text content should be in markdown format.
+Today's date is ${new Date().toLocaleDateString()}. Recommend planting steps over the next year based on the current garden and user requests.
 
-            If the user wants to update the garden or add planned steps, but hasn't provided enough details, ask for more information.
+If the user wants to update the garden or add planned steps, but hasn't provided enough details, ask for more information.
 
-            <weatherForecast>
-            ${forecastString}
-            </weatherForecast>
+<plantSpacingGuidance>
+${plantSpacing}
+</plantSpacingGuidance>
 
-            <currentGardenAttriburtes>
-            ${gardenString}
-            </currentGardenAttriburtes>
+<weatherForecast>
+${forecastString}
+</weatherForecast>
 
-            <currentPlannedSteps>
-            ${plannedStepsString}
-            </currentPlannedSteps>
+<currentGardenAttriburtes>
+${gardenString}
+</currentGardenAttriburtes>
 
-        `.replace(/^\s+/gm, '') //This trims the whitespace from the beginning of each line
+<currentPlannedSteps>
+${plannedStepsString}
+</currentPlannedSteps>
+        `//.replace(/^\s+/gm, '') //This trims the whitespace from the beginning of each line
 
         const input = {
             messages: [

@@ -17,6 +17,7 @@ export const createChatMessage = /* GraphQL */ `mutation CreateChatMessage(
       text
       __typename
     }
+    contextStepId
     createdAt
     garden {
       createdAt
@@ -225,9 +226,11 @@ export const createPlantedPlantRow = /* GraphQL */ `mutation CreatePlantedPlantR
     gardenId
     id
     info {
+      perrenial
       plantDate
-      plantSpacingInMeters
+      rowSpacingCm
       species
+      variety
       __typename
     }
     owner
@@ -256,6 +259,7 @@ export const deleteChatMessage = /* GraphQL */ `mutation DeleteChatMessage(
       text
       __typename
     }
+    contextStepId
     createdAt
     garden {
       createdAt
@@ -464,9 +468,11 @@ export const deletePlantedPlantRow = /* GraphQL */ `mutation DeletePlantedPlantR
     gardenId
     id
     info {
+      perrenial
       plantDate
-      plantSpacingInMeters
+      rowSpacingCm
       species
+      variety
       __typename
     }
     owner
@@ -515,6 +521,7 @@ export const updateChatMessage = /* GraphQL */ `mutation UpdateChatMessage(
       text
       __typename
     }
+    contextStepId
     createdAt
     garden {
       createdAt
@@ -723,9 +730,11 @@ export const updatePlantedPlantRow = /* GraphQL */ `mutation UpdatePlantedPlantR
     gardenId
     id
     info {
+      perrenial
       plantDate
-      plantSpacingInMeters
+      rowSpacingCm
       species
+      variety
       __typename
     }
     owner

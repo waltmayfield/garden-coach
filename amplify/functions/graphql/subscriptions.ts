@@ -17,6 +17,7 @@ export const onCreateChatMessage = /* GraphQL */ `subscription OnCreateChatMessa
       text
       __typename
     }
+    contextStepId
     createdAt
     garden {
       createdAt
@@ -225,9 +226,11 @@ export const onCreatePlantedPlantRow = /* GraphQL */ `subscription OnCreatePlant
     gardenId
     id
     info {
+      perrenial
       plantDate
-      plantSpacingInMeters
+      rowSpacingCm
       species
+      variety
       __typename
     }
     owner
@@ -256,6 +259,7 @@ export const onDeleteChatMessage = /* GraphQL */ `subscription OnDeleteChatMessa
       text
       __typename
     }
+    contextStepId
     createdAt
     garden {
       createdAt
@@ -464,9 +468,11 @@ export const onDeletePlantedPlantRow = /* GraphQL */ `subscription OnDeletePlant
     gardenId
     id
     info {
+      perrenial
       plantDate
-      plantSpacingInMeters
+      rowSpacingCm
       species
+      variety
       __typename
     }
     owner
@@ -495,6 +501,7 @@ export const onUpdateChatMessage = /* GraphQL */ `subscription OnUpdateChatMessa
       text
       __typename
     }
+    contextStepId
     createdAt
     garden {
       createdAt
@@ -703,9 +710,11 @@ export const onUpdatePlantedPlantRow = /* GraphQL */ `subscription OnUpdatePlant
     gardenId
     id
     info {
+      perrenial
       plantDate
-      plantSpacingInMeters
+      rowSpacingCm
       species
+      variety
       __typename
     }
     owner

@@ -36,10 +36,10 @@ const plantRowType = z.object({
     }),
     species: z.string(),
     variety: z.string(),
-    plantSpacingInMeters: z.number().int(),
+    rowSpacingCm: z.number().int().describe("The distance between rows in cm"),
     harvest: z.object({
         first: zodStringDate,
-        days: z.number().int().describe("What is the maximum number of days over which harvest can occur?"),
+        window: z.number().int().describe("What is the maximum number of days over which harvest can occur?"),
         amount: z.number().int(),
         unit: z.string()
     }),
@@ -50,7 +50,7 @@ const stepType = z.object({
     title: z.string(),
     description: z.string(),
     role: z.enum(['ai', 'human']),
-    plantRows: z.array(plantRowType),
+    plantRows: z.array(plantRowType).describe('Use all of the available space in the garden'),
 
 })
 
