@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Box, TextField, Typography } from '@mui/material';
-// import { getValueByPath } from '../utils/getValueByPath';
 
-const getValueByPath = (obj: any, path: string | string[]): any => {
+const getValueByPath = <T,>(obj: T, path: string | string[]): unknown => {
     if (typeof path === 'string') {
         path = path.split('.');
     }
-
-    return path.reduce((acc, key) => (acc && acc[key] !== undefined) ? acc[key] : undefined, obj);
+    return (path as string[]).reduce((acc, key) => (acc && (acc as Record<string, unknown>)[key] !== undefined) ? (acc as Record<string, unknown>)[key] : undefined, obj as unknown);
 };
 
 interface EditableTextBoxProps<T> {
@@ -15,7 +13,7 @@ interface EditableTextBoxProps<T> {
     fieldPath: string | string[];
     onUpdate: (updatedObject: T) => void;
     typographyVariant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'subtitle1' | 'subtitle2' | 'body1' | 'body2' | 'caption' | 'button' | 'overline' | 'inherit';
-    typographyColor?: string//'initial' | 'inherit' | 'primary' | 'secondary' | 'textPrimary' | 'textSecondary' | 'error';
+    typographyColor?: string; //'initial' | 'inherit' | 'primary' | 'secondary' | 'textPrimary' | 'textSecondary' | 'error';
 }
 
 const EditableTextBox = <T,>({ object, fieldPath, onUpdate, typographyVariant = 'body1', typographyColor }: EditableTextBoxProps<T>) => {
@@ -31,16 +29,16 @@ const EditableTextBox = <T,>({ object, fieldPath, onUpdate, typographyVariant = 
     };
 
     const handleSaveClick = () => {
-        const updatedObject: any = { ...object };
+        const updatedObject = { ...object } as Record<string, unknown>;
         const keys = Array.isArray(fieldPath) ? fieldPath : fieldPath.split('.');
-        let temp: any = updatedObject;
+        let temp: Record<string, unknown> = updatedObject; 
         keys.slice(0, -1).forEach(key => {
             if (!temp[key]) temp[key] = {};
-            temp = temp[key];
+            temp = temp[key] as Record<string, unknown>;
         });
         temp[keys[keys.length - 1]] = value;
 
-        Object.keys(updatedObject as object).forEach(key => {
+        Object.keys(updatedObject).forEach(key => {
             if (typeof updatedObject[key] === 'function') {
                 delete updatedObject[key];
             }
@@ -48,7 +46,8 @@ const EditableTextBox = <T,>({ object, fieldPath, onUpdate, typographyVariant = 
                 delete updatedObject[key];
             }
         });
-        onUpdate(updatedObject);
+
+        onUpdate(updatedObject as T);
         setIsEditing(false);
     };
 

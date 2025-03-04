@@ -1,4 +1,4 @@
-import { Box, Grid2 as Grid } from "@mui/material";
+import { Box, Grid2 as Grid, Tooltip } from "@mui/material";
 import { Schema } from "../amplify/data/resource";
 
 
@@ -43,14 +43,17 @@ export const createGardenSVG = ({ garden, plantRows }: GardenSVGProps) => {
                 const end = switchXY(row!.location!.end);
                 return (
                     <g key={`row-${rowIndex}`}>
-                        <line
-                            x1={start.x}
-                            y1={start.y}
-                            x2={end.x}
-                            y2={end.y}
-                            stroke={speciesColorMap.get(row!.species!) || '#000000'}
-                            strokeWidth={(row!.rowSpacingCm || 0.1) / 100}
-                        />
+                        <Tooltip title={`Species: ${row!.species}, Spacing: ${row!.rowSpacingCm}cm`} arrow>
+                            <line
+                                x1={start.x}
+                                y1={start.y}
+                                x2={end.x}
+                                y2={end.y}
+                                stroke={speciesColorMap.get(row!.species!) || '#000000'}
+                                strokeWidth={(row!.rowSpacingCm || 0.1) / 100}
+                                strokeOpacity={0.75}
+                            />
+                        </Tooltip>
                     </g>
                 );
             });

@@ -1,11 +1,12 @@
 import { tool } from "@langchain/core/tools";
 // import { z } from "zod";
-import { stringify } from "yaml";
+// import { stringify } from "yaml";
 
 // import { geocode } from '../../../utils/weather';
 
 // import { Schema } from '../../../amplify/data/resource';
 import { createGardenType, plannedStepArrayType } from "../../../utils/types";
+import { doRectanglesOverlap } from "../../../utils/geometry";
 
 // import { createPlannedStepForGarden } from '../../../utils/graphqlStatements'
 // import { UpdateGardenInput, UpdatePlannedStepInput, CreatePlannedStepInput } from "../graphql/API";
@@ -63,6 +64,35 @@ export const createGardenPlanToolBuilder = (props: {gardenId: string, owner: str
             console.log(`Invalid proposed steps:\n${JSON.stringify(verifySchemaResult.error)}`)
             throw new Error(`Invalid proposed steps: ${JSON.stringify(verifySchemaResult.error, null, 2)}`)
             // return `Invalid proposed steps:\n${JSON.stringify(verifySchemaResult.error)}`
+        }
+
+        //Check if the plant rows overlap
+        const plantRows = steps.map(({step: {plantRows}}) => plantRows).flat();
+        for (let i = 0; i < plantRows.length; i++) {
+            for (let j = i + 1; j < plantRows.length; j++) {
+                const rowA = plantRows[i];
+                const rowB = plantRows[j];
+
+                const overlap = doRectanglesOverlap(
+                    {
+                        ...rowA.location,
+                        width: rowA.rowSpacingCm/100
+                    }, {
+                        ...rowB.location,
+                        width: rowA.rowSpacingCm/100
+                    });
+
+
+                // const rowSpacing = (rowA.rowSpacingCm + rowB.rowSpacingCm) / 2;
+                // const overlap = !(rowA.location.end.x + rowSpacing < rowB.location.start.x ||
+                //         rowA.location.start.x > rowB.location.end.x + rowSpacing ||
+                //         rowA.location.end.y + rowSpacing < rowB.location.start.y ||
+                //         rowA.location.start.y > rowB.location.end.y + rowSpacing);
+
+                if (overlap) {
+                    throw new Error(`Plant rows overlap between species ${rowA.species} and ${rowB.species}`);
+                }
+            }
         }
 
         return "Send planned step recommendations to the user"

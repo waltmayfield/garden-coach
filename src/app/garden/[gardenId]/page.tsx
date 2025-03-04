@@ -458,9 +458,9 @@ function Page({
                                 <Typography variant="h6" component="div">
                                     {plannedStep.step?.title}
                                 </Typography>
-                                <Typography variant="body2">
+                                {/* <Typography variant="body2">
                                     {plannedStep.id}
-                                </Typography>
+                                </Typography> */}
                                 <Typography variant="body2" color="text.secondary">
                                     {plannedStep.plannedDate ? new Date(plannedStep.plannedDate).toLocaleDateString() : "Unknown"}
                                 </Typography>
