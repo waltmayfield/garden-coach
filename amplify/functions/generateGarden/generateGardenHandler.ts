@@ -7,6 +7,7 @@ import { ChatBedrockConverse } from "@langchain/aws";
 import { HumanMessage, AIMessage, ToolMessage, BaseMessage, MessageContentText, SystemMessage, AIMessageChunk } from "@langchain/core/messages";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { Calculator } from "@langchain/community/tools/calculator";
+import { Annotation } from "@langchain/langgraph";
 
 import { listPlannedSteps } from '../../../utils/graphqlStatements'
 // import { createGarden, updateGarden } from '../graphql/mutations';
@@ -18,9 +19,22 @@ import { Schema } from '../../data/resource';
 
 // import { generateGarden } from '../../../utils/amplifyStrucutedOutputs';
 import { getLangChainMessageTextContent, publishMessage, stringifyLimitStringLength } from '../../../utils/langChainUtils';
-import { createGardenInfoToolBuilder, createGardenPlanToolBuilder } from "./toolBox";
+import { createGardenInfoToolBuilder, createPlannedSteps } from "./toolBox";
 
 import { plantSpacing } from '../../../src/constants/plantSpacing'
+import { PlannedStepArray, Garden } from "../../../utils/types";
+
+const stepRecommendationState = Annotation.Root({
+    plannedStepArray: Annotation<PlannedStepArray>({
+        reducer: (x, y) => y ?? x ?? [{ steps: [], explaination: "dummy explaination" }],
+    }),
+    garden: Annotation<Garden>({
+        reducer: (x, y) => y ?? x ?? {},
+    }),
+    messages: Annotation<BaseMessage[]>({
+        reducer: (x, y) => x.concat(y),
+      }),
+})
 
 export const handler: Schema["generateGarden"]["functionHandler"] = async (event, context) => {
     console.log('event:\n', JSON.stringify(event, null, 2))
@@ -95,13 +109,21 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
         const agentTools = [
             new Calculator(),
             createGardenInfoToolBuilder({ gardenId: event.arguments.gardenId }),
-            createGardenPlanToolBuilder({ gardenId: event.arguments.gardenId, owner: event.identity.sub })
+            createPlannedSteps
         ]
 
         const agent = createReactAgent({
             llm: agentModel,
             tools: agentTools,
+            stateSchema: stepRecommendationState
         });
+
+        // agent.updateState({
+        //     garden,
+        //     plannedStepArray: plannedSteps.listPlannedSteps.items
+        // }, {
+        //     merge: true
+        // })  
 
         let systemMessageContent = `
 You are a helpful garden planner. Update the garden based on the user's request. 
@@ -139,6 +161,8 @@ ${plannedStepsString}
                 })
             ]
         }
+
+        agent.invoke
 
         console.log('input:\n', stringify(input))
 

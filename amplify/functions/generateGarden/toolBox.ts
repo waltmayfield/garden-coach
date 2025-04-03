@@ -1,17 +1,11 @@
 import { tool } from "@langchain/core/tools";
-// import { z } from "zod";
-// import { stringify } from "yaml";
+import { stringify } from "yaml";
 
-// import { geocode } from '../../../utils/weather';
+import { getContextVariable } from "@langchain/core/context";
 
-// import { Schema } from '../../../amplify/data/resource';
-import { createGardenType, plannedStepArrayType } from "../../../utils/types";
+import { createGardenType, plannedStepArrayType, PlannedStepArray, Garden } from "../../../utils/types";
 import { doRectanglesOverlap } from "../../../utils/geometry";
 
-// import { createPlannedStepForGarden } from '../../../utils/graphqlStatements'
-// import { UpdateGardenInput, UpdatePlannedStepInput, CreatePlannedStepInput } from "../graphql/API";
-// import { updateGarden, updatePlannedStep } from "../graphql/mutations";
-// import { getConfiguredAmplifyClient } from "../../../utils/amplifyUtils";
 
 export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
     async (proposedGarden) => {
@@ -56,7 +50,53 @@ export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
     }
 );
 
-export const createGardenPlanToolBuilder = (props: {gardenId: string, owner: string}) => tool(
+const getUtilizedGardenSpace = (plannedStepArray: PlannedStepArray) => {
+    return plannedStepArray.steps.map(({plannedDate, step: {plantRows}}) => {
+        //Check if the plant rows overlap
+        for (let i = 0; i < plantRows.length; i++) {
+            for (let j = i + 1; j < plantRows.length; j++) {
+                const rowA = plantRows[i];
+                const rowB = plantRows[j];
+    
+                const overlap = doRectanglesOverlap(
+                    {
+                        ...rowA.location,
+                        width: rowA.rowSpacingCm/100
+                    }, {
+                        ...rowB.location,
+                        width: rowA.rowSpacingCm/100
+                    });
+    
+                if (overlap) {
+                    throw new Error(`Plant rows overlap between species ${rowA.species} and ${rowB.species} for the step with planned date ${plannedDate}`);
+                }
+            }
+        }
+
+        //Check how much of the garden space is used
+        const garden = getContextVariable('garden') as Garden;
+
+        if (!garden.perimeterPoints) throw new Error("Garden perimeter points are missing");
+        const gardenArea = garden.perimeterPoints.reduce((acc, point, i, points) => {
+            const nextPoint = points[(i + 1) % points.length];
+            if (!point || !nextPoint) return acc;
+            return acc + (point.x * nextPoint.y - point.y * nextPoint.x);
+        }, 0) / 2;
+
+        const usedArea = plantRows.reduce((acc, row) => {
+            const {start, end} = row.location;
+            const rowLength = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2);
+            return acc + rowLength * row.rowSpacingCm / 100;
+        }, 0);
+
+        return {
+            stepPlannedDate: plannedDate,
+            utilizedAreaFraction: usedArea / gardenArea,
+        };
+    })
+}
+
+export const createPlannedSteps = tool(
     async ({steps}) => {
         console.log('Proposed steps:\n', steps)
         const verifySchemaResult = plannedStepArrayType.safeParse({steps})
@@ -66,36 +106,9 @@ export const createGardenPlanToolBuilder = (props: {gardenId: string, owner: str
             // return `Invalid proposed steps:\n${JSON.stringify(verifySchemaResult.error)}`
         }
 
-        //Check if the plant rows overlap
-        const plantRows = steps.map(({step: {plantRows}}) => plantRows).flat();
-        for (let i = 0; i < plantRows.length; i++) {
-            for (let j = i + 1; j < plantRows.length; j++) {
-                const rowA = plantRows[i];
-                const rowB = plantRows[j];
+        const utilizedSpace = getUtilizedGardenSpace(verifySchemaResult.data)
 
-                const overlap = doRectanglesOverlap(
-                    {
-                        ...rowA.location,
-                        width: rowA.rowSpacingCm/100
-                    }, {
-                        ...rowB.location,
-                        width: rowA.rowSpacingCm/100
-                    });
-
-
-                // const rowSpacing = (rowA.rowSpacingCm + rowB.rowSpacingCm) / 2;
-                // const overlap = !(rowA.location.end.x + rowSpacing < rowB.location.start.x ||
-                //         rowA.location.start.x > rowB.location.end.x + rowSpacing ||
-                //         rowA.location.end.y + rowSpacing < rowB.location.start.y ||
-                //         rowA.location.start.y > rowB.location.end.y + rowSpacing);
-
-                if (overlap) {
-                    throw new Error(`Plant rows overlap between species ${rowA.species} and ${rowB.species}`);
-                }
-            }
-        }
-
-        return "Send planned step recommendations to the user"
+        return `Recommend planned steps to the user. Utilized space: \n${stringify(utilizedSpace)}`
     },
     {
         name: "createGardenPlannedSteps",
