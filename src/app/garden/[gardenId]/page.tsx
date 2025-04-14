@@ -13,7 +13,7 @@ import ChatBoxDrawer from '@/components/ChatBoxDrawer';
 import PlantRowCardContent from '@/components/PlantRowCardContent';
 import EditableTextBox from '@/components/EditableTextBox';
 
-import { PlannedSteps, GardenWithSvg } from '@/../utils/types';
+import { WorkSteps, GardenWithSvg } from '@/../utils/types';
 import { createGardenSVG } from '@/../utils/drawing';
 import { sendMessage } from '@/../utils/amplifyUtils';
 
@@ -111,7 +111,7 @@ function Page({
     const [activeGarden, setActiveGarden] = useState<GardenWithSvg>();
     const [activeGardenSvg, setActiveGardenSvg] = useState<React.JSX.Element>();
     const [plantedPlantRows, setPlantedPlantRows] = useState<Schema["PlantedPlantRow"]["createType"][]>([]);
-    const [plannedSteps, setPlannedSteps] = useState<PlannedSteps>([]);
+    const [plannedSteps, setPlannedSteps] = useState<WorkSteps>([]);
     // const [pastSteps, setPastSteps] = useState<Array<Schema["PastStep"]["createType"]>>();
     // const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
     // const [editValues, setEditValues] = useState<{ [key: string]: string }>({});
@@ -197,7 +197,7 @@ function Page({
     //     }
     // };
 
-    const proccessPlannedSteps = React.useCallback((params: { garden: GardenWithSvg, unproccessedPlanSteps: PlannedSteps }) => {
+    const proccessPlannedSteps = React.useCallback((params: { garden: GardenWithSvg, unproccessedPlanSteps: WorkSteps }) => {
         const { garden, unproccessedPlanSteps } = params
         if (garden) {
             // console.log('unproccessedPlanSteps: ', unproccessedPlanSteps)
@@ -208,12 +208,12 @@ function Page({
             const plannedStepsWithSvg = uniquePlannedSteps.map(item => {
                 // If the step has plant rows, render the garden svg
                 if (
-                    !item.step ||
-                    !item.step.plantRows ||
-                    item.step?.plantRows?.length === 0
+                    !item ||
+                    !item.plantRows ||
+                    item.plantRows?.length === 0
                 ) return item
 
-                const plantRows = item.step.plantRows
+                const plantRows = item.plantRows
                 // .map(step => step.step?.plantRows || [])
                 // .flat()
                 // .filter(row => row)
@@ -230,8 +230,8 @@ function Page({
 
             return (
                 plannedStepsWithSvg.sort((a, b) => {
-                    const dateA = new Date(a.plannedDate || 0);
-                    const dateB = new Date(b.plannedDate || 0);
+                    const dateA = new Date(a.date || 0);
+                    const dateB = new Date(b.date || 0);
                     return dateA.getTime() - dateB.getTime();
                 })
             )
@@ -239,7 +239,7 @@ function Page({
 
     }, [])
 
-    const setPlannedStepsAndAddSvg = (newPlannedSteps: PlannedSteps) => {
+    const setPlannedStepsAndAddSvg = (newPlannedSteps: WorkSteps) => {
         setPlannedSteps(prev => {
             const processedPlannedSteps = proccessPlannedSteps({
                 garden: activeGarden!,
@@ -307,22 +307,19 @@ function Page({
     useEffect(() => {
         const fetchPlannedSteps = async () => {
             if (!activeGarden) return;
-            const { data: newPlannedSteps } = await activeGarden.plannedSteps()
-            // setPlannedStepsAndAddSvg(plannedSteps)
+            const { data: newPlannedSteps } = await amplifyClient.models.WorkStep.list({
+                filter: { gardenId: { eq: activeGarden.id } },
+            });
             setPlannedSteps(prev => {
                 const processedPlannedSteps = proccessPlannedSteps({
                     garden: activeGarden,
-                    unproccessedPlanSteps: [
-                        ...prev,
-                        ...newPlannedSteps
-                    ]
-                })
-                if (processedPlannedSteps) return processedPlannedSteps
-                else return prev
+                    unproccessedPlanSteps: [...prev, ...newPlannedSteps],
+                });
+                return processedPlannedSteps || prev;
             });
-        }
+        };
         fetchPlannedSteps();
-    }, [activeGarden, proccessPlannedSteps, setPlannedSteps]);
+    }, [activeGarden, proccessPlannedSteps]);
 
     if (!activeGarden || !activeGarden.id) {
         return <Typography variant="h6">Loading...</Typography>;
@@ -425,7 +422,7 @@ function Page({
                         <Bar
                             data={getChartData(getWeeklyHarvestData([
                                 ...plantedPlantRows.map(row => row.info),
-                                ...plannedSteps.map(step => step.step?.plantRows || []).flat()
+                                ...plannedSteps.map(step => step.plantRows || []).flat()
                             ]))}
                             options={{
                                 responsive: true,
@@ -456,21 +453,21 @@ function Page({
                         <Card sx={{ minWidth: 200 }}>
                             <CardContent>
                                 <Typography variant="h6" component="div">
-                                    {plannedStep.step?.title}
+                                    {plannedStep.title}
                                 </Typography>
                                 {/* <Typography variant="body2">
                                     {plannedStep.id}
                                 </Typography> */}
                                 <Typography variant="body2" color="text.secondary">
-                                    {plannedStep.plannedDate ? new Date(plannedStep.plannedDate).toLocaleDateString() : "Unknown"}
+                                    {plannedStep.date ? new Date(plannedStep.date).toLocaleDateString() : "Unknown"}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    {plannedStep.step?.description}
+                                    {plannedStep.description}
                                 </Typography>
 
                                 {/* <Box mt="2" flexDirection={"column"}> */}
                                 <Grid container spacing={2}>
-                                    {plannedStep.step?.plantRows?.map((row, rowIndex) => (
+                                    {plannedStep.plantRows?.map((row, rowIndex) => (
                                         // <Box key={rowIndex} mt={2}>
                                         <Card key={rowIndex}>
                                             <PlantRowCardContent row={row} />
@@ -482,10 +479,10 @@ function Page({
                                                         if (!row) return;
                                                         const daysToHarvest = (
                                                             row.harvest?.first &&
-                                                            plannedStep.plannedDate
-                                                        ) && Math.ceil((new Date(row.harvest.first).getTime() - new Date(plannedStep.plannedDate).getTime()) / (1000 * 60 * 60 * 24));
+                                                            plannedStep.date
+                                                        ) && Math.ceil((new Date(row.harvest.first).getTime() - new Date(plannedStep.date).getTime()) / (1000 * 60 * 60 * 24));
                                                         console.log(`
-                                                    Plant Date: ${plannedStep.plannedDate}
+                                                    Plant Date: ${plannedStep.date}
                                                     Expected Harvest: ${row.harvest?.first}
                                                     Days to harvest: `, daysToHarvest);
                                                         const newPlantedPlantRow: Schema["PlantedPlantRow"]["createType"] = {
@@ -513,9 +510,9 @@ function Page({
                                 {/* </Box> */}
                                 <Box mt={5}>
                                     {(
-                                        plannedStep.step &&
-                                        plannedStep.step.plantRows &&
-                                        plannedStep.step?.plantRows?.length > 0
+                                        plannedStep &&
+                                        plannedStep.plantRows &&
+                                        plannedStep.plantRows?.length > 0
                                     ) && (
                                             // <GardenSVG garden={activeGarden} plannedSteps={[plannedStep]} />
                                             plannedStep.gardenSvg
@@ -528,7 +525,7 @@ function Page({
                                     variant="contained"
                                     color="secondary"
                                     onClick={async () => {
-                                        await amplifyClient.models.PlannedStep.delete({
+                                        await amplifyClient.models.WorkStep.delete({
                                             id: plannedStep.id!
                                         });
                                         setPlannedSteps(prev => prev?.filter(step => step.id !== plannedStep.id));
@@ -542,12 +539,12 @@ function Page({
                                     onClick={async () => {
                                         const userUpdateMessagePrompt = prompt("Edit the step:", "");
 
-                                        if (userUpdateMessagePrompt !== null && plannedStep.step) {
+                                        if (userUpdateMessagePrompt !== null && plannedStep) {
 
                                             const newMessage: Schema['ChatMessage']['createType'] = {
                                                 role: 'human',
                                                 content: {
-                                                    text: `Create a new version the step with title ${plannedStep.step?.title}. ` + userUpdateMessagePrompt
+                                                    text: `Create a new version the step with title ${plannedStep.title}. ` + userUpdateMessagePrompt
                                                 },
                                                 gardenId: activeGarden.id,
                                                 contextStepId: plannedStep.id

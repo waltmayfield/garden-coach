@@ -58,8 +58,8 @@ export const createPlannedStepForGarden = /* GraphQL */ `mutation CreatePlannedS
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreatePlannedStepMutationVariables,
-  APITypes.CreatePlannedStepMutation
+  APITypes.CreateWorkStepMutationVariables,
+  APITypes.CreateWorkStepMutation
 >;
 
 export const publishResponseStreamChunk = /* GraphQL */ `mutation PublishResponseStreamChunk(
@@ -141,8 +141,8 @@ export const getPlannedStep = /* GraphQL */ `query GetPlannedStep($id: ID!) {
   }
 }
 ` as GeneratedQuery<
-  APITypes.GetPlannedStepQueryVariables,
-  APITypes.GetPlannedStepQuery & { getPlannedStep: {step: {plantRows: APITypes.PlantRow}} }
+  APITypes.GetWorkStepQueryVariables,
+  APITypes.GetWorkStepQuery & { getPlannedStep: {step: {plantRows: APITypes.PlantRow}} }
 >;
 
 export const listPlannedSteps = /* GraphQL */ `query ListPlannedSteps(
@@ -198,8 +198,8 @@ export const listPlannedSteps = /* GraphQL */ `query ListPlannedSteps(
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListPlannedStepsQueryVariables,
-  APITypes.ListPlannedStepsQuery
+  APITypes.ListWorkStepsQueryVariables,
+  APITypes.ListWorkStepsQuery
 >;
 export const listPlantedPlantRows = /* GraphQL */ `query ListPlantedPlantRows(
   $filter: ModelPlantedPlantRowFilterInput
@@ -213,6 +213,13 @@ export const listPlantedPlantRows = /* GraphQL */ `query ListPlantedPlantRows(
       id
       owner
       updatedAt
+      info {
+        status
+        plantDate
+        location
+        rowSpacingCm
+        species
+      }
       __typename
     }
     nextToken
@@ -221,5 +228,11 @@ export const listPlantedPlantRows = /* GraphQL */ `query ListPlantedPlantRows(
 }
 ` as GeneratedQuery<
   APITypes.ListPlantedPlantRowsQueryVariables,
-  APITypes.ListPlantedPlantRowsQuery
+  APITypes.ListPlantedPlantRowsQuery & { listPlantedPlantRows: {items: {info: {
+      status: string;
+      plantDate: string;
+      location: { start: { x: number; y: number }; end: { x: number; y: number } };
+      rowSpacingCm: number;
+      species: string
+  }}[]} }
 >;

@@ -92,20 +92,16 @@ export const onCreateGarden = /* GraphQL */ `subscription OnCreateGarden(
     }
     objective
     owner
-    pastSteps {
-      nextToken
-      __typename
-    }
     perimeterPoints {
       x
       y
       __typename
     }
-    plannedSteps {
+    plantedPlantRow {
       nextToken
       __typename
     }
-    plantedPlantRow {
+    steps {
       nextToken
       __typename
     }
@@ -117,95 +113,6 @@ export const onCreateGarden = /* GraphQL */ `subscription OnCreateGarden(
 ` as GeneratedSubscription<
   APITypes.OnCreateGardenSubscriptionVariables,
   APITypes.OnCreateGardenSubscription
->;
-export const onCreatePastStep = /* GraphQL */ `subscription OnCreatePastStep(
-  $filter: ModelSubscriptionPastStepFilterInput
-  $owner: String
-) {
-  onCreatePastStep(filter: $filter, owner: $owner) {
-    completedDate
-    createdAt
-    garden {
-      createdAt
-      id
-      name
-      objective
-      owner
-      units
-      updatedAt
-      __typename
-    }
-    gardenId
-    id
-    notes
-    owner
-    plantRowId
-    plantedPlantRow {
-      createdAt
-      gardenId
-      id
-      owner
-      updatedAt
-      __typename
-    }
-    step {
-      description
-      result
-      role
-      title
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnCreatePastStepSubscriptionVariables,
-  APITypes.OnCreatePastStepSubscription
->;
-export const onCreatePlannedStep = /* GraphQL */ `subscription OnCreatePlannedStep(
-  $filter: ModelSubscriptionPlannedStepFilterInput
-  $owner: String
-) {
-  onCreatePlannedStep(filter: $filter, owner: $owner) {
-    createdAt
-    garden {
-      createdAt
-      id
-      name
-      objective
-      owner
-      units
-      updatedAt
-      __typename
-    }
-    gardenId
-    id
-    owner
-    plannedDate
-    plantRowId
-    plantedPlantRow {
-      createdAt
-      gardenId
-      id
-      owner
-      updatedAt
-      __typename
-    }
-    step {
-      description
-      result
-      role
-      title
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnCreatePlannedStepSubscriptionVariables,
-  APITypes.OnCreatePlannedStepSubscription
 >;
 export const onCreatePlantedPlantRow = /* GraphQL */ `subscription OnCreatePlantedPlantRow(
   $filter: ModelSubscriptionPlantedPlantRowFilterInput
@@ -230,18 +137,11 @@ export const onCreatePlantedPlantRow = /* GraphQL */ `subscription OnCreatePlant
       plantDate
       rowSpacingCm
       species
+      status
       variety
       __typename
     }
     owner
-    pastSteps {
-      nextToken
-      __typename
-    }
-    plannedSteps {
-      nextToken
-      __typename
-    }
     updatedAt
     __typename
   }
@@ -249,6 +149,48 @@ export const onCreatePlantedPlantRow = /* GraphQL */ `subscription OnCreatePlant
 ` as GeneratedSubscription<
   APITypes.OnCreatePlantedPlantRowSubscriptionVariables,
   APITypes.OnCreatePlantedPlantRowSubscription
+>;
+export const onCreateWorkStep = /* GraphQL */ `subscription OnCreateWorkStep(
+  $filter: ModelSubscriptionWorkStepFilterInput
+  $owner: String
+) {
+  onCreateWorkStep(filter: $filter, owner: $owner) {
+    createdAt
+    date
+    description
+    garden {
+      createdAt
+      id
+      name
+      objective
+      owner
+      units
+      updatedAt
+      __typename
+    }
+    gardenId
+    id
+    owner
+    plantRows {
+      perrenial
+      plantDate
+      rowSpacingCm
+      species
+      status
+      variety
+      __typename
+    }
+    result
+    role
+    status
+    title
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateWorkStepSubscriptionVariables,
+  APITypes.OnCreateWorkStepSubscription
 >;
 export const onDeleteChatMessage = /* GraphQL */ `subscription OnDeleteChatMessage(
   $filter: ModelSubscriptionChatMessageFilterInput
@@ -334,20 +276,16 @@ export const onDeleteGarden = /* GraphQL */ `subscription OnDeleteGarden(
     }
     objective
     owner
-    pastSteps {
-      nextToken
-      __typename
-    }
     perimeterPoints {
       x
       y
       __typename
     }
-    plannedSteps {
+    plantedPlantRow {
       nextToken
       __typename
     }
-    plantedPlantRow {
+    steps {
       nextToken
       __typename
     }
@@ -359,95 +297,6 @@ export const onDeleteGarden = /* GraphQL */ `subscription OnDeleteGarden(
 ` as GeneratedSubscription<
   APITypes.OnDeleteGardenSubscriptionVariables,
   APITypes.OnDeleteGardenSubscription
->;
-export const onDeletePastStep = /* GraphQL */ `subscription OnDeletePastStep(
-  $filter: ModelSubscriptionPastStepFilterInput
-  $owner: String
-) {
-  onDeletePastStep(filter: $filter, owner: $owner) {
-    completedDate
-    createdAt
-    garden {
-      createdAt
-      id
-      name
-      objective
-      owner
-      units
-      updatedAt
-      __typename
-    }
-    gardenId
-    id
-    notes
-    owner
-    plantRowId
-    plantedPlantRow {
-      createdAt
-      gardenId
-      id
-      owner
-      updatedAt
-      __typename
-    }
-    step {
-      description
-      result
-      role
-      title
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnDeletePastStepSubscriptionVariables,
-  APITypes.OnDeletePastStepSubscription
->;
-export const onDeletePlannedStep = /* GraphQL */ `subscription OnDeletePlannedStep(
-  $filter: ModelSubscriptionPlannedStepFilterInput
-  $owner: String
-) {
-  onDeletePlannedStep(filter: $filter, owner: $owner) {
-    createdAt
-    garden {
-      createdAt
-      id
-      name
-      objective
-      owner
-      units
-      updatedAt
-      __typename
-    }
-    gardenId
-    id
-    owner
-    plannedDate
-    plantRowId
-    plantedPlantRow {
-      createdAt
-      gardenId
-      id
-      owner
-      updatedAt
-      __typename
-    }
-    step {
-      description
-      result
-      role
-      title
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnDeletePlannedStepSubscriptionVariables,
-  APITypes.OnDeletePlannedStepSubscription
 >;
 export const onDeletePlantedPlantRow = /* GraphQL */ `subscription OnDeletePlantedPlantRow(
   $filter: ModelSubscriptionPlantedPlantRowFilterInput
@@ -472,18 +321,11 @@ export const onDeletePlantedPlantRow = /* GraphQL */ `subscription OnDeletePlant
       plantDate
       rowSpacingCm
       species
+      status
       variety
       __typename
     }
     owner
-    pastSteps {
-      nextToken
-      __typename
-    }
-    plannedSteps {
-      nextToken
-      __typename
-    }
     updatedAt
     __typename
   }
@@ -491,6 +333,48 @@ export const onDeletePlantedPlantRow = /* GraphQL */ `subscription OnDeletePlant
 ` as GeneratedSubscription<
   APITypes.OnDeletePlantedPlantRowSubscriptionVariables,
   APITypes.OnDeletePlantedPlantRowSubscription
+>;
+export const onDeleteWorkStep = /* GraphQL */ `subscription OnDeleteWorkStep(
+  $filter: ModelSubscriptionWorkStepFilterInput
+  $owner: String
+) {
+  onDeleteWorkStep(filter: $filter, owner: $owner) {
+    createdAt
+    date
+    description
+    garden {
+      createdAt
+      id
+      name
+      objective
+      owner
+      units
+      updatedAt
+      __typename
+    }
+    gardenId
+    id
+    owner
+    plantRows {
+      perrenial
+      plantDate
+      rowSpacingCm
+      species
+      status
+      variety
+      __typename
+    }
+    result
+    role
+    status
+    title
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteWorkStepSubscriptionVariables,
+  APITypes.OnDeleteWorkStepSubscription
 >;
 export const onUpdateChatMessage = /* GraphQL */ `subscription OnUpdateChatMessage(
   $filter: ModelSubscriptionChatMessageFilterInput
@@ -576,20 +460,16 @@ export const onUpdateGarden = /* GraphQL */ `subscription OnUpdateGarden(
     }
     objective
     owner
-    pastSteps {
-      nextToken
-      __typename
-    }
     perimeterPoints {
       x
       y
       __typename
     }
-    plannedSteps {
+    plantedPlantRow {
       nextToken
       __typename
     }
-    plantedPlantRow {
+    steps {
       nextToken
       __typename
     }
@@ -601,95 +481,6 @@ export const onUpdateGarden = /* GraphQL */ `subscription OnUpdateGarden(
 ` as GeneratedSubscription<
   APITypes.OnUpdateGardenSubscriptionVariables,
   APITypes.OnUpdateGardenSubscription
->;
-export const onUpdatePastStep = /* GraphQL */ `subscription OnUpdatePastStep(
-  $filter: ModelSubscriptionPastStepFilterInput
-  $owner: String
-) {
-  onUpdatePastStep(filter: $filter, owner: $owner) {
-    completedDate
-    createdAt
-    garden {
-      createdAt
-      id
-      name
-      objective
-      owner
-      units
-      updatedAt
-      __typename
-    }
-    gardenId
-    id
-    notes
-    owner
-    plantRowId
-    plantedPlantRow {
-      createdAt
-      gardenId
-      id
-      owner
-      updatedAt
-      __typename
-    }
-    step {
-      description
-      result
-      role
-      title
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnUpdatePastStepSubscriptionVariables,
-  APITypes.OnUpdatePastStepSubscription
->;
-export const onUpdatePlannedStep = /* GraphQL */ `subscription OnUpdatePlannedStep(
-  $filter: ModelSubscriptionPlannedStepFilterInput
-  $owner: String
-) {
-  onUpdatePlannedStep(filter: $filter, owner: $owner) {
-    createdAt
-    garden {
-      createdAt
-      id
-      name
-      objective
-      owner
-      units
-      updatedAt
-      __typename
-    }
-    gardenId
-    id
-    owner
-    plannedDate
-    plantRowId
-    plantedPlantRow {
-      createdAt
-      gardenId
-      id
-      owner
-      updatedAt
-      __typename
-    }
-    step {
-      description
-      result
-      role
-      title
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedSubscription<
-  APITypes.OnUpdatePlannedStepSubscriptionVariables,
-  APITypes.OnUpdatePlannedStepSubscription
 >;
 export const onUpdatePlantedPlantRow = /* GraphQL */ `subscription OnUpdatePlantedPlantRow(
   $filter: ModelSubscriptionPlantedPlantRowFilterInput
@@ -714,18 +505,11 @@ export const onUpdatePlantedPlantRow = /* GraphQL */ `subscription OnUpdatePlant
       plantDate
       rowSpacingCm
       species
+      status
       variety
       __typename
     }
     owner
-    pastSteps {
-      nextToken
-      __typename
-    }
-    plannedSteps {
-      nextToken
-      __typename
-    }
     updatedAt
     __typename
   }
@@ -733,6 +517,48 @@ export const onUpdatePlantedPlantRow = /* GraphQL */ `subscription OnUpdatePlant
 ` as GeneratedSubscription<
   APITypes.OnUpdatePlantedPlantRowSubscriptionVariables,
   APITypes.OnUpdatePlantedPlantRowSubscription
+>;
+export const onUpdateWorkStep = /* GraphQL */ `subscription OnUpdateWorkStep(
+  $filter: ModelSubscriptionWorkStepFilterInput
+  $owner: String
+) {
+  onUpdateWorkStep(filter: $filter, owner: $owner) {
+    createdAt
+    date
+    description
+    garden {
+      createdAt
+      id
+      name
+      objective
+      owner
+      units
+      updatedAt
+      __typename
+    }
+    gardenId
+    id
+    owner
+    plantRows {
+      perrenial
+      plantDate
+      rowSpacingCm
+      species
+      status
+      variety
+      __typename
+    }
+    result
+    role
+    status
+    title
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateWorkStepSubscriptionVariables,
+  APITypes.OnUpdateWorkStepSubscription
 >;
 export const recieveResponseStreamChunk = /* GraphQL */ `subscription RecieveResponseStreamChunk($gardenId: String!) {
   recieveResponseStreamChunk(gardenId: $gardenId) {

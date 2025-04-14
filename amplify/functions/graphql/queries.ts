@@ -93,20 +93,16 @@ export const getGarden = /* GraphQL */ `query GetGarden($id: ID!) {
     }
     objective
     owner
-    pastSteps {
-      nextToken
-      __typename
-    }
     perimeterPoints {
       x
       y
       __typename
     }
-    plannedSteps {
+    plantedPlantRow {
       nextToken
       __typename
     }
-    plantedPlantRow {
+    steps {
       nextToken
       __typename
     }
@@ -116,89 +112,6 @@ export const getGarden = /* GraphQL */ `query GetGarden($id: ID!) {
   }
 }
 ` as GeneratedQuery<APITypes.GetGardenQueryVariables, APITypes.GetGardenQuery>;
-export const getPastStep = /* GraphQL */ `query GetPastStep($id: ID!) {
-  getPastStep(id: $id) {
-    completedDate
-    createdAt
-    garden {
-      createdAt
-      id
-      name
-      objective
-      owner
-      units
-      updatedAt
-      __typename
-    }
-    gardenId
-    id
-    notes
-    owner
-    plantRowId
-    plantedPlantRow {
-      createdAt
-      gardenId
-      id
-      owner
-      updatedAt
-      __typename
-    }
-    step {
-      description
-      result
-      role
-      title
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GetPastStepQueryVariables,
-  APITypes.GetPastStepQuery
->;
-export const getPlannedStep = /* GraphQL */ `query GetPlannedStep($id: ID!) {
-  getPlannedStep(id: $id) {
-    createdAt
-    garden {
-      createdAt
-      id
-      name
-      objective
-      owner
-      units
-      updatedAt
-      __typename
-    }
-    gardenId
-    id
-    owner
-    plannedDate
-    plantRowId
-    plantedPlantRow {
-      createdAt
-      gardenId
-      id
-      owner
-      updatedAt
-      __typename
-    }
-    step {
-      description
-      result
-      role
-      title
-      __typename
-    }
-    updatedAt
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.GetPlannedStepQueryVariables,
-  APITypes.GetPlannedStepQuery
->;
 export const getPlantedPlantRow = /* GraphQL */ `query GetPlantedPlantRow($id: ID!) {
   getPlantedPlantRow(id: $id) {
     createdAt
@@ -219,18 +132,11 @@ export const getPlantedPlantRow = /* GraphQL */ `query GetPlantedPlantRow($id: I
       plantDate
       rowSpacingCm
       species
+      status
       variety
       __typename
     }
     owner
-    pastSteps {
-      nextToken
-      __typename
-    }
-    plannedSteps {
-      nextToken
-      __typename
-    }
     updatedAt
     __typename
   }
@@ -238,6 +144,45 @@ export const getPlantedPlantRow = /* GraphQL */ `query GetPlantedPlantRow($id: I
 ` as GeneratedQuery<
   APITypes.GetPlantedPlantRowQueryVariables,
   APITypes.GetPlantedPlantRowQuery
+>;
+export const getWorkStep = /* GraphQL */ `query GetWorkStep($id: ID!) {
+  getWorkStep(id: $id) {
+    createdAt
+    date
+    description
+    garden {
+      createdAt
+      id
+      name
+      objective
+      owner
+      units
+      updatedAt
+      __typename
+    }
+    gardenId
+    id
+    owner
+    plantRows {
+      perrenial
+      plantDate
+      rowSpacingCm
+      species
+      status
+      variety
+      __typename
+    }
+    result
+    role
+    status
+    title
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetWorkStepQueryVariables,
+  APITypes.GetWorkStepQuery
 >;
 export const listChatMessageByGardenIdAndCreatedAt = /* GraphQL */ `query ListChatMessageByGardenIdAndCreatedAt(
   $createdAt: ModelStringKeyConditionInput
@@ -354,63 +299,6 @@ export const listGardens = /* GraphQL */ `query ListGardens(
   APITypes.ListGardensQueryVariables,
   APITypes.ListGardensQuery
 >;
-export const listPastSteps = /* GraphQL */ `query ListPastSteps(
-  $filter: ModelPastStepFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listPastSteps(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      completedDate
-      createdAt
-      gardenId
-      id
-      notes
-      owner
-      plantRowId
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.ListPastStepsQueryVariables,
-  APITypes.ListPastStepsQuery
->;
-export const listPlannedSteps = /* GraphQL */ `query ListPlannedSteps(
-  $filter: ModelPlannedStepFilterInput
-  $id: ID
-  $limit: Int
-  $nextToken: String
-  $sortDirection: ModelSortDirection
-) {
-  listPlannedSteps(
-    filter: $filter
-    id: $id
-    limit: $limit
-    nextToken: $nextToken
-    sortDirection: $sortDirection
-  ) {
-    items {
-      createdAt
-      gardenId
-      id
-      owner
-      plannedDate
-      plantRowId
-      updatedAt
-      __typename
-    }
-    nextToken
-    __typename
-  }
-}
-` as GeneratedQuery<
-  APITypes.ListPlannedStepsQueryVariables,
-  APITypes.ListPlannedStepsQuery
->;
 export const listPlantedPlantRows = /* GraphQL */ `query ListPlantedPlantRows(
   $filter: ModelPlantedPlantRowFilterInput
   $limit: Int
@@ -432,4 +320,40 @@ export const listPlantedPlantRows = /* GraphQL */ `query ListPlantedPlantRows(
 ` as GeneratedQuery<
   APITypes.ListPlantedPlantRowsQueryVariables,
   APITypes.ListPlantedPlantRowsQuery
+>;
+export const listWorkSteps = /* GraphQL */ `query ListWorkSteps(
+  $filter: ModelWorkStepFilterInput
+  $id: ID
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listWorkSteps(
+    filter: $filter
+    id: $id
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      createdAt
+      date
+      description
+      gardenId
+      id
+      owner
+      result
+      role
+      status
+      title
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListWorkStepsQueryVariables,
+  APITypes.ListWorkStepsQuery
 >;

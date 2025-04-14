@@ -11,7 +11,7 @@ import { Annotation } from "@langchain/langgraph";
 
 import { listPlannedSteps } from '../../../utils/graphqlStatements'
 // import { createGarden, updateGarden } from '../graphql/mutations';
-import { getGarden, getPlannedStep } from '../graphql/queries';
+import { getGarden, listWorkSteps } from '../graphql/queries';
 import { publishResponseStreamChunk, updateGarden } from "../graphql/mutations";
 // import { CreateGardenInput, UpdateGardenInput } from "../graphql/API";
 
@@ -19,22 +19,23 @@ import { Schema } from '../../data/resource';
 
 // import { generateGarden } from '../../../utils/amplifyStrucutedOutputs';
 import { getLangChainMessageTextContent, publishMessage, stringifyLimitStringLength } from '../../../utils/langChainUtils';
-import { createGardenInfoToolBuilder, createPlannedSteps } from "./toolBox";
+import { createGardenInfoToolBuilder } from "../tools/createGardenTool";
+import { updatePlannedStepsBuilder } from "../tools/recommendPlannedStepsTool";
 
 import { plantSpacing } from '../../../src/constants/plantSpacing'
-import { PlannedStepArray, Garden } from "../../../utils/types";
+import { WorkStepArray, Garden } from "../../../utils/types";
 
-const stepRecommendationState = Annotation.Root({
-    plannedStepArray: Annotation<PlannedStepArray>({
-        reducer: (x, y) => y ?? x ?? [{ steps: [], explaination: "dummy explaination" }],
-    }),
-    garden: Annotation<Garden>({
-        reducer: (x, y) => y ?? x ?? {},
-    }),
-    messages: Annotation<BaseMessage[]>({
-        reducer: (x, y) => x.concat(y),
-      }),
-})
+// const stepRecommendationState = Annotation.Root({
+//     plannedStepArray: Annotation<WorkStepArray>({
+//         reducer: (x, y) => y ?? x ?? [{ steps: [], explaination: "dummy explaination" }],
+//     }),
+//     garden: Annotation<Garden>({
+//         reducer: (x, y) => y ?? x ?? {},
+//     }),
+//     messages: Annotation<BaseMessage[]>({
+//         reducer: (x, y) => x.concat(y),
+//       }),
+// })
 
 export const handler: Schema["generateGarden"]["functionHandler"] = async (event, context) => {
     console.log('event:\n', JSON.stringify(event, null, 2))
@@ -60,12 +61,12 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
             perimeterPoints: garden.perimeterPoints
         })
 
-        const { data: plannedSteps } = await amplifyClient.graphql({
-            query: listPlannedSteps,
+        const { data: workSteps } = await amplifyClient.graphql({
+            query: listWorkSteps,
             variables: { filter: { gardenId: { eq: event.arguments.gardenId } } }
         })
-        if (!plannedSteps) throw new Error("Failed to fetch planned steps");
-        const plannedStepsString = plannedSteps.listPlannedSteps.items
+        if (!workSteps) throw new Error("Failed to fetch planned steps");
+        const plannedStepsString = workSteps.listWorkSteps.items
             .map(({ owner, createdAt, id, ...step }) => stringify(step)).join('\n')
 
         // if (!garden.location) throw new Error("Garden location is missing");
@@ -109,13 +110,13 @@ export const handler: Schema["generateGarden"]["functionHandler"] = async (event
         const agentTools = [
             new Calculator(),
             createGardenInfoToolBuilder({ gardenId: event.arguments.gardenId }),
-            createPlannedSteps
+            updatePlannedStepsBuilder({ gardenId: event.arguments.gardenId }),
         ]
 
         const agent = createReactAgent({
             llm: agentModel,
             tools: agentTools,
-            stateSchema: stepRecommendationState
+            // stateSchema: stepRecommendationState
         });
 
         // agent.updateState({

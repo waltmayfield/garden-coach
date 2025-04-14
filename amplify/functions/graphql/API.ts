@@ -39,10 +39,9 @@ export type Garden = {
   northVector?: XY | null,
   objective?: string | null,
   owner?: string | null,
-  pastSteps?: ModelPastStepConnection | null,
   perimeterPoints?:  Array<XY | null > | null,
-  plannedSteps?: ModelPlannedStepConnection | null,
   plantedPlantRow?: ModelPlantedPlantRowConnection | null,
+  steps?: ModelWorkStepConnection | null,
   units?: GardenUnits | null,
   updatedAt: string,
 };
@@ -66,25 +65,10 @@ export type XY = {
   y: number,
 };
 
-export type ModelPastStepConnection = {
-  __typename: "ModelPastStepConnection",
-  items:  Array<PastStep | null >,
+export type ModelPlantedPlantRowConnection = {
+  __typename: "ModelPlantedPlantRowConnection",
+  items:  Array<PlantedPlantRow | null >,
   nextToken?: string | null,
-};
-
-export type PastStep = {
-  __typename: "PastStep",
-  completedDate?: string | null,
-  createdAt: string,
-  garden?: Garden | null,
-  gardenId?: string | null,
-  id: string,
-  notes?: string | null,
-  owner?: string | null,
-  plantRowId?: string | null,
-  plantedPlantRow?: PlantedPlantRow | null,
-  step?: Step | null,
-  updatedAt: string,
 };
 
 export type PlantedPlantRow = {
@@ -95,8 +79,6 @@ export type PlantedPlantRow = {
   id: string,
   info?: PlantRow | null,
   owner?: string | null,
-  pastSteps?: ModelPastStepConnection | null,
-  plannedSteps?: ModelPlannedStepConnection | null,
   updatedAt: string,
 };
 
@@ -108,6 +90,7 @@ export type PlantRow = {
   plantDate?: string | null,
   rowSpacingCm?: number | null,
   species?: string | null,
+  status?: PlantRowStatus | null,
   variety?: string | null,
 };
 
@@ -125,46 +108,55 @@ export type rowLocation = {
   start: XY,
 };
 
-export type ModelPlannedStepConnection = {
-  __typename: "ModelPlannedStepConnection",
-  items:  Array<PlannedStep | null >,
+export enum PlantRowStatus {
+  failed = "failed",
+  flowering = "flowering",
+  fruiting = "fruiting",
+  germinated = "germinated",
+  planned = "planned",
+  planted = "planted",
+  removed = "removed",
+  vegatitative = "vegatitative",
+}
+
+
+export type ModelWorkStepConnection = {
+  __typename: "ModelWorkStepConnection",
+  items:  Array<WorkStep | null >,
   nextToken?: string | null,
 };
 
-export type PlannedStep = {
-  __typename: "PlannedStep",
+export type WorkStep = {
+  __typename: "WorkStep",
   createdAt: string,
+  date?: string | null,
+  description?: string | null,
   garden?: Garden | null,
   gardenId?: string | null,
   id: string,
   owner?: string | null,
-  plannedDate?: string | null,
-  plantRowId?: string | null,
-  plantedPlantRow?: PlantedPlantRow | null,
-  step?: Step | null,
+  plantRows?:  Array<PlantRow | null > | null,
+  result?: string | null,
+  role?: WorkStepRole | null,
+  status?: WorkStepStatus | null,
+  title: string,
   updatedAt: string,
 };
 
-export type Step = {
-  __typename: "Step",
-  description?: string | null,
-  plantRows?:  Array<PlantRow | null > | null,
-  result?: string | null,
-  role?: StepRole | null,
-  title: string,
-};
-
-export enum StepRole {
+export enum WorkStepRole {
   ai = "ai",
   human = "human",
 }
 
 
-export type ModelPlantedPlantRowConnection = {
-  __typename: "ModelPlantedPlantRowConnection",
-  items:  Array<PlantedPlantRow | null >,
-  nextToken?: string | null,
-};
+export enum WorkStepStatus {
+  completed = "completed",
+  failed = "failed",
+  planned = "planned",
+  proposed = "proposed",
+  rejected = "rejected",
+}
+
 
 export enum GardenUnits {
   imperial = "imperial",
@@ -336,33 +328,6 @@ export type ModelGardenConnection = {
   nextToken?: string | null,
 };
 
-export type ModelPastStepFilterInput = {
-  and?: Array< ModelPastStepFilterInput | null > | null,
-  completedDate?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  gardenId?: ModelIDInput | null,
-  id?: ModelIDInput | null,
-  not?: ModelPastStepFilterInput | null,
-  notes?: ModelStringInput | null,
-  or?: Array< ModelPastStepFilterInput | null > | null,
-  owner?: ModelStringInput | null,
-  plantRowId?: ModelIDInput | null,
-  updatedAt?: ModelStringInput | null,
-};
-
-export type ModelPlannedStepFilterInput = {
-  and?: Array< ModelPlannedStepFilterInput | null > | null,
-  createdAt?: ModelStringInput | null,
-  gardenId?: ModelIDInput | null,
-  id?: ModelIDInput | null,
-  not?: ModelPlannedStepFilterInput | null,
-  or?: Array< ModelPlannedStepFilterInput | null > | null,
-  owner?: ModelStringInput | null,
-  plannedDate?: ModelStringInput | null,
-  plantRowId?: ModelIDInput | null,
-  updatedAt?: ModelStringInput | null,
-};
-
 export type ModelPlantedPlantRowFilterInput = {
   and?: Array< ModelPlantedPlantRowFilterInput | null > | null,
   createdAt?: ModelStringInput | null,
@@ -372,6 +337,33 @@ export type ModelPlantedPlantRowFilterInput = {
   or?: Array< ModelPlantedPlantRowFilterInput | null > | null,
   owner?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+};
+
+export type ModelWorkStepFilterInput = {
+  and?: Array< ModelWorkStepFilterInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  date?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  gardenId?: ModelIDInput | null,
+  id?: ModelIDInput | null,
+  not?: ModelWorkStepFilterInput | null,
+  or?: Array< ModelWorkStepFilterInput | null > | null,
+  owner?: ModelStringInput | null,
+  result?: ModelStringInput | null,
+  role?: ModelWorkStepRoleInput | null,
+  status?: ModelWorkStepStatusInput | null,
+  title?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelWorkStepRoleInput = {
+  eq?: WorkStepRole | null,
+  ne?: WorkStepRole | null,
+};
+
+export type ModelWorkStepStatusInput = {
+  eq?: WorkStepStatus | null,
+  ne?: WorkStepStatus | null,
 };
 
 export type ModelChatMessageConditionInput = {
@@ -461,80 +453,6 @@ export type XYInput = {
   y: number,
 };
 
-export type ModelPastStepConditionInput = {
-  and?: Array< ModelPastStepConditionInput | null > | null,
-  completedDate?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  gardenId?: ModelIDInput | null,
-  not?: ModelPastStepConditionInput | null,
-  notes?: ModelStringInput | null,
-  or?: Array< ModelPastStepConditionInput | null > | null,
-  owner?: ModelStringInput | null,
-  plantRowId?: ModelIDInput | null,
-  updatedAt?: ModelStringInput | null,
-};
-
-export type CreatePastStepInput = {
-  completedDate?: string | null,
-  gardenId?: string | null,
-  id?: string | null,
-  notes?: string | null,
-  owner?: string | null,
-  plantRowId?: string | null,
-  step?: StepInput | null,
-};
-
-export type StepInput = {
-  description?: string | null,
-  plantRows?: Array< PlantRowInput | null > | null,
-  result?: string | null,
-  role?: StepRole | null,
-  title: string,
-};
-
-export type PlantRowInput = {
-  harvest?: HarvestInput | null,
-  location?: RowLocationInput | null,
-  perrenial?: boolean | null,
-  plantDate?: string | null,
-  rowSpacingCm?: number | null,
-  species?: string | null,
-  variety?: string | null,
-};
-
-export type HarvestInput = {
-  amount?: number | null,
-  first?: string | null,
-  unit?: string | null,
-  window?: number | null,
-};
-
-export type RowLocationInput = {
-  end: XYInput,
-  start: XYInput,
-};
-
-export type ModelPlannedStepConditionInput = {
-  and?: Array< ModelPlannedStepConditionInput | null > | null,
-  createdAt?: ModelStringInput | null,
-  gardenId?: ModelIDInput | null,
-  not?: ModelPlannedStepConditionInput | null,
-  or?: Array< ModelPlannedStepConditionInput | null > | null,
-  owner?: ModelStringInput | null,
-  plannedDate?: ModelStringInput | null,
-  plantRowId?: ModelIDInput | null,
-  updatedAt?: ModelStringInput | null,
-};
-
-export type CreatePlannedStepInput = {
-  gardenId?: string | null,
-  id?: string | null,
-  owner?: string | null,
-  plannedDate?: string | null,
-  plantRowId?: string | null,
-  step?: StepInput | null,
-};
-
 export type ModelPlantedPlantRowConditionInput = {
   and?: Array< ModelPlantedPlantRowConditionInput | null > | null,
   createdAt?: ModelStringInput | null,
@@ -551,6 +469,58 @@ export type CreatePlantedPlantRowInput = {
   info?: PlantRowInput | null,
 };
 
+export type PlantRowInput = {
+  harvest?: HarvestInput | null,
+  location?: RowLocationInput | null,
+  perrenial?: boolean | null,
+  plantDate?: string | null,
+  rowSpacingCm?: number | null,
+  species?: string | null,
+  status?: PlantRowStatus | null,
+  variety?: string | null,
+};
+
+export type HarvestInput = {
+  amount?: number | null,
+  first?: string | null,
+  unit?: string | null,
+  window?: number | null,
+};
+
+export type RowLocationInput = {
+  end: XYInput,
+  start: XYInput,
+};
+
+export type ModelWorkStepConditionInput = {
+  and?: Array< ModelWorkStepConditionInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  date?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  gardenId?: ModelIDInput | null,
+  not?: ModelWorkStepConditionInput | null,
+  or?: Array< ModelWorkStepConditionInput | null > | null,
+  owner?: ModelStringInput | null,
+  result?: ModelStringInput | null,
+  role?: ModelWorkStepRoleInput | null,
+  status?: ModelWorkStepStatusInput | null,
+  title?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type CreateWorkStepInput = {
+  date?: string | null,
+  description?: string | null,
+  gardenId?: string | null,
+  id?: string | null,
+  owner?: string | null,
+  plantRows?: Array< PlantRowInput | null > | null,
+  result?: string | null,
+  role?: WorkStepRole | null,
+  status?: WorkStepStatus | null,
+  title: string,
+};
+
 export type DeleteChatMessageInput = {
   id: string,
 };
@@ -563,15 +533,11 @@ export type DeleteGardenInput = {
   id: string,
 };
 
-export type DeletePastStepInput = {
-  id: string,
-};
-
-export type DeletePlannedStepInput = {
-  id: string,
-};
-
 export type DeletePlantedPlantRowInput = {
+  id: string,
+};
+
+export type DeleteWorkStepInput = {
   id: string,
 };
 
@@ -604,29 +570,23 @@ export type UpdateGardenInput = {
   units?: GardenUnits | null,
 };
 
-export type UpdatePastStepInput = {
-  completedDate?: string | null,
-  gardenId?: string | null,
-  id: string,
-  notes?: string | null,
-  owner?: string | null,
-  plantRowId?: string | null,
-  step?: StepInput | null,
-};
-
-export type UpdatePlannedStepInput = {
-  gardenId?: string | null,
-  id: string,
-  owner?: string | null,
-  plannedDate?: string | null,
-  plantRowId?: string | null,
-  step?: StepInput | null,
-};
-
 export type UpdatePlantedPlantRowInput = {
   gardenId?: string | null,
   id: string,
   info?: PlantRowInput | null,
+};
+
+export type UpdateWorkStepInput = {
+  date?: string | null,
+  description?: string | null,
+  gardenId?: string | null,
+  id: string,
+  owner?: string | null,
+  plantRows?: Array< PlantRowInput | null > | null,
+  result?: string | null,
+  role?: WorkStepRole | null,
+  status?: WorkStepStatus | null,
+  title?: string | null,
 };
 
 export type ModelSubscriptionChatMessageFilterInput = {
@@ -701,31 +661,6 @@ export type ModelSubscriptionGardenFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
 };
 
-export type ModelSubscriptionPastStepFilterInput = {
-  and?: Array< ModelSubscriptionPastStepFilterInput | null > | null,
-  completedDate?: ModelSubscriptionStringInput | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  gardenId?: ModelSubscriptionIDInput | null,
-  id?: ModelSubscriptionIDInput | null,
-  notes?: ModelSubscriptionStringInput | null,
-  or?: Array< ModelSubscriptionPastStepFilterInput | null > | null,
-  owner?: ModelStringInput | null,
-  plantRowId?: ModelSubscriptionIDInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-};
-
-export type ModelSubscriptionPlannedStepFilterInput = {
-  and?: Array< ModelSubscriptionPlannedStepFilterInput | null > | null,
-  createdAt?: ModelSubscriptionStringInput | null,
-  gardenId?: ModelSubscriptionIDInput | null,
-  id?: ModelSubscriptionIDInput | null,
-  or?: Array< ModelSubscriptionPlannedStepFilterInput | null > | null,
-  owner?: ModelStringInput | null,
-  plannedDate?: ModelSubscriptionStringInput | null,
-  plantRowId?: ModelSubscriptionIDInput | null,
-  updatedAt?: ModelSubscriptionStringInput | null,
-};
-
 export type ModelSubscriptionPlantedPlantRowFilterInput = {
   and?: Array< ModelSubscriptionPlantedPlantRowFilterInput | null > | null,
   createdAt?: ModelSubscriptionStringInput | null,
@@ -733,6 +668,22 @@ export type ModelSubscriptionPlantedPlantRowFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   or?: Array< ModelSubscriptionPlantedPlantRowFilterInput | null > | null,
   owner?: ModelStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+};
+
+export type ModelSubscriptionWorkStepFilterInput = {
+  and?: Array< ModelSubscriptionWorkStepFilterInput | null > | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  date?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  gardenId?: ModelSubscriptionIDInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  or?: Array< ModelSubscriptionWorkStepFilterInput | null > | null,
+  owner?: ModelStringInput | null,
+  result?: ModelSubscriptionStringInput | null,
+  role?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionStringInput | null,
+  title?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
 };
 
@@ -830,109 +781,20 @@ export type GetGardenQuery = {
     } | null,
     objective?: string | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
-    } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
       x: number,
       y: number,
     } | null > | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
     plantedPlantRow?:  {
       __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    steps?:  {
+      __typename: "ModelWorkStepConnection",
+      nextToken?: string | null,
+    } | null,
     units?: GardenUnits | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type GetPastStepQueryVariables = {
-  id: string,
-};
-
-export type GetPastStepQuery = {
-  getPastStep?:  {
-    __typename: "PastStep",
-    completedDate?: string | null,
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    notes?: string | null,
-    owner?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type GetPlannedStepQueryVariables = {
-  id: string,
-};
-
-export type GetPlannedStepQuery = {
-  getPlannedStep?:  {
-    __typename: "PlannedStep",
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    owner?: string | null,
-    plannedDate?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
     updatedAt: string,
   } | null,
 };
@@ -963,17 +825,50 @@ export type GetPlantedPlantRowQuery = {
       plantDate?: string | null,
       rowSpacingCm?: number | null,
       species?: string | null,
+      status?: PlantRowStatus | null,
       variety?: string | null,
     } | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type GetWorkStepQueryVariables = {
+  id: string,
+};
+
+export type GetWorkStepQuery = {
+  getWorkStep?:  {
+    __typename: "WorkStep",
+    createdAt: string,
+    date?: string | null,
+    description?: string | null,
+    garden?:  {
+      __typename: "Garden",
+      createdAt: string,
+      id: string,
+      name?: string | null,
+      objective?: string | null,
+      owner?: string | null,
+      units?: GardenUnits | null,
+      updatedAt: string,
     } | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
+    gardenId?: string | null,
+    id: string,
+    owner?: string | null,
+    plantRows?:  Array< {
+      __typename: "PlantRow",
+      perrenial?: boolean | null,
+      plantDate?: string | null,
+      rowSpacingCm?: number | null,
+      species?: string | null,
+      status?: PlantRowStatus | null,
+      variety?: string | null,
+    } | null > | null,
+    result?: string | null,
+    role?: WorkStepRole | null,
+    status?: WorkStepStatus | null,
+    title: string,
     updatedAt: string,
   } | null,
 };
@@ -1078,55 +973,6 @@ export type ListGardensQuery = {
   } | null,
 };
 
-export type ListPastStepsQueryVariables = {
-  filter?: ModelPastStepFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListPastStepsQuery = {
-  listPastSteps?:  {
-    __typename: "ModelPastStepConnection",
-    items:  Array< {
-      __typename: "PastStep",
-      completedDate?: string | null,
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      notes?: string | null,
-      owner?: string | null,
-      plantRowId?: string | null,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type ListPlannedStepsQueryVariables = {
-  filter?: ModelPlannedStepFilterInput | null,
-  id?: string | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  sortDirection?: ModelSortDirection | null,
-};
-
-export type ListPlannedStepsQuery = {
-  listPlannedSteps?:  {
-    __typename: "ModelPlannedStepConnection",
-    items:  Array< {
-      __typename: "PlannedStep",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      plannedDate?: string | null,
-      plantRowId?: string | null,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
 export type ListPlantedPlantRowsQueryVariables = {
   filter?: ModelPlantedPlantRowFilterInput | null,
   limit?: number | null,
@@ -1142,6 +988,35 @@ export type ListPlantedPlantRowsQuery = {
       gardenId?: string | null,
       id: string,
       owner?: string | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListWorkStepsQueryVariables = {
+  filter?: ModelWorkStepFilterInput | null,
+  id?: string | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListWorkStepsQuery = {
+  listWorkSteps?:  {
+    __typename: "ModelWorkStepConnection",
+    items:  Array< {
+      __typename: "WorkStep",
+      createdAt: string,
+      date?: string | null,
+      description?: string | null,
+      gardenId?: string | null,
+      id: string,
+      owner?: string | null,
+      result?: string | null,
+      role?: WorkStepRole | null,
+      status?: WorkStepStatus | null,
+      title: string,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
@@ -1233,111 +1108,20 @@ export type CreateGardenMutation = {
     } | null,
     objective?: string | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
-    } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
       x: number,
       y: number,
     } | null > | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
     plantedPlantRow?:  {
       __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    steps?:  {
+      __typename: "ModelWorkStepConnection",
+      nextToken?: string | null,
+    } | null,
     units?: GardenUnits | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreatePastStepMutationVariables = {
-  condition?: ModelPastStepConditionInput | null,
-  input: CreatePastStepInput,
-};
-
-export type CreatePastStepMutation = {
-  createPastStep?:  {
-    __typename: "PastStep",
-    completedDate?: string | null,
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    notes?: string | null,
-    owner?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreatePlannedStepMutationVariables = {
-  condition?: ModelPlannedStepConditionInput | null,
-  input: CreatePlannedStepInput,
-};
-
-export type CreatePlannedStepMutation = {
-  createPlannedStep?:  {
-    __typename: "PlannedStep",
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    owner?: string | null,
-    plannedDate?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
     updatedAt: string,
   } | null,
 };
@@ -1369,17 +1153,51 @@ export type CreatePlantedPlantRowMutation = {
       plantDate?: string | null,
       rowSpacingCm?: number | null,
       species?: string | null,
+      status?: PlantRowStatus | null,
       variety?: string | null,
     } | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateWorkStepMutationVariables = {
+  condition?: ModelWorkStepConditionInput | null,
+  input: CreateWorkStepInput,
+};
+
+export type CreateWorkStepMutation = {
+  createWorkStep?:  {
+    __typename: "WorkStep",
+    createdAt: string,
+    date?: string | null,
+    description?: string | null,
+    garden?:  {
+      __typename: "Garden",
+      createdAt: string,
+      id: string,
+      name?: string | null,
+      objective?: string | null,
+      owner?: string | null,
+      units?: GardenUnits | null,
+      updatedAt: string,
     } | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
+    gardenId?: string | null,
+    id: string,
+    owner?: string | null,
+    plantRows?:  Array< {
+      __typename: "PlantRow",
+      perrenial?: boolean | null,
+      plantDate?: string | null,
+      rowSpacingCm?: number | null,
+      species?: string | null,
+      status?: PlantRowStatus | null,
+      variety?: string | null,
+    } | null > | null,
+    result?: string | null,
+    role?: WorkStepRole | null,
+    status?: WorkStepStatus | null,
+    title: string,
     updatedAt: string,
   } | null,
 };
@@ -1469,111 +1287,20 @@ export type DeleteGardenMutation = {
     } | null,
     objective?: string | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
-    } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
       x: number,
       y: number,
     } | null > | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
     plantedPlantRow?:  {
       __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    steps?:  {
+      __typename: "ModelWorkStepConnection",
+      nextToken?: string | null,
+    } | null,
     units?: GardenUnits | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeletePastStepMutationVariables = {
-  condition?: ModelPastStepConditionInput | null,
-  input: DeletePastStepInput,
-};
-
-export type DeletePastStepMutation = {
-  deletePastStep?:  {
-    __typename: "PastStep",
-    completedDate?: string | null,
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    notes?: string | null,
-    owner?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeletePlannedStepMutationVariables = {
-  condition?: ModelPlannedStepConditionInput | null,
-  input: DeletePlannedStepInput,
-};
-
-export type DeletePlannedStepMutation = {
-  deletePlannedStep?:  {
-    __typename: "PlannedStep",
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    owner?: string | null,
-    plannedDate?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
     updatedAt: string,
   } | null,
 };
@@ -1605,17 +1332,51 @@ export type DeletePlantedPlantRowMutation = {
       plantDate?: string | null,
       rowSpacingCm?: number | null,
       species?: string | null,
+      status?: PlantRowStatus | null,
       variety?: string | null,
     } | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteWorkStepMutationVariables = {
+  condition?: ModelWorkStepConditionInput | null,
+  input: DeleteWorkStepInput,
+};
+
+export type DeleteWorkStepMutation = {
+  deleteWorkStep?:  {
+    __typename: "WorkStep",
+    createdAt: string,
+    date?: string | null,
+    description?: string | null,
+    garden?:  {
+      __typename: "Garden",
+      createdAt: string,
+      id: string,
+      name?: string | null,
+      objective?: string | null,
+      owner?: string | null,
+      units?: GardenUnits | null,
+      updatedAt: string,
     } | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
+    gardenId?: string | null,
+    id: string,
+    owner?: string | null,
+    plantRows?:  Array< {
+      __typename: "PlantRow",
+      perrenial?: boolean | null,
+      plantDate?: string | null,
+      rowSpacingCm?: number | null,
+      species?: string | null,
+      status?: PlantRowStatus | null,
+      variety?: string | null,
+    } | null > | null,
+    result?: string | null,
+    role?: WorkStepRole | null,
+    status?: WorkStepStatus | null,
+    title: string,
     updatedAt: string,
   } | null,
 };
@@ -1720,111 +1481,20 @@ export type UpdateGardenMutation = {
     } | null,
     objective?: string | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
-    } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
       x: number,
       y: number,
     } | null > | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
     plantedPlantRow?:  {
       __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    steps?:  {
+      __typename: "ModelWorkStepConnection",
+      nextToken?: string | null,
+    } | null,
     units?: GardenUnits | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdatePastStepMutationVariables = {
-  condition?: ModelPastStepConditionInput | null,
-  input: UpdatePastStepInput,
-};
-
-export type UpdatePastStepMutation = {
-  updatePastStep?:  {
-    __typename: "PastStep",
-    completedDate?: string | null,
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    notes?: string | null,
-    owner?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdatePlannedStepMutationVariables = {
-  condition?: ModelPlannedStepConditionInput | null,
-  input: UpdatePlannedStepInput,
-};
-
-export type UpdatePlannedStepMutation = {
-  updatePlannedStep?:  {
-    __typename: "PlannedStep",
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    owner?: string | null,
-    plannedDate?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
     updatedAt: string,
   } | null,
 };
@@ -1856,17 +1526,51 @@ export type UpdatePlantedPlantRowMutation = {
       plantDate?: string | null,
       rowSpacingCm?: number | null,
       species?: string | null,
+      status?: PlantRowStatus | null,
       variety?: string | null,
     } | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateWorkStepMutationVariables = {
+  condition?: ModelWorkStepConditionInput | null,
+  input: UpdateWorkStepInput,
+};
+
+export type UpdateWorkStepMutation = {
+  updateWorkStep?:  {
+    __typename: "WorkStep",
+    createdAt: string,
+    date?: string | null,
+    description?: string | null,
+    garden?:  {
+      __typename: "Garden",
+      createdAt: string,
+      id: string,
+      name?: string | null,
+      objective?: string | null,
+      owner?: string | null,
+      units?: GardenUnits | null,
+      updatedAt: string,
     } | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
+    gardenId?: string | null,
+    id: string,
+    owner?: string | null,
+    plantRows?:  Array< {
+      __typename: "PlantRow",
+      perrenial?: boolean | null,
+      plantDate?: string | null,
+      rowSpacingCm?: number | null,
+      species?: string | null,
+      status?: PlantRowStatus | null,
+      variety?: string | null,
+    } | null > | null,
+    result?: string | null,
+    role?: WorkStepRole | null,
+    status?: WorkStepStatus | null,
+    title: string,
     updatedAt: string,
   } | null,
 };
@@ -1956,111 +1660,20 @@ export type OnCreateGardenSubscription = {
     } | null,
     objective?: string | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
-    } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
       x: number,
       y: number,
     } | null > | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
     plantedPlantRow?:  {
       __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    steps?:  {
+      __typename: "ModelWorkStepConnection",
+      nextToken?: string | null,
+    } | null,
     units?: GardenUnits | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreatePastStepSubscriptionVariables = {
-  filter?: ModelSubscriptionPastStepFilterInput | null,
-  owner?: string | null,
-};
-
-export type OnCreatePastStepSubscription = {
-  onCreatePastStep?:  {
-    __typename: "PastStep",
-    completedDate?: string | null,
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    notes?: string | null,
-    owner?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreatePlannedStepSubscriptionVariables = {
-  filter?: ModelSubscriptionPlannedStepFilterInput | null,
-  owner?: string | null,
-};
-
-export type OnCreatePlannedStepSubscription = {
-  onCreatePlannedStep?:  {
-    __typename: "PlannedStep",
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    owner?: string | null,
-    plannedDate?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
     updatedAt: string,
   } | null,
 };
@@ -2092,17 +1705,51 @@ export type OnCreatePlantedPlantRowSubscription = {
       plantDate?: string | null,
       rowSpacingCm?: number | null,
       species?: string | null,
+      status?: PlantRowStatus | null,
       variety?: string | null,
     } | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateWorkStepSubscriptionVariables = {
+  filter?: ModelSubscriptionWorkStepFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnCreateWorkStepSubscription = {
+  onCreateWorkStep?:  {
+    __typename: "WorkStep",
+    createdAt: string,
+    date?: string | null,
+    description?: string | null,
+    garden?:  {
+      __typename: "Garden",
+      createdAt: string,
+      id: string,
+      name?: string | null,
+      objective?: string | null,
+      owner?: string | null,
+      units?: GardenUnits | null,
+      updatedAt: string,
     } | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
+    gardenId?: string | null,
+    id: string,
+    owner?: string | null,
+    plantRows?:  Array< {
+      __typename: "PlantRow",
+      perrenial?: boolean | null,
+      plantDate?: string | null,
+      rowSpacingCm?: number | null,
+      species?: string | null,
+      status?: PlantRowStatus | null,
+      variety?: string | null,
+    } | null > | null,
+    result?: string | null,
+    role?: WorkStepRole | null,
+    status?: WorkStepStatus | null,
+    title: string,
     updatedAt: string,
   } | null,
 };
@@ -2192,111 +1839,20 @@ export type OnDeleteGardenSubscription = {
     } | null,
     objective?: string | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
-    } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
       x: number,
       y: number,
     } | null > | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
     plantedPlantRow?:  {
       __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    steps?:  {
+      __typename: "ModelWorkStepConnection",
+      nextToken?: string | null,
+    } | null,
     units?: GardenUnits | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeletePastStepSubscriptionVariables = {
-  filter?: ModelSubscriptionPastStepFilterInput | null,
-  owner?: string | null,
-};
-
-export type OnDeletePastStepSubscription = {
-  onDeletePastStep?:  {
-    __typename: "PastStep",
-    completedDate?: string | null,
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    notes?: string | null,
-    owner?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeletePlannedStepSubscriptionVariables = {
-  filter?: ModelSubscriptionPlannedStepFilterInput | null,
-  owner?: string | null,
-};
-
-export type OnDeletePlannedStepSubscription = {
-  onDeletePlannedStep?:  {
-    __typename: "PlannedStep",
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    owner?: string | null,
-    plannedDate?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
     updatedAt: string,
   } | null,
 };
@@ -2328,17 +1884,51 @@ export type OnDeletePlantedPlantRowSubscription = {
       plantDate?: string | null,
       rowSpacingCm?: number | null,
       species?: string | null,
+      status?: PlantRowStatus | null,
       variety?: string | null,
     } | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteWorkStepSubscriptionVariables = {
+  filter?: ModelSubscriptionWorkStepFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnDeleteWorkStepSubscription = {
+  onDeleteWorkStep?:  {
+    __typename: "WorkStep",
+    createdAt: string,
+    date?: string | null,
+    description?: string | null,
+    garden?:  {
+      __typename: "Garden",
+      createdAt: string,
+      id: string,
+      name?: string | null,
+      objective?: string | null,
+      owner?: string | null,
+      units?: GardenUnits | null,
+      updatedAt: string,
     } | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
+    gardenId?: string | null,
+    id: string,
+    owner?: string | null,
+    plantRows?:  Array< {
+      __typename: "PlantRow",
+      perrenial?: boolean | null,
+      plantDate?: string | null,
+      rowSpacingCm?: number | null,
+      species?: string | null,
+      status?: PlantRowStatus | null,
+      variety?: string | null,
+    } | null > | null,
+    result?: string | null,
+    role?: WorkStepRole | null,
+    status?: WorkStepStatus | null,
+    title: string,
     updatedAt: string,
   } | null,
 };
@@ -2428,111 +2018,20 @@ export type OnUpdateGardenSubscription = {
     } | null,
     objective?: string | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
-    } | null,
     perimeterPoints?:  Array< {
       __typename: "XY",
       x: number,
       y: number,
     } | null > | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
     plantedPlantRow?:  {
       __typename: "ModelPlantedPlantRowConnection",
       nextToken?: string | null,
     } | null,
+    steps?:  {
+      __typename: "ModelWorkStepConnection",
+      nextToken?: string | null,
+    } | null,
     units?: GardenUnits | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdatePastStepSubscriptionVariables = {
-  filter?: ModelSubscriptionPastStepFilterInput | null,
-  owner?: string | null,
-};
-
-export type OnUpdatePastStepSubscription = {
-  onUpdatePastStep?:  {
-    __typename: "PastStep",
-    completedDate?: string | null,
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    notes?: string | null,
-    owner?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdatePlannedStepSubscriptionVariables = {
-  filter?: ModelSubscriptionPlannedStepFilterInput | null,
-  owner?: string | null,
-};
-
-export type OnUpdatePlannedStepSubscription = {
-  onUpdatePlannedStep?:  {
-    __typename: "PlannedStep",
-    createdAt: string,
-    garden?:  {
-      __typename: "Garden",
-      createdAt: string,
-      id: string,
-      name?: string | null,
-      objective?: string | null,
-      owner?: string | null,
-      units?: GardenUnits | null,
-      updatedAt: string,
-    } | null,
-    gardenId?: string | null,
-    id: string,
-    owner?: string | null,
-    plannedDate?: string | null,
-    plantRowId?: string | null,
-    plantedPlantRow?:  {
-      __typename: "PlantedPlantRow",
-      createdAt: string,
-      gardenId?: string | null,
-      id: string,
-      owner?: string | null,
-      updatedAt: string,
-    } | null,
-    step?:  {
-      __typename: "Step",
-      description?: string | null,
-      result?: string | null,
-      role?: StepRole | null,
-      title: string,
-    } | null,
     updatedAt: string,
   } | null,
 };
@@ -2564,17 +2063,51 @@ export type OnUpdatePlantedPlantRowSubscription = {
       plantDate?: string | null,
       rowSpacingCm?: number | null,
       species?: string | null,
+      status?: PlantRowStatus | null,
       variety?: string | null,
     } | null,
     owner?: string | null,
-    pastSteps?:  {
-      __typename: "ModelPastStepConnection",
-      nextToken?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateWorkStepSubscriptionVariables = {
+  filter?: ModelSubscriptionWorkStepFilterInput | null,
+  owner?: string | null,
+};
+
+export type OnUpdateWorkStepSubscription = {
+  onUpdateWorkStep?:  {
+    __typename: "WorkStep",
+    createdAt: string,
+    date?: string | null,
+    description?: string | null,
+    garden?:  {
+      __typename: "Garden",
+      createdAt: string,
+      id: string,
+      name?: string | null,
+      objective?: string | null,
+      owner?: string | null,
+      units?: GardenUnits | null,
+      updatedAt: string,
     } | null,
-    plannedSteps?:  {
-      __typename: "ModelPlannedStepConnection",
-      nextToken?: string | null,
-    } | null,
+    gardenId?: string | null,
+    id: string,
+    owner?: string | null,
+    plantRows?:  Array< {
+      __typename: "PlantRow",
+      perrenial?: boolean | null,
+      plantDate?: string | null,
+      rowSpacingCm?: number | null,
+      species?: string | null,
+      status?: PlantRowStatus | null,
+      variety?: string | null,
+    } | null > | null,
+    result?: string | null,
+    role?: WorkStepRole | null,
+    status?: WorkStepStatus | null,
+    title: string,
     updatedAt: string,
   } | null,
 };

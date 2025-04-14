@@ -57,15 +57,16 @@ export const schema = a.schema({
     plantDate: a.date(),
     harvest: a.ref('harvest'),
     perrenial: a.boolean(),
+    status: a.enum(['planned','planted','failed', 'germinated', 'vegatitative', 'flowering', 'fruiting', 'removed']),
   }),
 
-  Step: a.customType({
-    title: a.string().required(),
-    description: a.string(),
-    role: a.enum(['ai', 'human']),
-    result: a.string(),
-    plantRows: a.ref('PlantRow').array(),
-  }),
+  // Step: a.customType({
+  //   title: a.string().required(),
+  //   description: a.string(),
+  //   role: a.enum(['ai', 'human']),
+  //   result: a.string(),
+  //   plantRows: a.ref('PlantRow').array(),
+  // }),
 
   // ChatSession: a.model({
   //   messages: a.hasMany("ChatMessage", "chatSessionId"),
@@ -80,8 +81,6 @@ export const schema = a.schema({
       //Chat message fields
       content: a.customType({
         text: a.string(),
-        // proposedSteps: a.ref('Step').array(),
-        // proposedGardenUpdate: a.ref('Garden'),
       }),
       role: a.enum(["human", "ai", "tool"]),
       responseComplete: a.boolean(),
@@ -115,29 +114,36 @@ export const schema = a.schema({
   })
     .authorization((allow) => [allow.owner()]),
 
-  PlannedStep: a.model({
+  WorkStep: a.model({
+    // descirptive fields
+    title: a.string().required(),
+    description: a.string(),
+    role: a.enum(['ai', 'human']),
+    result: a.string(),
+    plantRows: a.ref('PlantRow').array(),
+    date: a.date(),
+    
+    status: a.enum(['proposed','rejected','planned', 'completed', 'failed']),
+
+    // contextual fields
+    owner: a.string(),
     id: a.id(),
     gardenId: a.id(),
     garden: a.belongsTo('Garden', 'gardenId'),
-    plantRowId: a.id(),
-    plantedPlantRow: a.belongsTo('PlantedPlantRow', 'plantRowId'),
-    step: a.ref('Step'),
-    plannedDate: a.date(),
-    owner: a.string(),
   })
     .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
-  PastStep: a.model({
-    gardenId: a.id(),
-    garden: a.belongsTo('Garden', 'gardenId'),
-    plantRowId: a.id(),
-    plantedPlantRow: a.belongsTo('PlantedPlantRow', 'plantRowId'),
-    step: a.ref('Step'),
-    completedDate: a.date(),
-    notes: a.string(),
-    owner: a.string(),
-  })
-    .authorization((allow) => [allow.owner(), allow.authenticated()]),
+  // PastStep: a.model({
+  //   gardenId: a.id(),
+  //   garden: a.belongsTo('Garden', 'gardenId'),
+  //   plantRowId: a.id(),
+  //   plantedPlantRow: a.belongsTo('PlantedPlantRow', 'plantRowId'),
+  //   step: a.ref('Step'),
+  //   completedDate: a.date(),
+  //   notes: a.string(),
+  //   owner: a.string(),
+  // })
+  //   .authorization((allow) => [allow.owner(), allow.authenticated()]),
 
   Garden: a.model({
     name: a.string(),
@@ -147,8 +153,8 @@ export const schema = a.schema({
     northVector: a.ref('XY'),
     units: a.enum(['imperial', 'metric']),
     plantedPlantRow: a.hasMany('PlantedPlantRow', 'gardenId'),
-    plannedSteps: a.hasMany('PlannedStep', 'gardenId'),
-    pastSteps: a.hasMany('PastStep', 'gardenId'),
+    steps: a.hasMany('WorkStep', 'gardenId'),
+    // pastSteps: a.hasMany('PastStep', 'gardenId'),
     messages: a.hasMany("ChatMessage", "gardenId"),
   })
     .authorization((allow) => [allow.owner(), allow.authenticated()]),
@@ -157,8 +163,7 @@ export const schema = a.schema({
     gardenId: a.id(),
     garden: a.belongsTo('Garden', 'gardenId'),
     info: a.ref('PlantRow'),
-    plannedSteps: a.hasMany('PlannedStep', 'plantRowId'),
-    pastSteps: a.hasMany('PastStep', 'plantRowId'),
+    // steps: a.hasMany('WorkStep', 'plantRowId'),
   })
     .authorization((allow) => [allow.owner(), allow.authenticated()]),
 

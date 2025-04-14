@@ -8,7 +8,7 @@ import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
 const xY = z.object({
     x: z.number(),
     y: z.number()
-})
+});
 
 export const createGardenType = z.object({
     name: z.string(),
@@ -18,52 +18,56 @@ export const createGardenType = z.object({
         lattitude: z.number(),
         longitude: z.number()
     }),
-    perimeterPoints: z.array(xY.nullable()).nullable(),
+    perimeterPoints: z.array(xY).nullable(),
     northVector: xY,
     units: z.enum(['imperial', 'metric']),
-})
+});
 
 export type Garden = z.infer<typeof createGardenType>
 
 const zodStringDate = z.string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format, should be YYYY-MM-DD")
-    .describe("The date in YYYY-MM-DD format")
+    .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)
+    .describe("The date in YYYY-MM-DD format");
+
+const harvestType = z.object({
+    first: zodStringDate,
+    window: z.number().int().describe("Maximum number of days over which harvest can occur"),
+    amount: z.number().describe("Harvest amount"),
+    unit: z.string().describe("Unit of measurement for harvest amount")
+});
+
+const rowLocationType = z.object({
+    start: xY,
+    end: xY
+});
 
 const plantRowType = z.object({
-    location: z.object({
-        start: xY,
-        end: xY
-    }),
+    location: rowLocationType,
     species: z.string(),
     variety: z.string(),
-    rowSpacingCm: z.number().int().describe("The distance between rows in cm"),
-    harvest: z.object({
-        first: zodStringDate,
-        window: z.number().int().describe("What is the maximum number of days over which harvest can occur?"),
-        amount: z.number().int(),
-        unit: z.string()
-    }),
+    rowSpacingCm: z.number().describe("Distance between rows in cm"),
+    plantDate: zodStringDate,
+    harvest: harvestType,
     perrenial: z.boolean(),
-})
+    status: z.enum(['planned', 'planted', 'failed', 'germinated', 'vegatitative', 'flowering', 'fruiting', 'removed'])
+});
 
 const stepType = z.object({
     title: z.string(),
-    description: z.string(),
+    description: z.string().optional(),
     role: z.enum(['ai', 'human']),
-    plantRows: z.array(plantRowType).describe('Use all of the available space in the garden'),
+    result: z.string().optional(),
+    plantRows: z.array(plantRowType),
+    date: zodStringDate,
+    status: z.enum(['proposed', 'rejected', 'planned', 'completed', 'failed'])
+});
 
-})
+export const workStepArrayType = z.object({
+    steps: z.array(stepType).describe("Array of work steps"),
+    explaination: z.string().optional()
+});
 
-export const plannedStepArrayType = z.object({
-    steps: z.array(z.object({
-        id: z.string().optional().describe("To update an existing step, provide the id of the step"),
-        step: stepType,
-        plannedDate: zodStringDate,
-    })),
-    explaination: z.string().optional(),
-})
-
-export type PlannedStepArray = z.infer<typeof plannedStepArrayType>
+export type WorkStepArray = z.infer<typeof workStepArrayType>
 
 export type GardenWithSvg = (
     Schema["Garden"]["type"] & {
@@ -71,8 +75,8 @@ export type GardenWithSvg = (
     }
 )
 
-export type PlannedSteps = (
-    Schema["PlannedStep"]["createType"] & {
+export type WorkSteps = (
+    Schema["WorkStep"]["createType"] & {
         gardenSvg?: React.JSX.Element
     }
 )[];
@@ -90,5 +94,5 @@ export type PublishMessageCommandInput = {
 
 const typeChecks = () =>{
     const garden: Schema["Garden"]["createType"] = {} as Garden;
-    const step: Schema["PlannedStep"]["createType"]["step"] = {} as PlannedStepArray["steps"][number]["step"]
+    const step: Schema["WorkStep"]["createType"] = {} as WorkStepArray["steps"][number]
 }

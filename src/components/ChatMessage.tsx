@@ -14,7 +14,7 @@ import { z } from "zod";
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "@/../amplify/data/resource";
 
-import { Message, PlannedSteps, createGardenType, plannedStepArrayType } from '@/../utils/types';
+import { Message, WorkSteps, createGardenType, workStepArrayType } from '@/../utils/types';
 // import { createGardenType, plannedStepArrayType } from '../../utils/types';
 
 // import { MuiMarkdown } from 'mui-markdown';
@@ -26,7 +26,7 @@ const amplifyClient = generateClient<Schema>();
 const ChatMessage = (params: {
     message: Message,
     setGarden: (newGarden: Schema["Garden"]["createType"]) => void,
-    setPlannedSteps: (newPlannedSteps: PlannedSteps) => void
+    setPlannedSteps: (newPlannedSteps: WorkSteps) => void
 }) => {
     //Render either ai or human messages based on the params.message.role
 
@@ -36,7 +36,7 @@ const ChatMessage = (params: {
 
     // let proposedGarden: z.infer<typeof createGardenType>
     let proposedGarden: Schema["Garden"]["createType"] = {}
-    const proposedSteps: PlannedSteps = []
+    const proposedSteps: WorkSteps = []
 
     switch (params.message.role) {
         case 'ai':
@@ -54,7 +54,7 @@ const ChatMessage = (params: {
                     switch (toolCall.name) {
                         case 'createGardenPlannedSteps':
                             // Verfiy schema using Zod verify
-                            const plannedStepParseResult = plannedStepArrayType.safeParse(toolCall.args);
+                            const plannedStepParseResult = workStepArrayType.safeParse(toolCall.args);
                             if (plannedStepParseResult.success) {
                                 plannedStepParseResult.data.steps?.forEach((step, index) => {
                                     const stepWithId = {
@@ -174,13 +174,13 @@ const ChatMessage = (params: {
                             }}>
                             <CardContent>
                                 <Typography variant="h5" component="div">
-                                    {proposedStep.step?.title}
+                                    {proposedStep.title}
                                 </Typography>
                                 <Typography variant="body2">
-                                    {proposedStep.plannedDate}
+                                    {proposedStep.date}
                                 </Typography>
-                                {proposedStep.step?.plantRows && (
-                                    proposedStep.step?.plantRows.map((plantRow, index) => (
+                                {proposedStep.plantRows && (
+                                    proposedStep.plantRows.map((plantRow, index) => (
                                         <Typography key={index} variant="body2">
                                             {plantRow?.species}
                                         </Typography>
@@ -191,7 +191,7 @@ const ChatMessage = (params: {
                                         console.log('setPlannedSteps: ', params.setPlannedSteps)
                                         params.setPlannedSteps([proposedStep]);
                                         // const { id, ...proposedStepWithoutId } = proposedStep
-                                        const createStepResponse = await amplifyClient.models.PlannedStep.create(proposedStep)
+                                        const createStepResponse = await amplifyClient.models.WorkStep.create(proposedStep)
                                         console.log('createStepResponse: ', createStepResponse)
                                     }}
                                 >
