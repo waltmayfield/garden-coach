@@ -201,6 +201,15 @@ export const listPlannedSteps = /* GraphQL */ `query ListPlannedSteps(
   APITypes.ListWorkStepsQueryVariables,
   APITypes.ListWorkStepsQuery
 >;
+
+export type ListPlantedPlantRowsWithLocation = APITypes.ListPlantedPlantRowsQuery & { listPlantedPlantRows: {items: {info: {
+  status: string;
+  plantDate: string;
+  location: { start: { x: number; y: number }; end: { x: number; y: number } };
+  rowSpacingCm: number;
+  species: string
+}}[]} }
+
 export const listPlantedPlantRows = /* GraphQL */ `query ListPlantedPlantRows(
   $filter: ModelPlantedPlantRowFilterInput
   $limit: Int
@@ -228,11 +237,5 @@ export const listPlantedPlantRows = /* GraphQL */ `query ListPlantedPlantRows(
 }
 ` as GeneratedQuery<
   APITypes.ListPlantedPlantRowsQueryVariables,
-  APITypes.ListPlantedPlantRowsQuery & { listPlantedPlantRows: {items: {info: {
-      status: string;
-      plantDate: string;
-      location: { start: { x: number; y: number }; end: { x: number; y: number } };
-      rowSpacingCm: number;
-      species: string
-  }}[]} }
+  ListPlantedPlantRowsWithLocation
 >;

@@ -1,34 +1,35 @@
 import { tool } from "@langchain/core/tools";
 import { stringify } from "yaml";
-import { listPlantedPlantRows } from "../../../utils/graphqlStatements";
+import { listPlantedPlantRows, ListPlantedPlantRowsWithLocation } from "../../../utils/graphqlStatements";
+import { getGarden } from "../graphql/queries";
 
 import { workStepArrayType, WorkStepArray } from "../../../utils/types";
 import { doRectanglesOverlap } from "../../../utils/geometry";
 
 import { getConfiguredAmplifyClient } from '../../../utils/amplifyUtils';
 
-const getUtilizedGardenSpace = async (workStepArray: WorkStepArray, gardenId: string) => {
-    const amplifyClient = getConfiguredAmplifyClient();
+import { Schema } from '../../data/resource';
 
-    // Fetch current planted plant rows from the garden
-    const {data: {listPlantedPlantRows: {items: plantedPlantRowsResponse}}} = await amplifyClient.graphql({
-        query: listPlantedPlantRows,
-        variables: { filter: { gardenId: { eq: gardenId } } }
-    });
-
-    const plantedPlantRows = plantedPlantRowsResponse.map((row) => row.info);
-
-    // const plantedPlantRows = gardenData?.data?.getGarden?.plantedPlantRow?.items || [];
+const getUtilizedGardenSpace = async (props: {
+    workStepArray: WorkStepArray,
+    plantedPlantRows: ListPlantedPlantRowsWithLocation["listPlantedPlantRows"]["items"][number]["info"][],
+    gardenPerimeterPoints: Schema["Garden"]["createType"]["perimeterPoints"],
+}) => {
+    const { workStepArray, plantedPlantRows } = props;
 
     return workStepArray.steps.map(({ date, plantRows }) => {
         // Combine planned plant rows with currently planted rows
         const allPlantRows = [...plantRows, ...plantedPlantRows];
+
+        const overlaps = [];
 
         // Check if any plant rows overlap
         for (let i = 0; i < allPlantRows.length; i++) {
             for (let j = i + 1; j < allPlantRows.length; j++) {
                 const rowA = allPlantRows[i];
                 const rowB = allPlantRows[j];
+
+                if (!rowA || !rowB || !rowA.location || !rowB.location || !rowA.rowSpacingCm || !rowB.rowSpacingCm) continue;
 
                 const overlap = doRectanglesOverlap(
                     {
@@ -42,9 +43,11 @@ const getUtilizedGardenSpace = async (workStepArray: WorkStepArray, gardenId: st
                 );
 
                 if (overlap) {
-                    throw new Error(
-                        `Plant rows overlap between species ${rowA.species} and ${rowB.species} for the step with planned date ${date}`
-                    );
+                    overlaps.push({
+                        speciesA: rowA.species,
+                        speciesB: rowB.species,
+                        plannedDate: date,
+                    });
                 }
             }
         }
@@ -52,6 +55,7 @@ const getUtilizedGardenSpace = async (workStepArray: WorkStepArray, gardenId: st
         return {
             stepPlannedDate: date,
             utilizedAreaFraction: 1.0, // Placeholder for area calculation logic
+            overlaps, // Include overlap information in the response
         };
     });
 };
@@ -59,8 +63,10 @@ const getUtilizedGardenSpace = async (workStepArray: WorkStepArray, gardenId: st
 // Add a persistent array to store planned steps
 const proposedSteps: WorkStepArray = { steps: [] };
 
-export const updatePlannedStepsBuilder = (props: {gardenId: string}) => tool(
+export const updatePlannedStepsBuilder = (props: { gardenId: string }) => tool(
     async ({ steps }) => {
+        const amplifyClient = getConfiguredAmplifyClient();
+
         console.log("Proposed steps:\n", steps);
         const verifySchemaResult = workStepArrayType.safeParse({ steps });
         if (!verifySchemaResult.success) {
@@ -87,8 +93,31 @@ export const updatePlannedStepsBuilder = (props: {gardenId: string}) => tool(
             }
         });
 
-        const utilizedSpace = await getUtilizedGardenSpace(proposedSteps, props.gardenId);
+        // Fetch the current garden's perimeter points
+        const { data: { getGarden: garden } } = await amplifyClient.graphql({
+            query: getGarden,
+            variables: { id: props.gardenId }
+        });
 
+        if (!garden) {
+            console.log("Garden not found");
+            return `Garden with id ${props.gardenId} not found`;
+        }
+
+        // Fetch current planted plant rows from the garden
+        const { data: { listPlantedPlantRows: { items: plantedPlantRowsResponse } } } = await amplifyClient.graphql({
+            query: listPlantedPlantRows,
+            variables: { filter: { gardenId: { eq: props.gardenId } } }
+        });
+
+        const utilizedSpace = await getUtilizedGardenSpace(
+        {
+            workStepArray: proposedSteps,
+            plantedPlantRows: plantedPlantRowsResponse.map((row) => row.info),
+            gardenPerimeterPoints: garden.perimeterPoints
+        })
+
+        
         return {
             status: "success",
             utilizedGardenSpace: utilizedSpace,

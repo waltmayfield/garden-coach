@@ -112,25 +112,47 @@ const ChatMessage = (params: {
 
                             }
 
-                            
+
                             break
                     }
                 }
             }
+            break
         case 'tool':
-            
-            break;
+            return (
+                <div style={{
+                    backgroundColor: theme.palette.grey[300],
+                    padding: theme.spacing(1),
+                    borderRadius: theme.shape.borderRadius,
+                    // border: `1px solid ${theme.palette.grey[400]}`
+                }}
+                >
+                    <p> tool call </p>
+                    <Typography variant="subtitle1" component="div">
+                        {params.message.toolName}
+                    </Typography>
+                    <pre>{params.message.content?.text}</pre>
+                </div>
+            )
+            break
         case 'human':
-            messageStyle = {
-                backgroundColor: theme.palette.primary.light,
-                color: theme.palette.primary.contrastText,
-                padding: theme.spacing(1),
-                borderRadius: theme.shape.borderRadius,
-            };
-            break;
+            return (
+                <div style={{
+                    backgroundColor: theme.palette.primary.light,
+                    color: theme.palette.primary.contrastText,
+                    padding: theme.spacing(1),
+                    borderRadius: theme.shape.borderRadius,
+                }}>
+                    <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                    >
+                        {params.message.content?.text}
+                    </ReactMarkdown>
+                </div>
+            )
     }
 
-    if (['human', 'ai'].includes(params.message.role || 'noRole')) return (
+    if (['ai'].includes(params.message.role || 'noRole')) return (
         <div style={messageStyle}>
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
