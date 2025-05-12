@@ -1,6 +1,6 @@
 import { tool } from "@langchain/core/tools";
 import { stringify } from "yaml";
-import { listPlantedPlantRows, ListPlantedPlantRowsWithLocation } from "../../../utils/graphqlStatements";
+import { listPlantedPlantRowsWithLocation, ListPlantedPlantRowsWithLocation } from "../../../utils/graphqlStatements";
 import { getGarden } from "../graphql/queries";
 
 import { workStepArrayType, WorkStepArray } from "../../../utils/types";
@@ -10,24 +10,39 @@ import { getConfiguredAmplifyClient } from '../../../utils/amplifyUtils';
 
 import { Schema } from '../../data/resource';
 
-const getUtilizedGardenSpace = async (props: {
+const analyzePlannedSteps = async (props: {
     workStepArray: WorkStepArray,
     plantedPlantRows: ListPlantedPlantRowsWithLocation["listPlantedPlantRows"]["items"][number]["info"][],
     gardenPerimeterPoints: Schema["Garden"]["createType"]["perimeterPoints"],
 }) => {
     const { workStepArray, plantedPlantRows } = props;
 
-    return workStepArray.steps.map(({ date, plantRows }) => {
-        // Combine planned plant rows with currently planted rows
-        const allPlantRows = [...plantRows, ...plantedPlantRows];
+    const workStepPlantRowsWithPlantDate = workStepArray.steps.flatMap((step) =>
+        step.plantRows.map((plantRow) => ({
+            ...plantRow,
+            plantDate: step.date,
+        }))
+    );
+
+    //For each date, find the plant rows which are in the ground, and find the utilized area
+    return workStepArray.steps.map(({ date }) => {
+        const activePlantRows = [
+            ...workStepPlantRowsWithPlantDate,
+            ...plantedPlantRows
+        ].filter((row) => {
+            const firstHarvestDate = new Date(row.harvest.first);
+            const plannedRemovalDate = new Date(firstHarvestDate.getTime() + row.harvest.window * 24 * 60 * 60 * 1000);
+            const stepDate = new Date(date);
+            return plannedRemovalDate <= stepDate || (row.perrenial && new Date(row.plantDate) <= stepDate);
+        });
 
         const overlaps = [];
 
         // Check if any plant rows overlap
-        for (let i = 0; i < allPlantRows.length; i++) {
-            for (let j = i + 1; j < allPlantRows.length; j++) {
-                const rowA = allPlantRows[i];
-                const rowB = allPlantRows[j];
+        for (let i = 0; i < activePlantRows.length; i++) {
+            for (let j = i + 1; j < activePlantRows.length; j++) {
+                const rowA = activePlantRows[i];
+                const rowB = activePlantRows[j];
 
                 if (!rowA || !rowB || !rowA.location || !rowB.location || !rowA.rowSpacingCm || !rowB.rowSpacingCm) continue;
 
@@ -62,6 +77,8 @@ const getUtilizedGardenSpace = async (props: {
 
 // Add a persistent array to store planned steps
 const proposedSteps: WorkStepArray = { steps: [] };
+
+export type UpdatePlannedStepsToolInput = z.infer<typeof workStepArrayType>
 
 export const updatePlannedStepsBuilder = (props: { gardenId: string }) => tool(
     async ({ steps }) => {
@@ -106,21 +123,19 @@ export const updatePlannedStepsBuilder = (props: { gardenId: string }) => tool(
 
         // Fetch current planted plant rows from the garden
         const { data: { listPlantedPlantRows: { items: plantedPlantRowsResponse } } } = await amplifyClient.graphql({
-            query: listPlantedPlantRows,
+            query: listPlantedPlantRowsWithLocation,
             variables: { filter: { gardenId: { eq: props.gardenId } } }
         });
 
-        const utilizedSpace = await getUtilizedGardenSpace(
-        {
+        const plannedStepAnalysis = await analyzePlannedSteps({
             workStepArray: proposedSteps,
             plantedPlantRows: plantedPlantRowsResponse.map((row) => row.info),
             gardenPerimeterPoints: garden.perimeterPoints
         })
 
-        
         return {
             status: "success",
-            utilizedGardenSpace: utilizedSpace,
+            plannedStepAnalysis: plannedStepAnalysis,
             proposedSteps: proposedSteps.steps,
         };
     },

@@ -1,7 +1,10 @@
 import { tool } from "@langchain/core/tools";
 import { stringify } from "yaml";
+import { z } from "zod";
 
 import { createGardenType, Garden } from "../../../utils/types";
+
+export type CreateGardenToolInput = z.infer<typeof createGardenType>;
 
 export const createGardenInfoToolBuilder = (props: {gardenId: string}) => tool(
     async (proposedGarden) => {

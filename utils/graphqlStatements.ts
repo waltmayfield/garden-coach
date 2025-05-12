@@ -207,10 +207,17 @@ export type ListPlantedPlantRowsWithLocation = APITypes.ListPlantedPlantRowsQuer
   plantDate: string;
   location: { start: { x: number; y: number }; end: { x: number; y: number } };
   rowSpacingCm: number;
-  species: string
+  perrenial: boolean;
+  species: string,
+  harvest: {
+    amount: number;
+    window: number;
+    first: string;
+    unit: string;
+  }
 }}[]} }
 
-export const listPlantedPlantRows = /* GraphQL */ `query ListPlantedPlantRows(
+export const listPlantedPlantRowsWithLocation = /* GraphQL */ `query ListPlantedPlantRows(
   $filter: ModelPlantedPlantRowFilterInput
   $limit: Int
   $nextToken: String
@@ -227,7 +234,15 @@ export const listPlantedPlantRows = /* GraphQL */ `query ListPlantedPlantRows(
         plantDate
         location
         rowSpacingCm
+        perrenial
         species
+        plantDate
+        harvest {
+          amount
+          window
+          first
+          unit
+          }
       }
       __typename
     }

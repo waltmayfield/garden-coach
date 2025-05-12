@@ -163,8 +163,6 @@ ${plannedStepsString}
             ]
         }
 
-        agent.invoke
-
         console.log('input:\n', stringify(input))
 
         const agentEventStream = agent.streamEvents(
