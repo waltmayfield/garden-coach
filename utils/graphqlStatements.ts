@@ -232,7 +232,10 @@ export const listPlantedPlantRowsWithLocation = /* GraphQL */ `query ListPlanted
       info {
         status
         plantDate
-        location
+        location {
+          start { x y }
+          end { x y }
+        }
         rowSpacingCm
         perrenial
         species

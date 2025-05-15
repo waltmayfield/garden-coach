@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { tool } from "@langchain/core/tools";
 import { stringify } from "yaml";
 import { listPlantedPlantRowsWithLocation, ListPlantedPlantRowsWithLocation } from "../../../utils/graphqlStatements";
@@ -33,7 +34,10 @@ const analyzePlannedSteps = async (props: {
             const firstHarvestDate = new Date(row.harvest.first);
             const plannedRemovalDate = new Date(firstHarvestDate.getTime() + row.harvest.window * 24 * 60 * 60 * 1000);
             const stepDate = new Date(date);
-            return plannedRemovalDate <= stepDate || (row.perrenial && new Date(row.plantDate) <= stepDate);
+            return (
+                (new Date(row.plantDate) <= stepDate) && //The plant has been planted
+                (plannedRemovalDate > stepDate || row.perrenial ) //The plant has not been removed yet
+            )
         });
 
         const overlaps = [];
