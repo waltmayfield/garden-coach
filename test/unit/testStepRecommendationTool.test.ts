@@ -1,3 +1,5 @@
+import { stringify } from 'yaml'
+
 import { updatePlannedStepsBuilder, UpdatePlannedStepsToolInput } from "../../amplify/functions/tools/recommendPlannedStepsTool";
 import { createGardenInfoToolBuilder, CreateGardenToolInput } from "../../amplify/functions/tools/createGardenTool";
 import { describe, it, expect } from "@jest/globals";
@@ -7,7 +9,19 @@ import { createGarden } from "../../amplify/functions/graphql/mutations";
 import * as APITypes from "../../amplify/functions/graphql/API";
 // Mock data for testing
 // const mockGardenId = "test-garden-id";
-const mockSteps: UpdatePlannedStepsToolInput = {
+
+const tomatoPlantRow: UpdatePlannedStepsToolInput["steps"][number]["plantRows"][number] = {
+  species: "Tomato",
+  variety: "Cherry",
+  location: { start: { x: 0, y: 0 }, end: { x: 1, y: 1 } },
+  rowSpacingCm: 50,
+  plantDate: "2025-05-01",
+  harvest: { amount: 10, window: 30, first: "2025-06-01", unit: "kg" },
+  perrenial: false,
+  status: "planned",
+}
+
+const mockStepsWithOverlap: UpdatePlannedStepsToolInput = {
   steps: [
     {
       title: "Plant Tomatoes",
@@ -17,26 +31,8 @@ const mockSteps: UpdatePlannedStepsToolInput = {
       description: "Planting tomato rows in the garden",
       result: "Expected successful planting of tomatoes.",
       plantRows: [
-        {
-          species: "Tomato",
-          variety: "Cherry",
-          location: { start: { x: 0, y: 0 }, end: { x: 1, y: 1 } },
-          rowSpacingCm: 50,
-          plantDate: "2025-05-01",
-          harvest: { amount: 10, window: 30, first: "2025-06-01", unit: "kg" },
-          perrenial: false,
-          status: "planned",
-        },
-        {
-          species: "Tomato",
-          variety: "Cherry",
-          location: { start: { x: 0, y: 0 }, end: { x: 1, y: 1 } },
-          rowSpacingCm: 50,
-          plantDate: "2025-05-01",
-          harvest: { amount: 10, window: 30, first: "2025-06-01", unit: "kg" },
-          perrenial: false,
-          status: "planned",
-        },
+        tomatoPlantRow,
+        tomatoPlantRow,
       ],
     },
   ],
@@ -44,7 +40,7 @@ const mockSteps: UpdatePlannedStepsToolInput = {
 };
 
 describe("updatePlannedStepsBuilder", () => {
-  it("should update or add planned steps correctly", async () => {
+  it("should alert on overlapping plant rows", async () => {
     await setAmplifyClientEnvVars()
     const amplifyClient = await getConfiguredAmplifyClient()
 
@@ -81,7 +77,7 @@ describe("updatePlannedStepsBuilder", () => {
     expect(createGardenResult.data).toBeDefined();
 
     const updatePlannedStepsTool = updatePlannedStepsBuilder({ gardenId: gardenId });
-    const toolInput = mockSteps;
+    const toolInput = mockStepsWithOverlap;
 
     const parseResult = updatePlannedStepsTool.schema.safeParse(toolInput);
     if (!parseResult.success) {
@@ -96,10 +92,10 @@ describe("updatePlannedStepsBuilder", () => {
     expect(parseResult.success).toBe(true);
 
     const updatePlannedStepsResult = await updatePlannedStepsTool.invoke(toolInput);
-    console.log("Update planned steps result:\n", updatePlannedStepsResult);
+    console.log("Update planned steps result:\n", stringify(updatePlannedStepsResult));
 
     expect(updatePlannedStepsResult).toBeDefined();
-    expect(updatePlannedStepsResult.plannedStepAnalysis[0].overlaps.length).toBe(0);
+    expect(updatePlannedStepsResult.plannedStepAnalysis[0].overlaps.length).toBe(1);
   });
 });
 
