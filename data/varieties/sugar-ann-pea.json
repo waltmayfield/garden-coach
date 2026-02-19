@@ -1,0 +1,40 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440034",
+  "variety_name": "Sugar Ann",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440015",
+  "common_name": "Sugar Ann Snap Pea",
+  "scientific_name": "Pisum sativum",
+  "seed_type": "hybrid",
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 52,
+    "spacing_inches": 2,
+    "row_spacing_inches": 18,
+    "depth_inches": 1,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 40,
+    "optimal_growth_temp_range_f": [55, 70],
+    "max_fruit_set_temp_f": 75,
+    "heat_tolerance_rating": "very_low"
+  },
+  "growth_habit": "dwarf_bush",
+  "fruit_size": "small",
+  "fruit_description": "2.5-inch sweet pods",
+  "flavor_profile": "Very sweet, crisp",
+  "disease_resistance": [],
+  "best_uses": ["fresh", "salads", "light_cooking"],
+  "special_characteristics": "Dwarf 2-3 foot vines. Earliest snap pea. Perfect for containers and small gardens. Minimal or no trellising needed. 1984 AAS Winner.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.25,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 50
+  },
+  "source_urls": [
+    "https://www.johnnyseeds.com/vegetables/peas/snap-peas/sugar-ann-pea-seed-559.html",
+    "https://www.fruitionseeds.com/shop/vegetables/peas/snap/organic-sugar-ann-dwarf-snap-pea/"
+  ]
+}

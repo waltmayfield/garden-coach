@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440020",
+  "common_name": "Malabar Spinach",
+  "scientific_name": "Basella alba",
+  "category": "vegetable",
+  "varieties": ["Red Stem", "Green Stem"],
+  "growing_info": {
+    "days_to_germination": 14,
+    "days_to_harvest": 70,
+    "spacing_inches": 12,
+    "row_spacing_inches": 36,
+    "depth_inches": 0.5,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b", "11a", "11b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 65,
+    "optimal_growth_temp_range_f": [75, 95],
+    "max_fruit_set_temp_f": null,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "very_high",
+    "cold_tolerance_rating": "very_low"
+  },
+  "planting_schedule": {
+    "method": "both",
+    "indoor_start_weeks_before_last_frost": 4,
+    "outdoor_plant_weeks_relative_to_last_frost": 2,
+    "succession_planting_interval_weeks": null,
+    "fall_planting_weeks_before_first_frost": null
+  },
+  "yield_info": {
+    "avg_yield_per_plant": 3,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 90
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Vining summer spinach substitute with buttery, nutty flavor. Not true spinach. Thrives in heat and humidity. Needs trellis support. Use fresh as sandwich wrap or in stir-fries. Beautiful edible ornamental. Dies with first frost.",
+  "source_urls": [
+    "https://thewoodlandstownshipblog-environment.com/2025/05/08/heat-tolerant-plants-for-the-summer-garden/",
+    "https://www.melindamyers.com/audio-video/melindas-garden-moment-audio-tips/vegetables-herbs-fruits/heat-tolerant-greens"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440168",
+  "variety_name": "Tiny Tim",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440001",
+  "common_name": "Tiny Tim Cherry Tomato",
+  "scientific_name": "Solanum lycopersicum",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 50,
+    "spacing_inches": 24,
+    "row_spacing_inches": 36
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "medium",
+    "optimal_temp_range": {
+      "min": 65,
+      "max": 85
+    },
+    "frost_tolerance": "none"
+  },
+  "growth_habit": "compact_determinate",
+  "fruit_size": "0.5-1 inch diameter",
+  "fruit_description": "Small, bright red, globe-shaped cherry tomatoes",
+  "flavor_profile": "Sweet with pleasant tang, delicious balanced tomato flavor",
+  "disease_resistance": [
+    "Generally disease resistant"
+  ],
+  "best_uses": [
+    "Container gardening",
+    "Patio growing",
+    "Snacking fresh",
+    "Salads",
+    "Indoor growing",
+    "Windowsill gardens"
+  ],
+  "special_characteristics": "Ultra-compact dwarf variety perfect for containers and small spaces. Plants reach only 12-18 inches tall and 14 inches wide. Self-supporting - no staking required. Introduced in 1945 by New Hampshire Agricultural Experiment Station. Extremely early at 50 days. Heavy yielder despite tiny plant size. Can be grown year-round indoors in 4-6 inch pots. Ideal for apartments, patios, and balconies. Well-suited for hydroponics. One of the most popular micro/dwarf tomato varieties.",
+  "yield_info": {
+    "avg_yield_per_plant": 2.5,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "source_urls": [
+    "https://anniesheirloomseeds.com/products/tiny-tim-cherry-tomato-solanum-lycopersicum-determinate",
+    "https://victoryseeds.com/products/tiny-tim-tomato",
+    "https://sowrightseeds.com/products/tiny-tim-tomato-seeds"
+  ]
+}

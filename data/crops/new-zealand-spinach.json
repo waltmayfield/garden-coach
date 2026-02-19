@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440021",
+  "common_name": "New Zealand Spinach",
+  "scientific_name": "Tetragonia tetragonioides",
+  "category": "vegetable",
+  "varieties": ["New Zealand Spinach"],
+  "growing_info": {
+    "days_to_germination": 14,
+    "days_to_harvest": 55,
+    "spacing_inches": 12,
+    "row_spacing_inches": 24,
+    "depth_inches": 0.5,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 60,
+    "optimal_growth_temp_range_f": [70, 85],
+    "max_fruit_set_temp_f": null,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "very_high",
+    "cold_tolerance_rating": "low"
+  },
+  "planting_schedule": {
+    "method": "direct_seed",
+    "indoor_start_weeks_before_last_frost": 4,
+    "outdoor_plant_weeks_relative_to_last_frost": 1,
+    "succession_planting_interval_weeks": 3,
+    "fall_planting_weeks_before_first_frost": null
+  },
+  "yield_info": {
+    "avg_yield_per_plant": 2,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 75
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Heat-tolerant spinach substitute with similar flavor. Not true spinach. Low-growing spreading plant. Harvest small tender leaves. Use raw or cooked. Cut-and-come-again. Thrives in summer heat when regular spinach fails. Soak seeds 24 hours before planting.",
+  "source_urls": [
+    "https://www.melindamyers.com/audio-video/melindas-garden-moment-audio-tips/vegetables-herbs-fruits/heat-tolerant-greens",
+    "https://fafard.com/heat-tolerant-greens-for-summer/"
+  ]
+}

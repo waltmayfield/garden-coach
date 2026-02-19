@@ -1,0 +1,39 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440106",
+  "variety_name": "California Wonder",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440003",
+  "common_name": "California Wonder Bell Pepper",
+  "scientific_name": "Capsicum annuum",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 14,
+    "days_to_harvest": 75,
+    "spacing_inches": 18,
+    "row_spacing_inches": 30,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 65,
+    "optimal_growth_temp_range_f": [70, 85],
+    "heat_tolerance_rating": "high"
+  },
+  "growth_habit": "bushy",
+  "fruit_size": "large",
+  "fruit_description": "4 x 4 inch blocky fruits, thick-walled",
+  "disease_resistance": [],
+  "flavor_profile": "Classic sweet bell pepper flavor. Mild and versatile",
+  "best_uses": ["fresh_eating", "stuffing", "grilling", "salads"],
+  "special_characteristics": "Standard green bell pepper heirloom. Can be harvested green or left to ripen red. Thick walls perfect for stuffing. Reliable producer. Max fruit set temp 95°F.",
+  "yield_info": {
+    "avg_yield_per_plant": 3.0,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 70
+  },
+  "source_urls": [
+    "https://www.burpee.com/vegetables/peppers/",
+    "https://extension.uga.edu/publications/detail.html?number=C1005"
+  ]
+}

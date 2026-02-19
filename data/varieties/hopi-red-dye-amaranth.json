@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440151",
+  "variety_name": "Hopi Red Dye",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440019",
+  "common_name": "Hopi Red Dye Amaranth",
+  "scientific_name": "Amaranthus spp.",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 90,
+    "spacing_inches": 18,
+    "row_spacing_inches": 24
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "very_high",
+    "optimal_temp_range": {
+      "min": 70,
+      "max": 100
+    },
+    "frost_tolerance": "none"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Red flower spikes with edible seeds",
+  "flavor_profile": "Young leaves for salads; seeds as gluten-free pseudo-grain",
+  "disease_resistance": [
+    "Drought tolerant",
+    "Heat resistant"
+  ],
+  "best_uses": [
+    "Young leaves in salads and stir-fries",
+    "Seeds harvested as gluten-free grain",
+    "Ornamental (reaches 7-8 feet)",
+    "Traditional dye plant"
+  ],
+  "special_characteristics": "Beautiful ornamental that reaches 7-8 feet in height with stunning red flower spikes. Both leaves and seeds are edible. Seeds are a 'super grain' high in protein and gluten-free. Easy to grow with minimal care, thrives in hot, humid weather.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.75,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "source_urls": [
+    "https://www.starhillfarms.com/blog/amaranth-kg2a3"
+  ]
+}

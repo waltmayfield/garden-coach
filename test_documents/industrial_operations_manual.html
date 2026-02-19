@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Operations Manual</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2E86AB;
+            text-align: center;
+            border-bottom: 3px solid #2E86AB;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #A23B72;
+            margin-top: 30px;
+        }
+        .chart-container {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th {
+            background-color: #2E86AB;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .diagram {
+            margin: 20px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            color: white;
+        }
+        .component-box {
+            display: inline-block;
+            padding: 20px 40px;
+            margin: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .sensor {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            background-color: #6A994E;
+            border-radius: 50%;
+            margin: 10px;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .key-findings {
+            background-color: #FFF3CD;
+            border-left: 4px solid #F18F01;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 200px;
+            gap: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+        }
+        .bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .bar {
+            width: 100%;
+            background: linear-gradient(to top, #2E86AB, #5BA3C5);
+            border-radius: 3px 3px 0 0;
+            position: relative;
+        }
+        .bar-label {
+            margin-top: 10px;
+            font-size: 12px;
+            text-align: center;
+        }
+        .pie-chart {
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            background: conic-gradient(
+                #2E86AB 0deg 126deg,
+                #A23B72 126deg 216deg,
+                #F18F01 216deg 288deg,
+                #C73E1D 288deg 342deg,
+                #6A994E 342deg 360deg
+            );
+            border-radius: 50%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Industrial Operations Manual</h1>
+    <p style="text-align: center; font-size: 18px; color: #666;">Equipment Performance & Maintenance Guide</p>
+
+    <h2>1. Introduction</h2>
+    <p>
+        This manual provides comprehensive guidance on industrial equipment operations, 
+        maintenance procedures, and performance monitoring. The document includes detailed 
+        performance metrics, cost analysis, and system architecture diagrams to support 
+        operational decision-making.
+    </p>
+
+    <h2>2. Equipment Performance Analysis</h2>
+    <p>
+        The following chart illustrates the performance metrics for five critical pumps 
+        in the production facility. <strong>Pump E demonstrates the highest efficiency at 95% 
+        with only 6 hours of downtime</strong>, while <strong>Pump C shows the lowest efficiency at 78% 
+        with 15 hours of downtime</strong>. These metrics are crucial for predictive maintenance 
+        scheduling and resource allocation.
+    </p>
+
+    <div class="chart-container">
+        <h3 style="text-align: center; margin-top: 0;">Equipment Performance Metrics</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <tr style="background-color: #2E86AB; color: white;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Pump</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Efficiency (%)</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Downtime (hours)</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Visual</th>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Pump A</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">85%</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">12</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><div style="width: 85%; height: 20px; background-color: #2E86AB;"></div></td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Pump B</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">92%</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">8</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><div style="width: 92%; height: 20px; background-color: #2E86AB;"></div></td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Pump C</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">78%</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">15</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><div style="width: 78%; height: 20px; background-color: #C73E1D;"></div></td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Pump D</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">88%</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">10</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><div style="width: 88%; height: 20px; background-color: #2E86AB;"></div></td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Pump E</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">95%</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">6</td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><div style="width: 95%; height: 20px; background-color: #6A994E;"></div></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="key-findings">
+        <strong>Key Findings:</strong><br>
+        • Pump E requires minimal intervention with 95% efficiency<br>
+        • Pump C needs immediate attention due to high downtime<br>
+        • Average fleet efficiency is 87.6%<br>
+        • Total downtime across all pumps: 51 hours per month
+    </div>
+
+    <h2>3. Maintenance Cost Analysis</h2>
+    <p>
+        Annual maintenance costs total <strong>$2.5 million</strong> across the facility. The pie chart 
+        below shows the breakdown of these costs. <strong>Labor represents the largest expense 
+        at 35% ($875,000)</strong>, followed by parts at 25% ($625,000). Understanding this 
+        distribution helps optimize maintenance budgets and identify cost reduction 
+        opportunities.
+    </p>
+
+    <div class="chart-container">
+        <h3 style="text-align: center; margin-top: 0;">Maintenance Cost Breakdown</h3>
+        <div style="text-align: center; margin: 20px 0;">
+            <svg width="300" height="300" viewBox="0 0 300 300" style="margin: 0 auto; display: block;">
+                <!-- Pie chart using SVG paths -->
+                <circle cx="150" cy="150" r="100" fill="none" stroke="#ddd" stroke-width="1"/>
+                <!-- Labor 35% (0-126 degrees) -->
+                <path d="M 150,150 L 150,50 A 100,100 0 0,1 236.6,89.6 Z" fill="#2E86AB"/>
+                <!-- Parts 25% (126-216 degrees) -->
+                <path d="M 150,150 L 236.6,89.6 A 100,100 0 0,1 236.6,210.4 Z" fill="#A23B72"/>
+                <!-- Equipment 20% (216-288 degrees) -->
+                <path d="M 150,150 L 236.6,210.4 A 100,100 0 0,1 150,250 Z" fill="#F18F01"/>
+                <!-- Contractors 15% (288-342 degrees) -->
+                <path d="M 150,150 L 150,250 A 100,100 0 0,1 63.4,210.4 Z" fill="#C73E1D"/>
+                <!-- Other 5% (342-360 degrees) -->
+                <path d="M 150,150 L 63.4,210.4 A 100,100 0 0,1 63.4,89.6 Z" fill="#6A994E"/>
+                <path d="M 150,150 L 63.4,89.6 A 100,100 0 0,1 150,50 Z" fill="#6A994E"/>
+            </svg>
+        </div>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #2E86AB;"></div>
+                <span>Labor (35% - $875,000)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #A23B72;"></div>
+                <span>Parts (25% - $625,000)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #F18F01;"></div>
+                <span>Equipment (20% - $500,000)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #C73E1D;"></div>
+                <span>Contractors (15% - $375,000)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #6A994E;"></div>
+                <span>Other (5% - $125,000)</span>
+            </div>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Labor</td>
+                <td>$875,000</td>
+                <td>35%</td>
+            </tr>
+            <tr>
+                <td>Parts</td>
+                <td>$625,000</td>
+                <td>25%</td>
+            </tr>
+            <tr>
+                <td>Equipment</td>
+                <td>$500,000</td>
+                <td>20%</td>
+            </tr>
+            <tr>
+                <td>Contractors</td>
+                <td>$375,000</td>
+                <td>15%</td>
+            </tr>
+            <tr>
+                <td>Other</td>
+                <td>$125,000</td>
+                <td>5%</td>
+            </tr>
+            <tr style="background-color: #F18F01; color: white; font-weight: bold;">
+                <td>Total</td>
+                <td>$2,500,000</td>
+                <td>100%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>4. System Architecture</h2>
+    <p>
+        The production system consists of three main components: <strong>Wellhead, Separator, 
+        and Storage</strong>. Each component is monitored by dedicated sensors measuring <strong>pressure, 
+        temperature, and level</strong> respectively. The diagram below illustrates the flow of 
+        materials through the system and the sensor placement for real-time monitoring.
+    </p>
+
+    <div class="diagram">
+        <h3 style="text-align: center; margin-top: 0;">Oil & Gas Production System Architecture</h3>
+        <div style="text-align: center; margin: 30px 0;">
+            <div class="component-box">WELLHEAD</div>
+            <span style="font-size: 24px; margin: 0 10px;">→</span>
+            <div class="component-box">SEPARATOR</div>
+            <span style="font-size: 24px; margin: 0 10px;">→</span>
+            <div class="component-box">STORAGE</div>
+        </div>
+        <div style="text-align: center; margin: 30px 0;">
+            <div style="display: inline-block; text-align: center; margin: 0 40px;">
+                <div class="sensor">P</div>
+                <div>Pressure</div>
+            </div>
+            <div style="display: inline-block; text-align: center; margin: 0 40px;">
+                <div class="sensor">T</div>
+                <div>Temperature</div>
+            </div>
+            <div style="display: inline-block; text-align: center; margin: 0 40px;">
+                <div class="sensor">L</div>
+                <div>Level</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="key-findings" style="background-color: #E3F2FD; border-left-color: #2E86AB;">
+        <strong>Technical Specifications:</strong><br>
+        • Wellhead Operating Pressure: 1,500 PSI<br>
+        • Separator Temperature Range: 150-200°F<br>
+        • Storage Capacity: 10,000 barrels<br>
+        • Sensor Accuracy: ±0.5%<br>
+        • Data Sampling Rate: 1 Hz
+    </div>
+
+    <h2>5. Wellhead Pressure Monitoring</h2>
+    <p>
+        Continuous monitoring of wellhead tubing pressure is essential for safe operations 
+        and production optimization. The chart below shows real-time pressure data from 
+        Well ID: WH-2547A over a 30-day period.
+    </p>
+
+    <div class="chart-container">
+        <img src="wellhead_pressure_chart.png" alt="Wellhead Tubing Pressure Time Series Chart" style="width: 100%; max-width: 900px; display: block; margin: 0 auto;">
+    </div>
+
+    <h2>6. Safety Considerations</h2>
+    <p>
+        All maintenance activities must follow strict safety protocols. The <strong>pressure 
+        sensor at the wellhead is critical for preventing overpressure conditions</strong>. 
+        Temperature monitoring at the separator prevents thermal runaway. Level sensors 
+        at storage prevent overflow incidents. Emergency shutdown procedures must be 
+        tested quarterly.
+    </p>
+
+    <div class="key-findings" style="background-color: #FFEBEE; border-left-color: #C73E1D;">
+        <strong>Critical Safety Points:</strong><br>
+        • Never bypass pressure relief valves<br>
+        • Maintain sensor calibration schedules<br>
+        • Test emergency shutdown systems quarterly<br>
+        • Keep fire suppression systems operational<br>
+        • Ensure all personnel wear appropriate PPE
+    </div>
+</body>
+</html>

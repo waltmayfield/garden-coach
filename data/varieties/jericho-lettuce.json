@@ -1,0 +1,39 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440109",
+  "variety_name": "Jericho",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440005",
+  "common_name": "Jericho Lettuce (Heat-Tolerant)",
+  "scientific_name": "Lactuca sativa",
+  "seed_type": "hybrid",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 48,
+    "spacing_inches": 8,
+    "row_spacing_inches": 12,
+    "depth_inches": 0.25,
+    "sun_requirement": "partial_sun",
+    "water_frequency": "daily"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 40,
+    "optimal_growth_temp_range_f": [60, 75],
+    "heat_tolerance_rating": "high"
+  },
+  "growth_habit": "head",
+  "fruit_size": null,
+  "fruit_description": null,
+  "disease_resistance": ["tip_burn"],
+  "flavor_profile": "Sweet, mild lettuce flavor. Crisp texture",
+  "best_uses": ["salads", "sandwiches", "summer_growing"],
+  "special_characteristics": "Heat-tolerant romaine lettuce that resists bolting in warm weather. Ideal for extending lettuce season into summer. Dark green crisp leaves. More bolt-resistant than standard varieties.",
+  "yield_info": {
+    "avg_yield_per_plant": 2.5,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 14
+  },
+  "source_urls": [
+    "https://www.groworganic.com/blogs/articles/growing-lettuce-in-the-summer-heat",
+    "https://www.johnnyseeds.com/vegetables/lettuce/"
+  ]
+}

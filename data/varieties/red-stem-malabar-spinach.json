@@ -1,0 +1,49 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440155",
+  "variety_name": "Red Stem Malabar",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440020",
+  "common_name": "Red Stem Malabar Spinach",
+  "scientific_name": "Basella alba var. rubra",
+  "seed_type": "heirloom",
+  "growing_info": {
+    "days_to_germination": 12,
+    "days_to_harvest": 70,
+    "spacing_inches": 15,
+    "row_spacing_inches": 36
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "very_high",
+    "optimal_temp_range": {
+      "min": 75,
+      "max": 95
+    },
+    "frost_tolerance": "none"
+  },
+  "growth_habit": "vining",
+  "fruit_size": "N/A",
+  "fruit_description": "Large heart-shaped leaves with striking red stems",
+  "flavor_profile": "Mild peppery and citrus notes, similar to spinach with slight mucilaginous texture when cooked",
+  "disease_resistance": [
+    "Heat tolerant",
+    "Drought tolerant once established"
+  ],
+  "best_uses": [
+    "Fresh salads (young leaves)",
+    "Stir-fries",
+    "Soups (thickening agent)",
+    "Sautéed greens",
+    "Ornamental vine"
+  ],
+  "special_characteristics": "Beautiful ornamental with vibrant red stems and glossy green leaves. Fast-growing vine reaches up to 10 feet - needs trellis support. Thrives in hot weather when regular spinach bolts. Scarify seeds or soak to speed germination. High in vitamins A and C. Self-sows readily. Can be severely cut back and will regrow.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.75,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "source_urls": [
+    "https://www.southernexposure.com/products/red-malabar-summer-spinach/",
+    "https://sowrightseeds.com/products/red-stem-malabar-spinach-seeds",
+    "https://www.thespruce.com/malabar-spinach-growing-guide-5219861"
+  ]
+}

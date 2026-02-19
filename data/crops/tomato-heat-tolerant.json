@@ -1,0 +1,47 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440002",
+  "common_name": "Tomato (Heat-Tolerant)",
+  "scientific_name": "Solanum lycopersicum",
+  "category": "vegetable",
+  "varieties": ["Phoenix", "Heatmaster", "Surefire", "Heatwave II", "Arkansas Traveler", "Celebrity"],
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 75,
+    "spacing_inches": 24,
+    "row_spacing_inches": 36,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 60,
+    "optimal_growth_temp_range_f": [70, 95],
+    "max_fruit_set_temp_f": 96,
+    "max_night_temp_for_fruit_set_f": 75,
+    "heat_tolerance_rating": "high",
+    "cold_tolerance_rating": "very_low"
+  },
+  "planting_schedule": {
+    "method": "transplant",
+    "indoor_start_weeks_before_last_frost": 6,
+    "outdoor_plant_weeks_relative_to_last_frost": 2,
+    "succession_planting_interval_weeks": null,
+    "fall_planting_weeks_before_first_frost": 14
+  },
+  "yield_info": {
+    "avg_yield_per_plant": 12,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 70
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Heat-tolerant tomato varieties bred to maintain fruit set in hot climates (Austin, Phoenix, etc). Better suited for summer growing when temperatures exceed 90°F consistently.",
+  "source_urls": [
+    "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2023.1245661/full",
+    "https://agrilifeextension.tamu.edu/asset-external/easy-gardening-tomatoes/",
+    "https://pubmed.ncbi.nlm.nih.gov/34394907/"
+  ]
+}

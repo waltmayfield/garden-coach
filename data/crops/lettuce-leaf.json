@@ -1,0 +1,47 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440005",
+  "common_name": "Lettuce (Leaf)",
+  "scientific_name": "Lactuca sativa",
+  "category": "vegetable",
+  "varieties": ["Black Seeded Simpson", "Oak Leaf", "Red Sails", "Lollo Rosso", "Buttercrunch"],
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 45,
+    "spacing_inches": 6,
+    "row_spacing_inches": 12,
+    "depth_inches": 0.25,
+    "sun_requirement": "partial_sun",
+    "water_frequency": "daily",
+    "hardiness_zones": ["2a", "2b", "3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 40,
+    "optimal_growth_temp_range_f": [60, 70],
+    "max_fruit_set_temp_f": null,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "low",
+    "cold_tolerance_rating": "high"
+  },
+  "planting_schedule": {
+    "method": "direct_seed",
+    "indoor_start_weeks_before_last_frost": null,
+    "outdoor_plant_weeks_relative_to_last_frost": -4,
+    "succession_planting_interval_weeks": 2,
+    "fall_planting_weeks_before_first_frost": 8
+  },
+  "yield_info": {
+    "avg_yield_per_plant": null,
+    "avg_yield_per_foot": 0.5,
+    "yield_unit": "lbs",
+    "harvest_window_days": 14
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Cool-season crop that bolts in heat. Best grown spring and fall. Plant every 2 weeks for continuous harvest. Bolts when temps exceed 75-80°F.",
+  "source_urls": [
+    "https://www.johnnyseeds.com/growers-library/vegetables/lettuce/lettuceprogram.html",
+    "https://extension.usu.edu/yardandgarden/research/lettuce-in-the-garden.php",
+    "https://www.groworganic.com/blogs/articles/growing-lettuce-in-the-summer-heat"
+  ]
+}

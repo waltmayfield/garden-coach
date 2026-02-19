@@ -1,0 +1,48 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440152",
+  "variety_name": "Caribe",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440010",
+  "common_name": "Caribe Cilantro",
+  "scientific_name": "Coriandrum sativum",
+  "seed_type": "open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 45,
+    "spacing_inches": 6,
+    "row_spacing_inches": 24
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "high",
+    "optimal_temp_range": {
+      "min": 60,
+      "max": 85
+    },
+    "frost_tolerance": "light"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Vibrant green leaves",
+  "flavor_profile": "Bright, citrusy flavor with slightly sweet aroma",
+  "disease_resistance": [
+    "Slow to bolt",
+    "Heat tolerant"
+  ],
+  "best_uses": [
+    "Salsas",
+    "Curries",
+    "Soups",
+    "Salads",
+    "Mexican and Asian cuisine"
+  ],
+  "special_characteristics": "Exceptional bolt resistance makes it ideal for extended harvests in warm climates. Fast-growing with maturity in 40-45 days. Slow-bolting cultivar provides continuous supply of fresh leaves. Direct-sow 1/4 inch deep. Succession sow every 2 weeks for continuous harvest.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.3,
+    "avg_yield_per_foot": null,
+    "yield_unit": "bunches",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://www.theorganicharvest.com/product/cilantro-caribe/",
+    "https://cultivatedearth.com/en/herbs/best-cilantro-varieties/"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440035",
+  "variety_name": "Super Sugar Snap",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440015",
+  "common_name": "Super Sugar Snap Pea",
+  "scientific_name": "Pisum sativum",
+  "seed_type": "hybrid",
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 61,
+    "spacing_inches": 2,
+    "row_spacing_inches": 18,
+    "depth_inches": 1,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 40,
+    "optimal_growth_temp_range_f": [55, 70],
+    "max_fruit_set_temp_f": 75,
+    "heat_tolerance_rating": "very_low"
+  },
+  "growth_habit": "vining",
+  "fruit_size": "medium",
+  "fruit_description": "3-inch thick-walled, plump pods",
+  "flavor_profile": "Sweet, excellent flavor",
+  "disease_resistance": ["powdery_mildew"],
+  "best_uses": ["fresh", "salads", "stir_fry"],
+  "special_characteristics": "Improved Sugar Snap. 5-foot vines. Higher yields, better disease resistance. Plumper pods, earlier harvest than original Sugar Snap.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.25,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 50
+  },
+  "source_urls": [
+    "https://www.johnnyseeds.com/vegetables/peas/snap-peas/super-sugar-snap-pea-seed-2855.html",
+    "https://victoryseeds.com/products/super-sugar-snap-pea"
+  ]
+}

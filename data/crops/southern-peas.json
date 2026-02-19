@@ -1,0 +1,47 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440014",
+  "common_name": "Southern Peas (Cowpeas)",
+  "scientific_name": "Vigna unguiculata",
+  "category": "vegetable",
+  "varieties": ["Black-Eyed Peas", "Purple Hull", "Crowder", "Cream Peas", "Pink Eye", "Mississippi Silver", "Lady Peas", "Zipper Cream"],
+  "growing_info": {
+    "days_to_germination": 8,
+    "days_to_harvest": 65,
+    "spacing_inches": 4,
+    "row_spacing_inches": 36,
+    "depth_inches": 1,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 65,
+    "optimal_growth_temp_range_f": [75, 95],
+    "max_fruit_set_temp_f": 100,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "very_high",
+    "cold_tolerance_rating": "very_low"
+  },
+  "planting_schedule": {
+    "method": "direct_seed",
+    "indoor_start_weeks_before_last_frost": null,
+    "outdoor_plant_weeks_relative_to_last_frost": 2,
+    "succession_planting_interval_weeks": 3,
+    "fall_planting_weeks_before_first_frost": null
+  },
+  "yield_info": {
+    "avg_yield_per_plant": null,
+    "avg_yield_per_foot": 0.75,
+    "yield_unit": "lbs",
+    "harvest_window_days": 30
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Warm-season legume perfect for hot summers (85-95°F). Nitrogen-fixing. Excellent for Austin heat. Can be eaten fresh, frozen, or dried. Bush and vining varieties. Also called field peas, cowpeas. Very nutritious.",
+  "source_urls": [
+    "https://hgic.clemson.edu/factsheet/southern-peas/",
+    "https://aggie-horticulture.tamu.edu/vegetable/wp-content/uploads/sites/10/2011/10/southernpea.pdf",
+    "https://extension.okstate.edu/fact-sheets/southern-pea-production.html"
+  ]
+}

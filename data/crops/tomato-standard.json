@@ -1,0 +1,47 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440001",
+  "common_name": "Tomato (Standard)",
+  "scientific_name": "Solanum lycopersicum",
+  "category": "vegetable",
+  "varieties": ["Beefsteak", "Big Boy", "Early Girl", "Roma", "Cherokee Purple", "Brandywine"],
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 70,
+    "spacing_inches": 24,
+    "row_spacing_inches": 36,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 60,
+    "optimal_growth_temp_range_f": [70, 85],
+    "max_fruit_set_temp_f": 90,
+    "max_night_temp_for_fruit_set_f": 70,
+    "heat_tolerance_rating": "moderate",
+    "cold_tolerance_rating": "very_low"
+  },
+  "planting_schedule": {
+    "method": "transplant",
+    "indoor_start_weeks_before_last_frost": 6,
+    "outdoor_plant_weeks_relative_to_last_frost": 2,
+    "succession_planting_interval_weeks": null,
+    "fall_planting_weeks_before_first_frost": 14
+  },
+  "yield_info": {
+    "avg_yield_per_plant": 10,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Standard tomato varieties are popular for home gardens but sensitive to heat. Best planted in spring or fall in hot climates. Requires staking or caging.",
+  "source_urls": [
+    "https://agrilifeextension.tamu.edu/asset-external/easy-gardening-tomatoes/",
+    "https://www.almanac.com/plant/tomatoes",
+    "https://hgic.clemson.edu/factsheet/tomato/"
+  ]
+}

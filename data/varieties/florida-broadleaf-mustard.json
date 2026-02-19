@@ -1,0 +1,45 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440157",
+  "variety_name": "Florida Broadleaf",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440022",
+  "common_name": "Florida Broadleaf Mustard",
+  "scientific_name": "Brassica juncea",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 42,
+    "spacing_inches": 6,
+    "row_spacing_inches": 18
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "medium",
+    "optimal_temp_range": {
+      "min": 45,
+      "max": 75
+    },
+    "frost_tolerance": "light"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Large, smooth, pale green oval leaves with greenish-white midribs",
+  "flavor_profile": "Best-flavored American variety for cooked greens - rich mustard taste",
+  "disease_resistance": [
+    "Slower to bolt than other varieties"
+  ],
+  "best_uses": [
+    "Southern-style cooked greens",
+    "Braising",
+    "Soups",
+    "Traditional cuisine"
+  ],
+  "special_characteristics": "Considered by many as the best-flavored American mustard variety. Fast-growing with abundance of flavorful large leaves. Grows to about 10 inches in height. Extremely popular in southern-style cuisine. Slower to bolt than most varieties.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.75,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "source_urls": [
+    "https://www.youtube.com/watch?v=Y8gyVInXnw4"
+  ]
+}

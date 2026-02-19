@@ -1,0 +1,39 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440104",
+  "variety_name": "Red Brandywine",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440001",
+  "common_name": "Brandywine Tomato",
+  "scientific_name": "Solanum lycopersicum",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 78,
+    "spacing_inches": 24,
+    "row_spacing_inches": 36,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 60,
+    "optimal_growth_temp_range_f": [70, 85],
+    "heat_tolerance_rating": "low"
+  },
+  "growth_habit": "indeterminate",
+  "fruit_size": "large",
+  "fruit_description": "1 lb beefsteak, deep red, smooth skin, meaty and juicy",
+  "disease_resistance": [],
+  "flavor_profile": "Classic sweet-tart tomato flavor. Juicy and rich. Described as perfection by tomato experts",
+  "best_uses": ["fresh_eating", "slicing", "sandwiches"],
+  "special_characteristics": "One of the most famous heirloom tomatoes (c. 1889). Classic old-fashioned tomato flavor. Lower yields than modern hybrids but outstanding taste. Max fruit set temp 88°F.",
+  "yield_info": {
+    "avg_yield_per_plant": 10.0,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "source_urls": [
+    "https://www.johnnyseeds.com/on/demandware.static/-/Library-Sites-JSSSharedLibrary/default/dw9242aed0/assets/information/tomatoes-heirloom-comparison-chart.pdf",
+    "https://fafard.com/tag/tomatoes/"
+  ]
+}

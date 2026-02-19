@@ -1,0 +1,38 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440029",
+  "variety_name": "Bright Lights",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440018",
+  "common_name": "Bright Lights Swiss Chard",
+  "scientific_name": "Beta vulgaris subsp. vulgaris",
+  "seed_type": "open_pollinated",
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 55,
+    "spacing_inches": 6,
+    "row_spacing_inches": 18,
+    "depth_inches": 0.5,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 50,
+    "optimal_growth_temp_range_f": [60, 75],
+    "heat_tolerance_rating": "very_high"
+  },
+  "growth_habit": "upright",
+  "fruit_size": null,
+  "fruit_description": null,
+  "flavor_profile": "Mild, earthy",
+  "disease_resistance": [],
+  "best_uses": ["fresh", "sautéing", "braising", "ornamental"],
+  "special_characteristics": "Multicolored stems (red, pink, orange, yellow, white). Highly ornamental. High savoy (crinkled) leaves. Mix of colors in each packet.",
+  "yield_info": {
+    "avg_yield_per_plant": 1.0,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://www.johnnyseeds.com/vegetables/swiss-chard/bright-lights-swiss-chard-seed-703D.html"
+  ]
+}

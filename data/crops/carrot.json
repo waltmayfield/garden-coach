@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440007",
+  "common_name": "Carrot",
+  "scientific_name": "Daucus carota",
+  "category": "vegetable",
+  "varieties": ["Nantes", "Danvers", "Imperator", "Chantenay", "Rainbow Mix"],
+  "growing_info": {
+    "days_to_germination": 14,
+    "days_to_harvest": 70,
+    "spacing_inches": 2,
+    "row_spacing_inches": 12,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "daily",
+    "hardiness_zones": ["3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 45,
+    "optimal_growth_temp_range_f": [60, 70],
+    "max_fruit_set_temp_f": null,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "moderate",
+    "cold_tolerance_rating": "high"
+  },
+  "planting_schedule": {
+    "method": "direct_seed",
+    "indoor_start_weeks_before_last_frost": null,
+    "outdoor_plant_weeks_relative_to_last_frost": -3,
+    "succession_planting_interval_weeks": 3,
+    "fall_planting_weeks_before_first_frost": 10
+  },
+  "yield_info": {
+    "avg_yield_per_plant": null,
+    "avg_yield_per_foot": 1,
+    "yield_unit": "lbs",
+    "harvest_window_days": 30
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Cool-season root crop. Needs loose, well-drained soil. Germination can be slow. Plant in spring and fall. Flavor improves after light frost.",
+  "source_urls": [
+    "https://www.proagrimedia.com/crops/vegetable-planting-guide-part-3-carrots-and-green-beans/",
+    "https://yardandgarden.extension.iastate.edu/how-to/vegetable-growing-guides"
+  ]
+}

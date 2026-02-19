@@ -1,0 +1,47 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440003",
+  "common_name": "Bell Pepper",
+  "scientific_name": "Capsicum annuum",
+  "category": "vegetable",
+  "varieties": ["California Wonder", "Yolo Wonder", "King Arthur", "Aristotle", "Orange Blaze", "Purple Beauty"],
+  "growing_info": {
+    "days_to_germination": 14,
+    "days_to_harvest": 70,
+    "spacing_inches": 18,
+    "row_spacing_inches": 30,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 65,
+    "optimal_growth_temp_range_f": [70, 85],
+    "max_fruit_set_temp_f": 95,
+    "max_night_temp_for_fruit_set_f": 75,
+    "heat_tolerance_rating": "high",
+    "cold_tolerance_rating": "very_low"
+  },
+  "planting_schedule": {
+    "method": "transplant",
+    "indoor_start_weeks_before_last_frost": 8,
+    "outdoor_plant_weeks_relative_to_last_frost": 2,
+    "succession_planting_interval_weeks": null,
+    "fall_planting_weeks_before_first_frost": 12
+  },
+  "yield_info": {
+    "avg_yield_per_plant": 5,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Sweet bell peppers are versatile and productive. Heat-tolerant once established. Can be harvested green or left to ripen to red, orange, or yellow.",
+  "source_urls": [
+    "https://extension.uga.edu/publications/detail.html?number=C1005",
+    "https://hgic.clemson.edu/factsheet/pepper/",
+    "https://yardandgarden.extension.iastate.edu/how-to/growing-peppers-home-garden"
+  ]
+}

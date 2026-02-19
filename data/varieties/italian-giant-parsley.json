@@ -1,0 +1,47 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440160",
+  "variety_name": "Italian Giant",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440011",
+  "common_name": "Italian Giant Parsley",
+  "scientific_name": "Petroselinum crispum",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 18,
+    "days_to_harvest": 75,
+    "spacing_inches": 5,
+    "row_spacing_inches": 12
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "medium",
+    "optimal_temp_range": {
+      "min": 50,
+      "max": 80
+    },
+    "frost_tolerance": "moderate"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Towering, deep-green flat leaves with sturdy stems",
+  "flavor_profile": "Bold, savory Italian parsley flavor",
+  "disease_resistance": [
+    "Generally disease resistant"
+  ],
+  "best_uses": [
+    "Sauces",
+    "Salads",
+    "Garnishes",
+    "Italian cuisine",
+    "Fresh or dried"
+  ],
+  "special_characteristics": "Brings bold, savory flavor and lush greenery to kitchen gardens. Towering deep-green flat leaves deliver high yield and robust culinary performance. Excellent for sauces, salads, and garnishes. Superior flavor compared to curly parsley varieties.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.3,
+    "avg_yield_per_foot": null,
+    "yield_unit": "bunches",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://trueleafmarket.com/products/parsley-seeds-italian-giant",
+    "https://sandiegoseedcompany.com/product/herbs/flat-leaf-italian-parsley-seeds/"
+  ]
+}

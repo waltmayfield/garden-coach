@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440022",
+  "common_name": "Mustard Greens",
+  "scientific_name": "Brassica juncea",
+  "category": "vegetable",
+  "varieties": ["Red Giant", "Florida Broadleaf", "Red Kingdom Mizuna", "Green Wave", "Southern Giant Curled"],
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 40,
+    "spacing_inches": 6,
+    "row_spacing_inches": 18,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["2a", "2b", "3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 45,
+    "optimal_growth_temp_range_f": [60, 75],
+    "max_fruit_set_temp_f": null,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "high",
+    "cold_tolerance_rating": "very_high"
+  },
+  "planting_schedule": {
+    "method": "direct_seed",
+    "indoor_start_weeks_before_last_frost": null,
+    "outdoor_plant_weeks_relative_to_last_frost": -4,
+    "succession_planting_interval_weeks": 2,
+    "fall_planting_weeks_before_first_frost": 8
+  },
+  "yield_info": {
+    "avg_yield_per_plant": null,
+    "avg_yield_per_foot": 0.5,
+    "yield_unit": "lbs",
+    "harvest_window_days": 30
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Spicy, peppery greens that tolerate summer heat better than other brassicas. Red Giant and Florida Broadleaf best for heat. Use raw (young), pickled, wilted, or cooked. Fast-growing. Cut-and-come-again harvest. More heat-tolerant than kale or collards.",
+  "source_urls": [
+    "https://www.melindamyers.com/audio-video/melindas-garden-moment-audio-tips/vegetables-herbs-fruits/heat-tolerant-greens",
+    "https://travis-tx.tamu.edu/about-2/horticulture/edible-gardens-for-austin/vegetable-gardening-in-austin/vegetable-varieties-for-central-texas/"
+  ]
+}

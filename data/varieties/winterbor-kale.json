@@ -1,0 +1,48 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440167",
+  "variety_name": "Winterbor",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440023",
+  "common_name": "Winterbor Kale",
+  "scientific_name": "Brassica oleracea var. sabellica",
+  "seed_type": "hybrid",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 60,
+    "spacing_inches": 12,
+    "row_spacing_inches": 18
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "low",
+    "optimal_temp_range": {
+      "min": 45,
+      "max": 70
+    },
+    "frost_tolerance": "very_high"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Deeply curled, blue-green leaves",
+  "flavor_profile": "Classic kale flavor - robust and slightly bitter, sweetens after frost",
+  "disease_resistance": [
+    "Extremely cold hardy",
+    "Freezing temperature tolerant"
+  ],
+  "best_uses": [
+    "Cooked greens",
+    "Soups",
+    "Braising",
+    "Kale chips",
+    "Winter harvesting"
+  ],
+  "special_characteristics": "Extremely cold-hardy curly kale that thrives in freezing temperatures. Produces all winter even under light snow cover. Deeply curled blue-green leaves. One of the best varieties for winter production. Very productive and hardy. Recommended for Central Texas fall/winter gardens. Good for continuous harvest.",
+  "yield_info": {
+    "avg_yield_per_plant": 1.5,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 90
+  },
+  "source_urls": [
+    "https://www.centraltexasgardener.org/resource/kale-varieties/",
+    "https://harvesttotable.com/best-kale-varieties-for-different-climates/"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440009",
+  "common_name": "Basil",
+  "scientific_name": "Ocimum basilicum",
+  "category": "herb",
+  "varieties": ["Genovese", "Sweet Thai", "Purple", "Lemon", "Cinnamon"],
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 60,
+    "spacing_inches": 12,
+    "row_spacing_inches": 18,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "daily",
+    "hardiness_zones": ["2a", "2b", "3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 70,
+    "optimal_growth_temp_range_f": [70, 90],
+    "max_fruit_set_temp_f": null,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "high",
+    "cold_tolerance_rating": "very_low"
+  },
+  "planting_schedule": {
+    "method": "both",
+    "indoor_start_weeks_before_last_frost": 6,
+    "outdoor_plant_weeks_relative_to_last_frost": 2,
+    "succession_planting_interval_weeks": 3,
+    "fall_planting_weeks_before_first_frost": null
+  },
+  "yield_info": {
+    "avg_yield_per_plant": 0.5,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 90
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Warm-season annual herb. Pinch flowers to promote leaf growth. Harvest regularly for bushier plants. Sensitive to cold and frost.",
+  "source_urls": [
+    "https://www.ufseeds.com/herb-growing-guide.html",
+    "https://www.gardenary.com/blog/your-complete-guide-to-harvesting-herbs-from-your-garden",
+    "https://www.lsuagcenter.com/~/media/system/8/4/8/f/848fcac92cdce23acb0ffc9760858d13/pub3424schoolherbgarden.pdf"
+  ]
+}

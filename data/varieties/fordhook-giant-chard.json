@@ -1,0 +1,38 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440030",
+  "variety_name": "Fordhook Giant",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440018",
+  "common_name": "Fordhook Giant Swiss Chard",
+  "scientific_name": "Beta vulgaris subsp. vulgaris",
+  "seed_type": "open_pollinated",
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 60,
+    "spacing_inches": 6,
+    "row_spacing_inches": 18,
+    "depth_inches": 0.5,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 50,
+    "optimal_growth_temp_range_f": [60, 75],
+    "heat_tolerance_rating": "very_high"
+  },
+  "growth_habit": "upright",
+  "fruit_size": null,
+  "fruit_description": null,
+  "flavor_profile": "Mild, earthy",
+  "disease_resistance": [],
+  "best_uses": ["sautéing", "braising", "fresh"],
+  "special_characteristics": "White stems, green leaves. Classic variety. Medium savoy. Large, vigorous plants.",
+  "yield_info": {
+    "avg_yield_per_plant": 1.2,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://www.johnnyseeds.com/vegetables/swiss-chard/fordhook-giant-swiss-chard-seed-701.html"
+  ]
+}

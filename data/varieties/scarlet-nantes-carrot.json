@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440162",
+  "variety_name": "Scarlet Nantes",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440007",
+  "common_name": "Scarlet Nantes Carrot",
+  "scientific_name": "Daucus carota",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 14,
+    "days_to_harvest": 70,
+    "spacing_inches": 2,
+    "row_spacing_inches": 18
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "low",
+    "optimal_temp_range": {
+      "min": 45,
+      "max": 75
+    },
+    "frost_tolerance": "moderate"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "6-7 inches long",
+  "fruit_description": "Smooth, cylindrical, bright orange roots with small core",
+  "flavor_profile": "Sweet, crisp, tender - classic carrot flavor",
+  "disease_resistance": [
+    "Generally disease resistant"
+  ],
+  "best_uses": [
+    "Fresh eating",
+    "Salads",
+    "Juicing",
+    "Cooking",
+    "Storage"
+  ],
+  "special_characteristics": "Classic Nantes-type carrot with superior flavor and texture. Smooth, slender, cylindrical shape with blunt tip. Excellent for fresh eating with sweet, crisp flesh. Does best in loose, sandy loam soils. One of the most popular home garden varieties. Uniform growth and excellent yield.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.25,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 14
+  },
+  "source_urls": [
+    "https://www.gardenary.com/blog/the-best-types-of-carrots-to-grow-in-the-kitchen-garden"
+  ]
+}

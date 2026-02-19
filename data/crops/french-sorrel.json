@@ -1,0 +1,47 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440012",
+  "common_name": "French Sorrel",
+  "scientific_name": "Rumex scutatus",
+  "category": "herb",
+  "varieties": ["French Sorrel", "Red-Veined Sorrel (R. sanguineus)", "Garden Sorrel (R. acetosa)"],
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 60,
+    "spacing_inches": 12,
+    "row_spacing_inches": 18,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 50,
+    "optimal_growth_temp_range_f": [60, 70],
+    "max_fruit_set_temp_f": null,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "low",
+    "cold_tolerance_rating": "very_high"
+  },
+  "planting_schedule": {
+    "method": "both",
+    "indoor_start_weeks_before_last_frost": 3,
+    "outdoor_plant_weeks_relative_to_last_frost": -3,
+    "succession_planting_interval_weeks": null,
+    "fall_planting_weeks_before_first_frost": 8
+  },
+  "yield_info": {
+    "avg_yield_per_plant": 1,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 120
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Perennial herb (Zones 3-9) with lemony, tangy leaves. First to harvest in spring. Bolt-resistant in cool weather. French sorrel preferred for culinary use. Spreads readily. Cooking reduces tartness. Rich in vitamin C.",
+  "source_urls": [
+    "https://extension.umn.edu/vegetables/growing-sorrel",
+    "https://harvesttotable.com/how_to_grow_sorrel/",
+    "https://ucanr.edu/site/uc-master-gardeners-santa-clara-county/sorrel"
+  ]
+}

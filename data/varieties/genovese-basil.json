@@ -1,0 +1,38 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440107",
+  "variety_name": "Genovese Compact Improved",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440009",
+  "common_name": "Genovese Basil",
+  "scientific_name": "Ocimum basilicum",
+  "seed_type": "open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 74,
+    "spacing_inches": 12,
+    "row_spacing_inches": 18,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "daily"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 70,
+    "optimal_growth_temp_range_f": [70, 90],
+    "heat_tolerance_rating": "high"
+  },
+  "growth_habit": "compact",
+  "fruit_size": null,
+  "fruit_description": null,
+  "disease_resistance": [],
+  "flavor_profile": "Classic Italian basil flavor. Sweet, aromatic, slightly spicy",
+  "best_uses": ["pesto", "italian_cuisine", "fresh_eating", "containers"],
+  "special_characteristics": "Compact Genovese basil ideal for home gardens and containers. Plants reach 16-18 inches tall. Classic large, cupped leaves with sweet aroma. Pinch flowers to promote leaf production.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.3,
+    "avg_yield_per_foot": null,
+    "yield_unit": "bunches",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://www.johnnyseeds.com/on/demandware.static/-/Library-Sites-JSSSharedLibrary/default/dw73a0a58a/assets/information/basil-varieties-comparison-chart.pdf"
+  ]
+}

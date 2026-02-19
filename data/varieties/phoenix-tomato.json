@@ -1,0 +1,38 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440105",
+  "variety_name": "Phoenix",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440002",
+  "common_name": "Phoenix Tomato (Heat-Tolerant)",
+  "scientific_name": "Solanum lycopersicum",
+  "seed_type": "hybrid",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 70,
+    "spacing_inches": 24,
+    "row_spacing_inches": 36,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 60,
+    "optimal_growth_temp_range_f": [75, 95],
+    "heat_tolerance_rating": "very_high"
+  },
+  "growth_habit": "determinate",
+  "fruit_size": "medium",
+  "fruit_description": "8-10 oz firm, meaty fruits",
+  "disease_resistance": ["verticillium_wilt", "fusarium_wilt"],
+  "flavor_profile": "Good tomato flavor for a heat-tolerant variety. Well-balanced",
+  "best_uses": ["fresh_eating", "slicing", "hot_climate_production"],
+  "special_characteristics": "Specifically bred for hot climates (Texas, Arizona, etc). Sets fruit reliably above 90°F. Max fruit set temp 97°F. Determinate habit easier to manage in hot weather.",
+  "yield_info": {
+    "avg_yield_per_plant": 18.0,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 45
+  },
+  "source_urls": [
+    "https://agrilifeextension.tamu.edu/asset-external/easy-gardening-tomatoes/"
+  ]
+}

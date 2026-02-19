@@ -1,0 +1,39 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440031",
+  "variety_name": "Mississippi Silver",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440014",
+  "common_name": "Mississippi Silver Cowpea",
+  "scientific_name": "Vigna unguiculata",
+  "seed_type": "open_pollinated",
+  "growing_info": {
+    "days_to_germination": 8,
+    "days_to_harvest": 65,
+    "spacing_inches": 4,
+    "row_spacing_inches": 36,
+    "depth_inches": 1,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 65,
+    "optimal_growth_temp_range_f": [75, 95],
+    "max_fruit_set_temp_f": 100,
+    "heat_tolerance_rating": "very_high"
+  },
+  "growth_habit": "semi_vining",
+  "fruit_size": null,
+  "fruit_description": null,
+  "flavor_profile": "Creamy, nutty",
+  "disease_resistance": ["fusarium_wilt", "root_knot_nematode", "virus_resistance"],
+  "best_uses": ["fresh", "frozen", "dried", "canning"],
+  "special_characteristics": "Silver-skinned cream pea. Bred by Mississippi Agricultural and Forestry Experiment Station. Multiple disease resistance. Excellent for hot summers.",
+  "yield_info": {
+    "avg_yield_per_plant": 1.5,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "source_urls": [
+    "https://extension.msstate.edu/lawn-and-garden/vegetable-gardens/peas-southern"
+  ]
+}

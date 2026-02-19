@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440153",
+  "variety_name": "Slo-Bolt",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440010",
+  "common_name": "Slo-Bolt Cilantro",
+  "scientific_name": "Coriandrum sativum",
+  "seed_type": "open_pollinated",
+  "growing_info": {
+    "days_to_germination": 8,
+    "days_to_harvest": 50,
+    "spacing_inches": 5,
+    "row_spacing_inches": 18
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "high",
+    "optimal_temp_range": {
+      "min": 60,
+      "max": 80
+    },
+    "frost_tolerance": "light"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Standard cilantro leaves",
+  "flavor_profile": "Classic cilantro flavor - fresh and flavorful",
+  "disease_resistance": [
+    "More bolt-resistant than standard varieties"
+  ],
+  "best_uses": [
+    "Mexican cuisine",
+    "Thai cuisine",
+    "Salsas",
+    "Garnish",
+    "All cilantro uses"
+  ],
+  "special_characteristics": "Easy-to-grow, more bolt-resistant version of standard cilantro. Essential herb for many cuisines. Plant frequent successions just a few weeks apart for continuous fresh cilantro. Takes light frost. Start 3-4 weeks before last frost of spring.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.3,
+    "avg_yield_per_foot": null,
+    "yield_unit": "bunches",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://www.rareseeds.com/cilantro-slo-bolt"
+  ]
+}

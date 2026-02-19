@@ -1,0 +1,59 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440023",
+  "common_name": "Kale",
+  "scientific_name": "Brassica oleracea var. sabellica",
+  "category": "vegetable",
+  "varieties": [],
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 60,
+    "spacing_inches": 12,
+    "row_spacing_inches": 18,
+    "planting_depth_inches": 0.5
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "low",
+    "frost_tolerance_rating": "very_high",
+    "optimal_temp_range": {
+      "min": 50,
+      "max": 75
+    },
+    "frost_tolerance": "Can handle temps down to 28°F; frost improves flavor"
+  },
+  "planting_schedule": {
+    "austin_spring": {
+      "plant_dates": "January - March",
+      "harvest_dates": "March - May",
+      "notes": "Plant in partial shade once temps exceed 85°F; provide shade cloth if needed"
+    },
+    "austin_fall": {
+      "plant_dates": "September - November",
+      "harvest_dates": "November - April",
+      "notes": "Best planting window for Austin; thrives in cool weather"
+    }
+  },
+  "yield_info": {
+    "yield_per_plant": "1-2 lbs over season with cut-and-come-again harvesting",
+    "plants_per_person": "2-3 plants for continuous harvest"
+  },
+  "companion_plants": [
+    "beets",
+    "celery",
+    "cucumbers",
+    "lettuce",
+    "onions",
+    "potatoes",
+    "herbs"
+  ],
+  "antagonist_plants": [
+    "strawberries",
+    "tomatoes",
+    "pole beans"
+  ],
+  "description": "Nutrient-dense leafy green that thrives in cool weather (50-75°F). Very frost tolerant down to 28°F - frost actually improves flavor. Less heat-tolerant than mustard greens; may bolt in Austin summer heat. Provide shade when temps exceed 85°F. Continuous harvest through cut-and-come-again method. One of the healthiest vegetables with high vitamins A, C, K. Best grown fall through spring in Central Texas.",
+  "source_urls": [
+    "https://lettucegrowsomething.com/how-to-grow-kale-in-central-texas/",
+    "https://www.centraltexasgardener.org/resource/kale-varieties/",
+    "https://travis-tx.tamu.edu/about-2/horticulture/edible-gardens-for-austin/vegetable-gardening-in-austin/vegetable-varieties-for-central-texas/"
+  ]
+}

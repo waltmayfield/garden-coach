@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440010",
+  "common_name": "Cilantro",
+  "scientific_name": "Coriandrum sativum",
+  "category": "herb",
+  "varieties": ["Santo", "Calypso", "Slow Bolt", "Leisure"],
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 50,
+    "spacing_inches": 4,
+    "row_spacing_inches": 12,
+    "depth_inches": 0.5,
+    "sun_requirement": "partial_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["2a", "2b", "3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 60,
+    "optimal_growth_temp_range_f": [55, 75],
+    "max_fruit_set_temp_f": null,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "low",
+    "cold_tolerance_rating": "moderate"
+  },
+  "planting_schedule": {
+    "method": "direct_seed",
+    "indoor_start_weeks_before_last_frost": null,
+    "outdoor_plant_weeks_relative_to_last_frost": -2,
+    "succession_planting_interval_weeks": 3,
+    "fall_planting_weeks_before_first_frost": 8
+  },
+  "yield_info": {
+    "avg_yield_per_plant": null,
+    "avg_yield_per_foot": 0.25,
+    "yield_unit": "lbs",
+    "harvest_window_days": 30
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Cool-season herb that bolts quickly in heat. Best grown spring and fall. Plant every 3 weeks for continuous harvest. Allow some to go to seed for coriander spice.",
+  "source_urls": [
+    "https://www.ufseeds.com/herb-growing-guide.html",
+    "https://www.gardenary.com/blog/your-complete-guide-to-harvesting-herbs-from-your-garden"
+  ]
+}

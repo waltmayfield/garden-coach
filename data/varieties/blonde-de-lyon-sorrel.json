@@ -1,0 +1,48 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440164",
+  "variety_name": "Blonde de Lyon",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440012",
+  "common_name": "Blonde de Lyon French Sorrel",
+  "scientific_name": "Rumex acetosa",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 14,
+    "days_to_harvest": 60,
+    "spacing_inches": 12,
+    "row_spacing_inches": 24
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "medium",
+    "optimal_temp_range": {
+      "min": 50,
+      "max": 75
+    },
+    "frost_tolerance": "high"
+  },
+  "growth_habit": "clumping",
+  "fruit_size": "N/A",
+  "fruit_description": "Large, succulent, pale green leaves",
+  "flavor_profile": "Tart, slightly acidic citrusy flavor - lemony tang",
+  "disease_resistance": [
+    "Hardy perennial",
+    "Generally disease free"
+  ],
+  "best_uses": [
+    "Sorrel soup",
+    "Fresh salads",
+    "Cooked like spinach",
+    "Fish dishes (salmon, shad)",
+    "French cuisine"
+  ],
+  "special_characteristics": "Standard variety esteemed in France for sorrel soup. Essential to French cooking. Large, succulent leaves with slightly acidic taste give zest to salads. Very high in Vitamin C, Potassium, and Vitamins A and B1. Hardy perennial (Zones 3-9). Remove flowering tops to keep leaves tender. Divide clumps every 3-4 years. Can be grown in pots.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.3,
+    "avg_yield_per_foot": null,
+    "yield_unit": "bunches",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://thegrowers-exchange.com/products/her-sor01",
+    "https://horticulture.co.uk/sorrel/varieties/"
+  ]
+}

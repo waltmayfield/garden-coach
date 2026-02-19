@@ -1,0 +1,33 @@
+Safety Procedures for Industrial Operations
+
+1. Personal Protective Equipment (PPE)
+   - Hard hats must be worn at all times in designated areas
+   - Safety glasses are required when working with machinery
+   - Steel-toed boots are mandatory on the production floor
+   - Hearing protection must be used in high-noise areas
+
+2. Emergency Procedures
+   - In case of fire, activate the nearest fire alarm
+   - Evacuate using the designated emergency exits
+   - Assemble at the designated muster point
+   - Do not re-enter the building until cleared by safety personnel
+
+3. Equipment Operation
+   - Only trained and authorized personnel may operate machinery
+   - Perform pre-operation safety checks before starting equipment
+   - Report any equipment malfunctions immediately
+   - Follow lockout/tagout procedures during maintenance
+
+4. Hazardous Materials
+   - Consult Safety Data Sheets (SDS) before handling chemicals
+   - Use appropriate PPE when working with hazardous materials
+   - Store chemicals in designated areas with proper labeling
+   - Report spills immediately to the safety coordinator
+
+5. Incident Reporting
+   - Report all incidents, near-misses, and unsafe conditions
+   - Complete incident reports within 24 hours
+   - Cooperate with safety investigations
+   - Participate in corrective action implementation
+
+This document is part of the company's safety management system and should be reviewed regularly by all personnel.

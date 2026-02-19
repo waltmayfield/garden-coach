@@ -1,0 +1,39 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440102",
+  "variety_name": "Sungold",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440001",
+  "common_name": "Sungold Cherry Tomato",
+  "scientific_name": "Solanum lycopersicum",
+  "seed_type": "hybrid",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 62,
+    "spacing_inches": 24,
+    "row_spacing_inches": 36,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 60,
+    "optimal_growth_temp_range_f": [70, 85],
+    "heat_tolerance_rating": "moderate"
+  },
+  "growth_habit": "indeterminate",
+  "fruit_size": "small",
+  "fruit_description": "1 oz gold-orange cherry tomato, juicy",
+  "disease_resistance": [],
+  "flavor_profile": "Exceptionally sweet, fruity, tropical. Among the sweetest cherry tomatoes available",
+  "best_uses": ["fresh_eating", "snacking", "salads"],
+  "special_characteristics": "Prolific producer in long trusses. Incredibly sweet (9+ Brix). Prone to cracking after heavy rain. America's #1 taste-test winning cherry tomato. Max fruit set temp 90°F.",
+  "yield_info": {
+    "avg_yield_per_plant": 20.0,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://www.johnnyseeds.com/vegetables/tomatoes/cherry-tomatoes/sun-gold-f1-tomato-seed-770.html",
+    "https://fafard.com/tag/tomatoes/"
+  ]
+}

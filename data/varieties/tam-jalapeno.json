@@ -1,0 +1,50 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440154",
+  "variety_name": "TAM Jalapeño",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440004",
+  "common_name": "TAM Jalapeño Pepper",
+  "scientific_name": "Capsicum annuum",
+  "seed_type": "open_pollinated",
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 65,
+    "spacing_inches": 18,
+    "row_spacing_inches": 24
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "very_high",
+    "optimal_temp_range": {
+      "min": 70,
+      "max": 95
+    },
+    "frost_tolerance": "none"
+  },
+  "growth_habit": "compact",
+  "fruit_size": "2.5-3 inches",
+  "fruit_description": "Classic jalapeño shape, green to red at maturity",
+  "flavor_profile": "Milder than standard jalapeño - 1,000-1,500 Scovilles, classic jalapeño flavor",
+  "disease_resistance": [
+    "Resistant to 6 types of viruses",
+    "Very disease resistant",
+    "Heat tolerant"
+  ],
+  "best_uses": [
+    "Fresh eating",
+    "Salsas",
+    "Pickling",
+    "Grilling",
+    "Cooking"
+  ],
+  "special_characteristics": "Developed by Texas A&M for disease resistance and heat tolerance. Milder heat (1,000-1,500 Scovilles) than traditional jalapeños but retains classic flavor. Very productive early variety. Excellent for Texas gardens. Resistant to multiple viral diseases.",
+  "yield_info": {
+    "avg_yield_per_plant": 3.0,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 70
+  },
+  "source_urls": [
+    "https://www.sandiaseed.com/blogs/news/disease-resistant-peppers",
+    "https://growhotpeppers.com/jalapeno-pepper-varieties/",
+    "https://aggie-horticulture.tamu.edu/wp-content/uploads/sites/12/2011/03/E-515_peppers.pdf"
+  ]
+}

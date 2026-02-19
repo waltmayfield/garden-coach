@@ -1,0 +1,47 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440156",
+  "variety_name": "Southern Giant Curled",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440022",
+  "common_name": "Southern Giant Curled Mustard",
+  "scientific_name": "Brassica juncea",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 50,
+    "spacing_inches": 6,
+    "row_spacing_inches": 18
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "medium",
+    "optimal_temp_range": {
+      "min": 45,
+      "max": 75
+    },
+    "frost_tolerance": "light"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Large, curled bright green leaves",
+  "flavor_profile": "Traditional spicy 'mustard green' flavor - peppery and bold",
+  "disease_resistance": [
+    "Tolerates light frost",
+    "Heat tolerant for mustard greens"
+  ],
+  "best_uses": [
+    "Cooked greens (Southern-style)",
+    "Fresh in salads (young leaves)",
+    "Stir-fries",
+    "Braising"
+  ],
+  "special_characteristics": "All-America Selections Winner. Old Florida favorite and standard mustard variety grown for decades. Heavy yields of large, crisp curled leaves. Holds well in late spring without getting bitter as temperatures warm. Light frost sweetens leaves. Broad leaf variety needs extra space. Harvest from outside leaves inward.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.75,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "source_urls": [
+    "https://flseeds.com/product/southern-giant-curled-mustard-300-seeds/",
+    "https://growhoss.com/products/southern-giant-curled-mustard"
+  ]
+}

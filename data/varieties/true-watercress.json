@@ -1,0 +1,48 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440161",
+  "variety_name": "True Watercress",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440013",
+  "common_name": "True Watercress",
+  "scientific_name": "Nasturtium officinale",
+  "seed_type": "open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 50,
+    "spacing_inches": 8,
+    "row_spacing_inches": 12
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "low",
+    "optimal_temp_range": {
+      "min": 50,
+      "max": 70
+    },
+    "frost_tolerance": "moderate"
+  },
+  "growth_habit": "creeping",
+  "fruit_size": "N/A",
+  "fruit_description": "Small, oval dark green leaves with wavy edges",
+  "flavor_profile": "Fresh peppery taste - crisp and spicy like mustard family",
+  "disease_resistance": [
+    "Generally pest and disease free when grown in clean water"
+  ],
+  "best_uses": [
+    "Fresh salads",
+    "Sandwiches",
+    "Garnishes",
+    "Soups",
+    "Microgreens"
+  ],
+  "special_characteristics": "Delicious highly nutritious semi-aquatic herb. Creeping perennial with edible oval, wavy-edged rich dark green leaves. Grows rapidly in damp soil or can be grown in pots placed in tub of water (change weekly). Prefers cool spring weather. One of oldest cultivated leafy greens. Plant in early spring, harvest before summer heat. Small white flowers late spring to midsummer.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.3,
+    "avg_yield_per_foot": null,
+    "yield_unit": "bunches",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://www.ufseeds.com/product/true-watercress-cress-seed---1%2F4-ounce/GRTWC-1_4-ounce.html",
+    "https://www.thespruce.com/how-to-grow-watercress-7965923",
+    "https://www.almanac.com/plant/watercress"
+  ]
+}

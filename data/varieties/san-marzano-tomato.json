@@ -1,0 +1,38 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440103",
+  "variety_name": "San Marzano II",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440001",
+  "common_name": "San Marzano Paste Tomato",
+  "scientific_name": "Solanum lycopersicum",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 80,
+    "spacing_inches": 24,
+    "row_spacing_inches": 36,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 60,
+    "optimal_growth_temp_range_f": [70, 85],
+    "heat_tolerance_rating": "moderate"
+  },
+  "growth_habit": "indeterminate",
+  "fruit_size": "medium",
+  "fruit_description": "3-4 oz elongated paste tomato, meaty with few seeds",
+  "disease_resistance": [],
+  "flavor_profile": "Classic Italian tomato flavor, rich and sweet. Low acid",
+  "best_uses": ["sauce", "paste", "canning", "drying"],
+  "special_characteristics": "Classic Italian paste tomato from San Marzano region. Gold standard for sauce making. Vigorous vines produce heavily. Max fruit set temp 90°F.",
+  "yield_info": {
+    "avg_yield_per_plant": 15.0,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 70
+  },
+  "source_urls": [
+    "https://www.johnnyseeds.com/vegetables/tomatoes/heirloom-tomatoes/san-marzano-ii-organic-tomato-seed-3405G.html"
+  ]
+}

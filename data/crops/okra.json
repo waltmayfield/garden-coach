@@ -1,0 +1,45 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440008",
+  "common_name": "Okra",
+  "scientific_name": "Abelmoschus esculentus",
+  "category": "vegetable",
+  "varieties": ["Clemson Spineless", "Burgundy", "Annie Oakley II", "Cajun Delight"],
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 55,
+    "spacing_inches": 12,
+    "row_spacing_inches": 36,
+    "depth_inches": 0.5,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 70,
+    "optimal_growth_temp_range_f": [75, 95],
+    "max_fruit_set_temp_f": 105,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "very_high",
+    "cold_tolerance_rating": "very_low"
+  },
+  "planting_schedule": {
+    "method": "direct_seed",
+    "indoor_start_weeks_before_last_frost": null,
+    "outdoor_plant_weeks_relative_to_last_frost": 3,
+    "succession_planting_interval_weeks": null,
+    "fall_planting_weeks_before_first_frost": null
+  },
+  "yield_info": {
+    "avg_yield_per_plant": 5,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Heat-loving summer crop perfect for hot climates like Austin. Thrives in temperatures above 90°F. Harvest pods when 2-4 inches long for best tenderness.",
+  "source_urls": [
+    "https://extension.uga.edu/publications/detail.html?number=C627"
+  ]
+}

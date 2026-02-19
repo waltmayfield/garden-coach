@@ -1,0 +1,48 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440150",
+  "variety_name": "Green Calaloo",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440019",
+  "common_name": "Green Calaloo Amaranth",
+  "scientific_name": "Amaranthus spp.",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 30,
+    "spacing_inches": 12,
+    "row_spacing_inches": 18
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "very_high",
+    "optimal_temp_range": {
+      "min": 70,
+      "max": 95
+    },
+    "frost_tolerance": "none"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Light green leaves",
+  "flavor_profile": "Tangy, spinach-like flavor with mild peppery notes",
+  "disease_resistance": [
+    "Generally disease-free",
+    "Drought tolerant"
+  ],
+  "best_uses": [
+    "Fresh salads",
+    "Stir-fries",
+    "Soups (Calaloo Seafood Soup)",
+    "Stews",
+    "Summer greens substitute for spinach"
+  ],
+  "special_characteristics": "Popular green vegetable in Caribbean cuisine, especially for Calaloo Seafood Soup. Easy to grow in warm weather when other greens bolt. Fast-growing and productive. Highly nutritious summer green high in protein, fiber, and minerals.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.75,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "source_urls": [
+    "https://www.smartgardener.com/plants/1573-amaranth-green-calaloo/overview",
+    "https://thewoodlandstownshipblog-environment.com/2025/05/08/heat-tolerant-plants-for-the-summer-garden/"
+  ]
+}

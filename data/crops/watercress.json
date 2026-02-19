@@ -1,0 +1,45 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440013",
+  "common_name": "Watercress",
+  "scientific_name": "Nasturtium officinale",
+  "category": "vegetable",
+  "varieties": ["True Watercress", "Upland Cress (Barbarea verna)"],
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 50,
+    "spacing_inches": 6,
+    "row_spacing_inches": 12,
+    "depth_inches": 0.125,
+    "sun_requirement": "partial_sun",
+    "water_frequency": "daily",
+    "hardiness_zones": ["3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 50,
+    "optimal_growth_temp_range_f": [55, 70],
+    "max_fruit_set_temp_f": null,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "very_low",
+    "cold_tolerance_rating": "high"
+  },
+  "planting_schedule": {
+    "method": "both",
+    "indoor_start_weeks_before_last_frost": 4,
+    "outdoor_plant_weeks_relative_to_last_frost": -4,
+    "succession_planting_interval_weeks": 3,
+    "fall_planting_weeks_before_first_frost": 8
+  },
+  "yield_info": {
+    "avg_yield_per_plant": null,
+    "avg_yield_per_foot": 0.25,
+    "yield_unit": "lbs",
+    "harvest_window_days": 40
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Cool-season perennial green with peppery flavor. Prefers consistently moist soil or shallow water. Can grow in containers with frequent watering. Bolts in heat. Best spring and fall. Rich in vitamins A, C, K.",
+  "source_urls": [
+    "https://www.rhs.org.uk/herbs/watercress/grow-your-own"
+  ]
+}

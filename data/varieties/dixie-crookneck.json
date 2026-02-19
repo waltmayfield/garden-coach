@@ -1,0 +1,40 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440026",
+  "variety_name": "Dixie",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440017",
+  "common_name": "Dixie Crookneck Squash",
+  "scientific_name": "Cucurbita pepo",
+  "seed_type": "hybrid",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 41,
+    "spacing_inches": 24,
+    "row_spacing_inches": 48,
+    "depth_inches": 1,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 70,
+    "optimal_growth_temp_range_f": [70, 85],
+    "max_fruit_set_temp_f": 95,
+    "heat_tolerance_rating": "high"
+  },
+  "growth_habit": "bush",
+  "fruit_size": "small_to_medium",
+  "fruit_description": "Uniform shiny lemon-yellow crookneck",
+  "flavor_profile": "Mild, buttery",
+  "disease_resistance": [],
+  "best_uses": ["grilling", "sautéing", "fresh"],
+  "special_characteristics": "Very early, highly productive, vigorous. Tastiest when 4-6 inches long.",
+  "yield_info": {
+    "avg_yield_per_plant": 15.0,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "source_urls": [
+    "https://www.ufseeds.com/product/dixie-f1-squash-seeds/",
+    "https://www.holmesseed.com/dixie-f1/"
+  ]
+}

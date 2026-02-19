@@ -1,0 +1,39 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440025",
+  "variety_name": "Ambassador",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440016",
+  "common_name": "Ambassador Zucchini",
+  "scientific_name": "Cucurbita pepo",
+  "seed_type": "hybrid",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 47,
+    "spacing_inches": 18,
+    "row_spacing_inches": 48,
+    "depth_inches": 1,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 70,
+    "optimal_growth_temp_range_f": [70, 85],
+    "max_fruit_set_temp_f": 95,
+    "heat_tolerance_rating": "high"
+  },
+  "growth_habit": "compact_bush",
+  "fruit_size": "medium",
+  "fruit_description": "Medium-green skin flecked with gold, smooth and uniform. White flesh, crisp",
+  "flavor_profile": "Crisp, mild",
+  "disease_resistance": [],
+  "best_uses": ["fresh", "sautéing", "grilling"],
+  "special_characteristics": "Best yielder. Open plant for ease of picking. Harvest at 6-8 inches.",
+  "yield_info": {
+    "avg_yield_per_plant": 15.0,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "source_urls": [
+    "https://seedsnsuch.com/products/ambassador-hybrid-zucchini-squash-seeds"
+  ]
+}

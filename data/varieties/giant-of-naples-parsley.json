@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440159",
+  "variety_name": "Giant of Naples",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440011",
+  "common_name": "Giant of Naples Parsley",
+  "scientific_name": "Petroselinum crispum",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 18,
+    "days_to_harvest": 75,
+    "spacing_inches": 6,
+    "row_spacing_inches": 12
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "medium",
+    "optimal_temp_range": {
+      "min": 50,
+      "max": 80
+    },
+    "frost_tolerance": "moderate"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Large flat leaves on strong, long stalks",
+  "flavor_profile": "Exceptional bold, savory Italian parsley flavor",
+  "disease_resistance": [
+    "Cold hardy - can overwinter in most US areas"
+  ],
+  "best_uses": [
+    "Italian sauces",
+    "Soups",
+    "Salads",
+    "Garnishes",
+    "Fresh or dried"
+  ],
+  "special_characteristics": "Heirloom Italian flat-leaf variety with exceptionally large leaves. Known for robust flavor superior to curly varieties. Grows on strong, long stalks with vigorous regrowth after cutting. Cold-hardy and can overwinter in most US areas. High-yielding variety perfect for Italian cuisine.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.3,
+    "avg_yield_per_foot": null,
+    "yield_unit": "bunches",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://www.growitalian.com/products/parsley-gigante-di-napoli-108-2"
+  ]
+}

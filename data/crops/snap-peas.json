@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440015",
+  "common_name": "Snap Peas (Garden Peas)",
+  "scientific_name": "Pisum sativum",
+  "category": "vegetable",
+  "varieties": ["Sugar Snap", "Sugar Ann", "Super Sugar Snap", "Cascadia", "Sugar Sprint"],
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 60,
+    "spacing_inches": 2,
+    "row_spacing_inches": 18,
+    "depth_inches": 1,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["2a", "2b", "3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 40,
+    "optimal_growth_temp_range_f": [55, 70],
+    "max_fruit_set_temp_f": 75,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "very_low",
+    "cold_tolerance_rating": "very_high"
+  },
+  "planting_schedule": {
+    "method": "direct_seed",
+    "indoor_start_weeks_before_last_frost": null,
+    "outdoor_plant_weeks_relative_to_last_frost": -6,
+    "succession_planting_interval_weeks": 2,
+    "fall_planting_weeks_before_first_frost": 10
+  },
+  "yield_info": {
+    "avg_yield_per_plant": null,
+    "avg_yield_per_foot": 0.5,
+    "yield_unit": "lbs",
+    "harvest_window_days": 21
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Cool-season crop for spring and fall planting. Edible pods and peas. Sweet, crisp flavor. Plant 4-6 weeks before last frost. Dies in summer heat. Bush and climbing varieties available. Great for succession planting.",
+  "source_urls": [
+    "https://www.johnnyseeds.com/growers-library/vegetables/peas/",
+    "https://yardandgarden.extension.iastate.edu/how-to/vegetable-growing-guides"
+  ]
+}

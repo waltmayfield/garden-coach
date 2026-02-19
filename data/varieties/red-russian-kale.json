@@ -1,0 +1,48 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440166",
+  "variety_name": "Red Russian",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440023",
+  "common_name": "Red Russian Kale",
+  "scientific_name": "Brassica oleracea var. sabellica",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 55,
+    "spacing_inches": 12,
+    "row_spacing_inches": 18
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "low",
+    "optimal_temp_range": {
+      "min": 45,
+      "max": 70
+    },
+    "frost_tolerance": "very_high"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Flat, oak-shaped leaves with purple-red veins and stems",
+  "flavor_profile": "Mild, sweet flavor - sweetens noticeably after frost",
+  "disease_resistance": [
+    "Cold hardy",
+    "Pest resistant"
+  ],
+  "best_uses": [
+    "Fresh salads (very tender)",
+    "Sautéing",
+    "Smoothies",
+    "Braising",
+    "Juicing"
+  ],
+  "special_characteristics": "Beautiful variety with flat, oak-shaped leaves featuring striking purple-red veins. Tender texture makes it excellent for raw eating. Sweetens noticeably after frost. One of the most cold-hardy kale varieties - outlasts others into early spring. Very mild flavor compared to other kales. Fast-growing at 55 days. Recommended for Central Texas gardens.",
+  "yield_info": {
+    "avg_yield_per_plant": 1.2,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 90
+  },
+  "source_urls": [
+    "https://www.centraltexasgardener.org/resource/kale-varieties/",
+    "https://harvesttotable.com/best-kale-varieties-for-different-climates/"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440108",
+  "variety_name": "Blue Lake 274",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440006",
+  "common_name": "Blue Lake Bush Bean",
+  "scientific_name": "Phaseolus vulgaris",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 8,
+    "days_to_harvest": 55,
+    "spacing_inches": 3,
+    "row_spacing_inches": 30,
+    "depth_inches": 1.5,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 60,
+    "optimal_growth_temp_range_f": [65, 85],
+    "heat_tolerance_rating": "moderate"
+  },
+  "growth_habit": "bush",
+  "fruit_size": "medium",
+  "fruit_description": "5-6 inch dark green pods, crisp, tender, stringless",
+  "disease_resistance": ["bean_mosaic_virus"],
+  "flavor_profile": "Classic green bean flavor. Tender and sweet",
+  "best_uses": ["fresh_eating", "freezing", "canning"],
+  "special_characteristics": "Popular bush bean variety. Compact plants need no staking. Heavy yields over concentrated harvest period. Excellent for succession planting every 2 weeks.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.5,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 50
+  },
+  "source_urls": [
+    "https://extension.uga.edu/publications/detail.html?number=C1006",
+    "https://hgic.clemson.edu/factsheet/bush-pole-type-snap-beans/"
+  ]
+}

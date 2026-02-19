@@ -1,0 +1,48 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440165",
+  "variety_name": "Lacinato",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440023",
+  "common_name": "Lacinato Kale (Dinosaur Kale, Tuscan Kale)",
+  "scientific_name": "Brassica oleracea var. sabellica",
+  "seed_type": "heirloom_open_pollinated",
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 62,
+    "spacing_inches": 12,
+    "row_spacing_inches": 18
+  },
+  "temperature_tolerance": {
+    "heat_tolerance_rating": "low",
+    "optimal_temp_range": {
+      "min": 50,
+      "max": 75
+    },
+    "frost_tolerance": "very_high"
+  },
+  "growth_habit": "upright",
+  "fruit_size": "N/A",
+  "fruit_description": "Long, narrow, dark blue-green leaves with bumpy texture",
+  "flavor_profile": "Deep, earthy, slightly sweet flavor - develops sweetness in cool weather",
+  "disease_resistance": [
+    "Slow to bolt in mild winters",
+    "Generally pest resistant"
+  ],
+  "best_uses": [
+    "Salads (raw when young)",
+    "Sautéing",
+    "Soups",
+    "Braising",
+    "Italian cuisine"
+  ],
+  "special_characteristics": "Also called Dinosaur Kale or Tuscan Kale. Most popular variety with distinctive dark blue-green, bumpy textured leaves. Slow to bolt, perfect for year-round picking in mild climates. Survives frost well and develops deep earthy sweetness in cool weather. Tender texture compared to curly varieties. Best kale for Central Texas according to gardeners.",
+  "yield_info": {
+    "avg_yield_per_plant": 1.0,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 75
+  },
+  "source_urls": [
+    "https://www.centraltexasgardener.org/resource/kale-varieties/",
+    "https://harvesttotable.com/best-kale-varieties-for-different-climates/"
+  ]
+}

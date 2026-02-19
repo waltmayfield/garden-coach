@@ -1,0 +1,39 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440036",
+  "variety_name": "Sugar Sprint",
+  "parent_crop_id": "550e8400-e29b-41d4-a716-446655440015",
+  "common_name": "Sugar Sprint Snap Pea",
+  "scientific_name": "Pisum sativum",
+  "seed_type": "hybrid",
+  "growing_info": {
+    "days_to_germination": 10,
+    "days_to_harvest": 58,
+    "spacing_inches": 2,
+    "row_spacing_inches": 18,
+    "depth_inches": 1,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days"
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 40,
+    "optimal_growth_temp_range_f": [55, 70],
+    "max_fruit_set_temp_f": 75,
+    "heat_tolerance_rating": "very_low"
+  },
+  "growth_habit": "dwarf_vining",
+  "fruit_size": "medium",
+  "fruit_description": "Sweet, stringless pods",
+  "flavor_profile": "Excellent flavor, sweetest of newer snap peas",
+  "disease_resistance": ["powdery_mildew"],
+  "best_uses": ["fresh", "salads"],
+  "special_characteristics": "Earliest sugar snap. Practically stringless. Short vines need little to no support. Best flavor of post-Sugar Ann varieties. High powdery mildew resistance.",
+  "yield_info": {
+    "avg_yield_per_plant": 0.25,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 50
+  },
+  "source_urls": [
+    "https://www.superseeds.com/products/sugar-sprint-pea-58-days"
+  ]
+}

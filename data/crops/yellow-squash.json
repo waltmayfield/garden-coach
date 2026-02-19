@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440017",
+  "common_name": "Yellow Squash",
+  "scientific_name": "Cucurbita pepo",
+  "category": "vegetable",
+  "varieties": ["Dixie", "Early Prolific", "Multipik", "Goldbar", "Butterbar", "Early Summer", "Sunray"],
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 50,
+    "spacing_inches": 24,
+    "row_spacing_inches": 48,
+    "depth_inches": 1,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 70,
+    "optimal_growth_temp_range_f": [70, 85],
+    "max_fruit_set_temp_f": 95,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "high",
+    "cold_tolerance_rating": "very_low"
+  },
+  "planting_schedule": {
+    "method": "direct_seed",
+    "indoor_start_weeks_before_last_frost": 2,
+    "outdoor_plant_weeks_relative_to_last_frost": 1,
+    "succession_planting_interval_weeks": 3,
+    "fall_planting_weeks_before_first_frost": 12
+  },
+  "yield_info": {
+    "avg_yield_per_plant": 10,
+    "avg_yield_per_foot": null,
+    "yield_unit": "lbs",
+    "harvest_window_days": 45
+  },
+  "companion_plants": ["beans", "corn", "peas"],
+  "antagonist_plants": ["potatoes"],
+  "image_url": null,
+  "description": "Bright yellow summer squash with mild, buttery flavor. Includes crookneck and straightneck varieties. Harvest young at 4-6 inches. Excellent for grilling and sautéing. Plant in spring or late summer to avoid peak pest pressure.",
+  "source_urls": [
+    "https://aggie-horticulture.tamu.edu/vegetable/wp-content/uploads/sites/10/2011/10/squash.pdf",
+    "https://agrilifeextension.tamu.edu/asset-external/easy-gardening-squash/"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440019",
+  "common_name": "Amaranth (Greens)",
+  "scientific_name": "Amaranthus spp.",
+  "category": "vegetable",
+  "varieties": ["Red Garnet", "Green Callaloo", "Tampala", "Joseph's Coat"],
+  "growing_info": {
+    "days_to_germination": 7,
+    "days_to_harvest": 30,
+    "spacing_inches": 12,
+    "row_spacing_inches": 18,
+    "depth_inches": 0.25,
+    "sun_requirement": "full_sun",
+    "water_frequency": "every_2_days",
+    "hardiness_zones": ["3a", "3b", "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b"]
+  },
+  "temperature_tolerance": {
+    "min_germination_temp_f": 65,
+    "optimal_growth_temp_range_f": [75, 95],
+    "max_fruit_set_temp_f": null,
+    "max_night_temp_for_fruit_set_f": null,
+    "heat_tolerance_rating": "very_high",
+    "cold_tolerance_rating": "very_low"
+  },
+  "planting_schedule": {
+    "method": "direct_seed",
+    "indoor_start_weeks_before_last_frost": null,
+    "outdoor_plant_weeks_relative_to_last_frost": 2,
+    "succession_planting_interval_weeks": 2,
+    "fall_planting_weeks_before_first_frost": null
+  },
+  "yield_info": {
+    "avg_yield_per_plant": null,
+    "avg_yield_per_foot": 0.5,
+    "yield_unit": "lbs",
+    "harvest_window_days": 60
+  },
+  "companion_plants": [],
+  "antagonist_plants": [],
+  "image_url": null,
+  "description": "Nutritious summer green thriving in hot, humid weather. High protein, fiber, minerals. Drought tolerant. Slightly bitter flavor—mix in salads or sauté. Can mature for grain harvest. Perfect Austin summer green. Easy to grow.",
+  "source_urls": [
+    "https://thewoodlandstownshipblog-environment.com/2025/05/08/heat-tolerant-plants-for-the-summer-garden/",
+    "https://fafard.com/heat-tolerant-greens-for-summer/"
+  ]
+}
