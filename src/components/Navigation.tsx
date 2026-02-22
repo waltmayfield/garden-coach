@@ -12,7 +12,7 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import UserMenu from './UserMenu';
-import { Home, Plus, List, MessageSquare, Settings } from 'lucide-react';
+import { Home, Plus, List, MessageSquare, Settings, Sprout, Leaf } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { createChat } from '@/../utils/chatStore';
 
@@ -23,6 +23,8 @@ export default function Navigation() {
 
   const navItems = [
     { href: '/app', label: 'Home', icon: Home },
+    { href: '/gardens', label: 'Gardens', icon: Leaf },
+    { href: '/planner', label: 'Planner', icon: Sprout },
     { href: '/chat', label: 'Chat', icon: MessageSquare },
     { href: '/chats', label: 'Chat History', icon: List },
     { href: '/settings', label: 'Settings', icon: Settings },

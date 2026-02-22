@@ -26,7 +26,7 @@ import {
   PromptInputFooter,
   PromptInputTools,
 } from '@/components/ai-elements/prompt-input';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { AgentCoreChatTransport } from '@/lib/agentCoreTransport';
 import {
@@ -45,6 +45,10 @@ import { useChatPersistence } from '@/components/chat/useChatPersistence';
 
 const models: { name: string, id: string }[] = [
   {
+    name: 'Claude Haiku 4.5',
+    id: 'us.anthropic.claude-haiku-4-5-20251001-v1:0'
+  },
+  {
     name: 'Claude Sonnet 4.5',
     id: 'us.anthropic.claude-sonnet-4-5-20250929-v1:0'
   },
@@ -57,10 +61,6 @@ const models: { name: string, id: string }[] = [
     id: 'us.amazon.nova-premier-v1:0'
   },
   {
-    name: 'Claude Haiku 4.5',
-    id: 'us.anthropic.claude-haiku-4-5-20251001-v1:0'
-  },
-  {
     name: 'Lamma3 70B Instruct',
     id: 'meta.llama3-70b-instruct-v1:0',
   },
@@ -68,11 +68,13 @@ const models: { name: string, id: string }[] = [
 
 interface ChatBoxProps {
   chatSessionId: string;
+  initialPrompt?: string;
 }
 
-export const ChatBox = ({ chatSessionId }: ChatBoxProps) => {
+export const ChatBox = ({ chatSessionId, initialPrompt }: ChatBoxProps) => {
   const [input, setInput] = useState('');
   const [model, setModel] = useState<string>(models[0].id);
+  const initialPromptSentRef = useRef(false);
 
   const { messages, setMessages, sendMessage, status, error, regenerate } = useChat({
     transport: new AgentCoreChatTransport(),
@@ -116,6 +118,26 @@ export const ChatBox = ({ chatSessionId }: ChatBoxProps) => {
   const handleSuggestionClick = (suggestion: string) => {
     setInput(suggestion);
   };
+
+  useEffect(() => {
+    if (!initialPrompt || initialPromptSentRef.current) return;
+
+    initialPromptSentRef.current = true;
+    sendMessage(
+      {
+        text: initialPrompt,
+        metadata: {
+          createdAt: new Date().toISOString(),
+        },
+      },
+      {
+        body: {
+          modelId: model,
+          chatSessionId,
+        },
+      }
+    );
+  }, [initialPrompt, sendMessage, model, chatSessionId]);
 
   return (
     <div className="w-full p-6 relative h-full">

@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight, BookOpen, MessageSquare, Settings } from 'lucide-react';
+import { ArrowRight, BookOpen, MessageSquare, Sprout } from 'lucide-react';
 
 export default function AppHome() {
   const router = useRouter();
@@ -52,14 +52,14 @@ export default function AppHome() {
 
           <Card className="p-6 flex flex-col gap-4">
             <div className="flex items-center gap-3 text-slate-700 dark:text-slate-200">
-              <Settings className="h-5 w-5" />
-              <h2 className="text-lg font-semibold">Settings</h2>
+              <Sprout className="h-5 w-5" />
+              <h2 className="text-lg font-semibold">Planner</h2>
             </div>
             <p className="text-sm text-slate-600 dark:text-slate-300">
-              Configure defaults and preferences for your gardening workflow.
+              Step through your garden plan and preview what changes over time.
             </p>
-            <Button onClick={() => router.push('/settings')} className="mt-auto">
-              Open Settings
+            <Button onClick={() => router.push('/planner')} className="mt-auto">
+              Open Planner
               <ArrowRight />
             </Button>
           </Card>
