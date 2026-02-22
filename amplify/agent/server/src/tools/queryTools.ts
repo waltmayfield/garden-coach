@@ -1,567 +1,268 @@
-import { z } from "zod";
-import { getConfiguredAmplifyClient } from "./amplifyUtils";
+import { tool } from 'ai';
+import { z } from 'zod';
+import { getConfiguredAmplifyClient } from './amplifyUtils';
 
-// GraphQL queries for ActionItems and WorkoverJobs
 const queries = {
-  listActionItems: /* GraphQL */ `
-    query ListActionItems($limit: Int, $nextToken: String) {
-      listActionItems(limit: $limit, nextToken: $nextToken) {
+  listCrops: /* GraphQL */ `
+    query ListCrops($filter: ModelCropFilterInput, $limit: Int, $nextToken: String) {
+      listCrops(filter: $filter, limit: $limit, nextToken: $nextToken) {
         items {
           id
-          alertId
+          commonName
+          scientificName
+          category
+          growingInfo
+          temperatureTolerance
+          plantingSchedule
+          yieldInfo
+          description
+          imageUrl
+        }
+        nextToken
+      }
+    }
+  `,
+  getCrop: /* GraphQL */ `
+    query GetCrop($id: ID!) {
+      getCrop(id: $id) {
+        id
+        commonName
+        scientificName
+        category
+        growingInfo
+        temperatureTolerance
+        plantingSchedule
+        yieldInfo
+        description
+        imageUrl
+      }
+    }
+  `,
+  listVarieties: /* GraphQL */ `
+    query ListVarieties($filter: ModelVarietyFilterInput, $limit: Int, $nextToken: String) {
+      listVarieties(filter: $filter, limit: $limit, nextToken: $nextToken) {
+        items {
+          id
+          cropId
+          varietyName
+          commonName
+          seedType
+          growingInfo
+          temperatureTolerance
+          growthHabit
+          yieldInfo
+        }
+        nextToken
+      }
+    }
+  `,
+  getVariety: /* GraphQL */ `
+    query GetVariety($id: ID!) {
+      getVariety(id: $id) {
+        id
+        cropId
+        varietyName
+        commonName
+        scientificName
+        seedType
+        growingInfo
+        temperatureTolerance
+        growthHabit
+        fruitSize
+        fruitDescription
+        flavorProfile
+        diseaseResistance
+        bestUses
+        specialCharacteristics
+        yieldInfo
+        sourceUrls
+      }
+    }
+  `,
+  listGardens: /* GraphQL */ `
+    query ListGardens($filter: ModelGardenFilterInput, $limit: Int, $nextToken: String) {
+      listGardens(filter: $filter, limit: $limit, nextToken: $nextToken) {
+        items {
+          id
+          name
+          description
           type
-          action
-          description
-          expectedValue
-          risk
-          status
-          source
-          createdAt
-          updatedAt
+          coordinateSystem
+          yAxisDegrees
+          defaultViewRotationDegrees
+          isActive
         }
         nextToken
       }
     }
   `,
-  getActionItem: /* GraphQL */ `
-    query GetActionItem($id: ID!) {
-      getActionItem(id: $id) {
-        id
-        alertId
-        type
-        action
-        description
-        expectedValue
-        risk
-        status
-        source
-        createdAt
-        updatedAt
-      }
-    }
-  `,
-  listWorkoverJobs: /* GraphQL */ `
-    query ListWorkoverJobs($limit: Int, $nextToken: String) {
-      listWorkoverJobs(limit: $limit, nextToken: $nextToken) {
+  listPlantingPlans: /* GraphQL */ `
+    query ListPlantingPlans($filter: ModelPlantingPlanFilterInput, $limit: Int, $nextToken: String) {
+      listPlantingPlans(filter: $filter, limit: $limit, nextToken: $nextToken) {
         items {
           id
-          wellName
-          location
-          jobType
-          priority
-          status
-          estimatedDuration
-          scheduledDate
-          rigAssigned
-          description
-          estimatedCost
-          financialMetrics {
-            incrementalOilBOPD
-            incrementalGasMCFD
-            presentValue
-            rateOfReturn
-            paybackMonths
-          }
-          createdAt
-          updatedAt
+          gardenId
+          name
+          season
+          year
+          isTemplate
+          isActive
+          previewStartDate
+          notes
         }
         nextToken
       }
     }
   `,
-  getWorkoverJob: /* GraphQL */ `
-    query GetWorkoverJob($id: ID!) {
-      getWorkoverJob(id: $id) {
-        id
-        wellName
-        location
-        jobType
-        priority
-        status
-        estimatedDuration
-        scheduledDate
-        rigAssigned
-        description
-        estimatedCost
-        financialMetrics {
-          incrementalOilBOPD
-          incrementalGasMCFD
-          presentValue
-          rateOfReturn
-          paybackMonths
+  listPlanSteps: /* GraphQL */ `
+    query ListPlanSteps($filter: ModelPlanStepFilterInput, $limit: Int, $nextToken: String) {
+      listPlanSteps(filter: $filter, limit: $limit, nextToken: $nextToken) {
+        items {
+          id
+          plantingPlanId
+          gardenId
+          stepNumber
+          actionType
+          status
+          effectiveDate
+          title
+          description
+          target
+          delta
         }
-        createdAt
-        updatedAt
+        nextToken
       }
     }
-  `
+  `,
 };
 
-// GraphQL mutation for executing Athena queries
-const executeAthenaQueryMutation = /* GraphQL */ `
-  mutation ExecuteAthenaQuery(
-    $queryString: String
-    $database: String
-    $outputLocation: String
-    $queryExecutionId: String
-    $nextToken: String
-  ) {
-    executeAthenaQuery(
-      queryString: $queryString
-      database: $database
-      outputLocation: $outputLocation
-      queryExecutionId: $queryExecutionId
-      nextToken: $nextToken
-    ) {
-      queryExecutionId
-      status
-      data
-      columns
-      error
-      rowCount
-      nextToken
-    }
-  }
-`;
+async function runQuery(query: string, variables?: Record<string, unknown>) {
+  const client = getConfiguredAmplifyClient();
+  const result = await client.graphql({
+    query,
+    variables,
+  });
 
-// SQL Query Tool
-const sqlQueryTool = {
-  name: 'execute-sql-query',
-  config: {
-    title: 'Execute SQL Query',
-    description: 'Execute SQL queries using Amazon Athena and return the results. Waits for query completion and returns data.',
+  const data = 'data' in result ? result.data : null;
+  const errors = 'errors' in result ? result.errors : undefined;
+
+  if (errors && errors.length > 0) {
+    throw new Error(errors.map((error: { message?: string }) => error.message).filter(Boolean).join('; '));
+  }
+
+  return data;
+}
+
+export const queryTools = {
+  'list-crops': tool({
+    description: 'List crops in the catalog. Optionally filter by category.',
     inputSchema: z.object({
-      queryString: z.string().describe("The SQL query to execute"),
-      database: z.string().optional().describe("The database to query (optional)"),
-      outputLocation: z.string().optional().describe("S3 location for query results (optional)"),
-    })
-  },
-  handler: async (params: any) => {
-    try {
-      console.log('SQL Query Tool - Received params:', JSON.stringify(params, null, 2));
-      
-      const client = getConfiguredAmplifyClient();
-      
-      // Validate that queryString is present and not empty
-      if (!params.queryString || typeof params.queryString !== 'string' || params.queryString.trim() === '') {
-        throw new Error('queryString parameter is required and must be a non-empty string');
-      }
-      
-      console.log('SQL Query Tool - Executing query:', params.queryString);
-      
-      // Execute the initial query
-      const initialResult = await client.graphql({
-        query: executeAthenaQueryMutation,
-        variables: {
-          queryString: params.queryString,
-          database: params.database,
-          outputLocation: params.outputLocation,
-        }
+      category: z.enum(['vegetable', 'fruit', 'herb', 'flower', 'other']).optional(),
+      limit: z.number().int().min(1).max(200).optional(),
+      nextToken: z.string().optional(),
+    }),
+    execute: async ({ category, limit, nextToken }) => {
+      const data = await runQuery(queries.listCrops, {
+        filter: category ? { category: { eq: category } } : undefined,
+        limit: limit ?? 100,
+        nextToken,
       });
 
-      console.log('SQL Query Tool - GraphQL result:', JSON.stringify(initialResult, null, 2));
+      return data;
+    },
+  }),
 
-      const data = 'data' in initialResult ? initialResult.data : null;
-      if (!data || !data.executeAthenaQuery) {
-        throw new Error("No result returned from executeAthenaQuery");
-      }
-
-      let queryExecutionId = data.executeAthenaQuery.queryExecutionId;
-      let status = data.executeAthenaQuery.status;
-      let result = data.executeAthenaQuery;
-
-      // Poll for completion if query is still running
-      const maxAttempts = 60; // 5 minutes with 5-second intervals
-      let attempts = 0;
-
-      while ((status === "QUEUED" || status === "RUNNING") && attempts < maxAttempts) {
-        await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
-        
-        const pollResult = await client.graphql({
-          query: executeAthenaQueryMutation,
-          variables: {
-            queryExecutionId,
-          }
-        });
-
-        const pollData = 'data' in pollResult ? pollResult.data : null;
-        if (pollData && pollData.executeAthenaQuery) {
-          result = pollData.executeAthenaQuery;
-          status = pollData.executeAthenaQuery.status;
-        }
-        
-        attempts++;
-      }
-
-      // Check final status
-      if (status === "FAILED") {
-        return {
-          content: [{ 
-            type: "text" as const, 
-            text: JSON.stringify({
-              success: false,
-              error: result.error || "Query execution failed",
-              queryExecutionId,
-              status,
-            }, null, 2)
-          }],
-          isError: true
-        };
-      }
-
-      if (status === "CANCELLED") {
-        return {
-          content: [{ 
-            type: "text" as const, 
-            text: JSON.stringify({
-              success: false,
-              error: "Query execution was cancelled",
-              queryExecutionId,
-              status,
-            }, null, 2)
-          }],
-          isError: true
-        };
-      }
-
-      if (status === "QUEUED" || status === "RUNNING") {
-        return {
-          content: [{ 
-            type: "text" as const, 
-            text: JSON.stringify({
-              success: false,
-              error: "Query execution timed out after 5 minutes",
-              queryExecutionId,
-              status,
-            }, null, 2)
-          }],
-          isError: true
-        };
-      }
-
-      // Query succeeded
-      return {
-        content: [{ 
-          type: "text" as const, 
-          text: JSON.stringify({
-            success: true,
-            queryExecutionId,
-            status,
-            data: result.data,
-            columns: result.columns,
-            rowCount: result.rowCount,
-            nextToken: result.nextToken,
-            message: `Query executed successfully. Retrieved ${result.rowCount || 0} rows.`
-          }, null, 2)
-        }]
-      };
-
-    } catch (error) {
-      console.error("SQL Query Tool Error:", error);
-      
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else {
-        errorMessage = JSON.stringify(error);
-      }
-
-      return {
-        content: [{ 
-          type: "text" as const, 
-          text: JSON.stringify({
-            success: false,
-            error: "Failed to execute SQL query",
-            message: errorMessage
-          }, null, 2)
-        }],
-        isError: true
-      };
-    }
-  }
-};
-
-// List Action Items Tool
-const listActionItemsTool = {
-  name: 'list-action-items',
-  config: {
-    title: 'List Action Items',
-    description: 'List all action items with their current status, type, and details. Use this to get an overview of pending, approved, rejected, or deferred actions.',
+  'get-crop': tool({
+    description: 'Get detailed information for a specific crop by ID.',
     inputSchema: z.object({
-      limit: z.number().optional().describe('Maximum number of action items to return (default: 100)'),
-      nextToken: z.string().optional().describe('Pagination token for next page of results')
-    })
-  },
-  handler: async (params: any) => {
-    try {
-      const client = getConfiguredAmplifyClient();
-      
-      const result = await client.graphql({
-        query: queries.listActionItems,
-        variables: {
-          limit: params.limit || 100,
-          nextToken: params.nextToken
-        }
+      id: z.string(),
+    }),
+    execute: async ({ id }) => {
+      const data = await runQuery(queries.getCrop, { id });
+      return data;
+    },
+  }),
+
+  'list-varieties': tool({
+    description: 'List crop varieties. Optionally filter by crop ID.',
+    inputSchema: z.object({
+      cropId: z.string().optional(),
+      limit: z.number().int().min(1).max(200).optional(),
+      nextToken: z.string().optional(),
+    }),
+    execute: async ({ cropId, limit, nextToken }) => {
+      const data = await runQuery(queries.listVarieties, {
+        filter: cropId ? { cropId: { eq: cropId } } : undefined,
+        limit: limit ?? 100,
+        nextToken,
       });
 
-      const data = 'data' in result ? result.data : null;
-      if (!data || !data.listActionItems) {
-        throw new Error("No result returned from listActionItems");
-      }
+      return data;
+    },
+  }),
 
-      return {
-        content: [{ 
-          type: "text" as const, 
-          text: JSON.stringify({
-            success: true,
-            actionItems: data.listActionItems.items,
-            nextToken: data.listActionItems.nextToken,
-            count: data.listActionItems.items.length,
-            message: `Retrieved ${data.listActionItems.items.length} action items`
-          }, null, 2)
-        }]
-      };
-
-    } catch (error) {
-      console.error("List Action Items Tool Error:", error);
-      
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else {
-        errorMessage = JSON.stringify(error);
-      }
-
-      return {
-        content: [{ 
-          type: "text" as const, 
-          text: JSON.stringify({
-            success: false,
-            error: "Failed to list action items",
-            message: errorMessage
-          }, null, 2)
-        }],
-        isError: true
-      };
-    }
-  }
-};
-
-// Get Action Item Tool
-const getActionItemTool = {
-  name: 'get-action-item',
-  config: {
-    title: 'Get Action Item',
-    description: 'Get detailed information about a specific action item by its ID.',
+  'get-variety': tool({
+    description: 'Get detailed information for a specific variety by ID.',
     inputSchema: z.object({
-      id: z.string().describe('The ID of the action item to retrieve')
-    })
-  },
-  handler: async (params: any) => {
-    try {
-      const client = getConfiguredAmplifyClient();
-      
-      const result = await client.graphql({
-        query: queries.getActionItem,
-        variables: {
-          id: params.id
-        }
+      id: z.string(),
+    }),
+    execute: async ({ id }) => {
+      const data = await runQuery(queries.getVariety, { id });
+      return data;
+    },
+  }),
+
+  'list-gardens': tool({
+    description: 'List gardens. Optionally filter to active gardens only.',
+    inputSchema: z.object({
+      activeOnly: z.boolean().optional(),
+      limit: z.number().int().min(1).max(200).optional(),
+      nextToken: z.string().optional(),
+    }),
+    execute: async ({ activeOnly, limit, nextToken }) => {
+      const data = await runQuery(queries.listGardens, {
+        filter: activeOnly ? { isActive: { eq: true } } : undefined,
+        limit: limit ?? 100,
+        nextToken,
       });
 
-      const data = 'data' in result ? result.data : null;
-      if (!data || !data.getActionItem) {
-        return {
-          content: [{ 
-            type: "text" as const, 
-            text: JSON.stringify({
-              success: false,
-              error: "Action item not found",
-              message: `No action item found with ID: ${params.id}`
-            }, null, 2)
-          }],
-          isError: true
-        };
-      }
+      return data;
+    },
+  }),
 
-      return {
-        content: [{ 
-          type: "text" as const, 
-          text: JSON.stringify({
-            success: true,
-            actionItem: data.getActionItem,
-            message: `Retrieved action item: ${data.getActionItem.action}`
-          }, null, 2)
-        }]
-      };
-
-    } catch (error) {
-      console.error("Get Action Item Tool Error:", error);
-      
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else {
-        errorMessage = JSON.stringify(error);
-      }
-
-      return {
-        content: [{ 
-          type: "text" as const, 
-          text: JSON.stringify({
-            success: false,
-            error: "Failed to get action item",
-            message: errorMessage
-          }, null, 2)
-        }],
-        isError: true
-      };
-    }
-  }
-};
-
-// List Workover Jobs Tool
-const listWorkoverJobsTool = {
-  name: 'list-workover-jobs',
-  config: {
-    title: 'List Workover Jobs',
-    description: 'List all workover rig jobs with their status, priority, financial metrics, and scheduling information. Use this to get an overview of the workover job queue.',
+  'list-planting-plans': tool({
+    description: 'List planting plans. Optionally filter by garden ID.',
     inputSchema: z.object({
-      limit: z.number().optional().describe('Maximum number of workover jobs to return (default: 100)'),
-      nextToken: z.string().optional().describe('Pagination token for next page of results')
-    })
-  },
-  handler: async (params: any) => {
-    try {
-      const client = getConfiguredAmplifyClient();
-      
-      const result = await client.graphql({
-        query: queries.listWorkoverJobs,
-        variables: {
-          limit: params.limit || 100,
-          nextToken: params.nextToken
-        }
+      gardenId: z.string().optional(),
+      limit: z.number().int().min(1).max(200).optional(),
+      nextToken: z.string().optional(),
+    }),
+    execute: async ({ gardenId, limit, nextToken }) => {
+      const data = await runQuery(queries.listPlantingPlans, {
+        filter: gardenId ? { gardenId: { eq: gardenId } } : undefined,
+        limit: limit ?? 100,
+        nextToken,
       });
 
-      const data = 'data' in result ? result.data : null;
-      if (!data || !data.listWorkoverJobs) {
-        throw new Error("No result returned from listWorkoverJobs");
-      }
+      return data;
+    },
+  }),
 
-      return {
-        content: [{ 
-          type: "text" as const, 
-          text: JSON.stringify({
-            success: true,
-            workoverJobs: data.listWorkoverJobs.items,
-            nextToken: data.listWorkoverJobs.nextToken,
-            count: data.listWorkoverJobs.items.length,
-            message: `Retrieved ${data.listWorkoverJobs.items.length} workover jobs`
-          }, null, 2)
-        }]
-      };
-
-    } catch (error) {
-      console.error("List Workover Jobs Tool Error:", error);
-      
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else {
-        errorMessage = JSON.stringify(error);
-      }
-
-      return {
-        content: [{ 
-          type: "text" as const, 
-          text: JSON.stringify({
-            success: false,
-            error: "Failed to list workover jobs",
-            message: errorMessage
-          }, null, 2)
-        }],
-        isError: true
-      };
-    }
-  }
-};
-
-// Get Workover Job Tool
-const getWorkoverJobTool = {
-  name: 'get-workover-job',
-  config: {
-    title: 'Get Workover Job',
-    description: 'Get detailed information about a specific workover job by its ID, including financial metrics and scheduling details.',
+  'list-plan-steps': tool({
+    description: 'List plan steps. Optionally filter by planting plan ID.',
     inputSchema: z.object({
-      id: z.string().describe('The ID of the workover job to retrieve')
-    })
-  },
-  handler: async (params: any) => {
-    try {
-      const client = getConfiguredAmplifyClient();
-      
-      const result = await client.graphql({
-        query: queries.getWorkoverJob,
-        variables: {
-          id: params.id
-        }
+      plantingPlanId: z.string().optional(),
+      limit: z.number().int().min(1).max(500).optional(),
+      nextToken: z.string().optional(),
+    }),
+    execute: async ({ plantingPlanId, limit, nextToken }) => {
+      const data = await runQuery(queries.listPlanSteps, {
+        filter: plantingPlanId ? { plantingPlanId: { eq: plantingPlanId } } : undefined,
+        limit: limit ?? 200,
+        nextToken,
       });
 
-      const data = 'data' in result ? result.data : null;
-      if (!data || !data.getWorkoverJob) {
-        return {
-          content: [{ 
-            type: "text" as const, 
-            text: JSON.stringify({
-              success: false,
-              error: "Workover job not found",
-              message: `No workover job found with ID: ${params.id}`
-            }, null, 2)
-          }],
-          isError: true
-        };
-      }
-
-      return {
-        content: [{ 
-          type: "text" as const, 
-          text: JSON.stringify({
-            success: true,
-            workoverJob: data.getWorkoverJob,
-            message: `Retrieved workover job: ${data.getWorkoverJob.wellName} - ${data.getWorkoverJob.description}`
-          }, null, 2)
-        }]
-      };
-
-    } catch (error) {
-      console.error("Get Workover Job Tool Error:", error);
-      
-      let errorMessage: string;
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else {
-        errorMessage = JSON.stringify(error);
-      }
-
-      return {
-        content: [{ 
-          type: "text" as const, 
-          text: JSON.stringify({
-            success: false,
-            error: "Failed to get workover job",
-            message: errorMessage
-          }, null, 2)
-        }],
-        isError: true
-      };
-    }
-  }
-};
-
-// Export all tools as an array for easy registration
-export const allQueryTools = [
-  sqlQueryTool,
-  listActionItemsTool,
-  getActionItemTool,
-  listWorkoverJobsTool,
-  getWorkoverJobTool,
-];
+      return data;
+    },
+  }),
+} as const;

@@ -21,7 +21,7 @@ Target features:
     - Recommend a plan for the garden, including when and where to plant various varities in their garden, garden bed maintence tasks like weeding, and any other actions to improve gardening success.
     - Troubleshoot the garden
     - Update the goal / task list
-1. View the garden at various stages in the year so the user can better understand the proposed plan.
+1. View the garden at various stages in the year so the user can better understand the proposed plan. This should be highly visually appealing.
 1. Harvest yield prediction calendar based on planting plan
 1. System to organize trading of crops based on planting plan
     - Distributed comunity agriculture

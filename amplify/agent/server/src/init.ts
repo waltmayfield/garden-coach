@@ -2,11 +2,10 @@ import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
 import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock';
 import { z } from 'zod';
 import { getConfiguredAmplifyClient } from "./tools/amplifyUtils";
-import { allQueryTools } from './tools/queryTools';
-import { allMutationTools } from './tools/mutationTools';
-import { executeGraphqlTool } from './tools/executeGraphql';
-import { allRagTools } from './tools/ragTools';
-import { getCurrentChatSessionId } from './context';
+import { queryTools } from './tools/queryTools';
+import { mutationTools } from './tools/mutationTools';
+import { graphqlTools } from './tools/executeGraphql';
+// import { allRagTools } from './tools/ragTools';
 import { tool } from 'ai'
 /**
  * Fetch the system prompt from the Settings table using GraphQL
@@ -141,107 +140,11 @@ export async function initializeCredentials() {
  */
 export function initializeTools() {
   console.log('Initializing tools...');
-  
-  const tools: Record<string, any> = {};
-  
-  // Add mutation tools (same format as query tools)
-  for (const mutationTool of allMutationTools) {
-    const inputSchema = (mutationTool.config as any).inputSchema;
-
-    let parameters: z.ZodObject<any>;
-    
-    if (inputSchema && typeof inputSchema.parse === 'function') {
-      parameters = inputSchema as z.ZodObject<any>;
-    } else if (inputSchema && typeof inputSchema === 'object' && Object.keys(inputSchema).length > 0) {
-      parameters = z.object(inputSchema);
-    } else {
-      parameters = z.object({});
-    }
-
-    tools[mutationTool.name] = tool({
-      description: mutationTool.config.description,
-      inputSchema: parameters,
-      execute: async (params: Record<string, any>) => {
-        const result = await mutationTool.handler(params as any);
-        return result.content?.[0]?.text || JSON.stringify(result);
-      }
-    });
-  }
-  
-  // Add query tools
-  for (const queryTool of allQueryTools) {
-    const inputSchema = (queryTool.config as any).inputSchema;
-
-    let parameters: z.ZodObject<any>;
-    
-    if (inputSchema && typeof inputSchema.parse === 'function') {
-      parameters = inputSchema as z.ZodObject<any>;
-    } else if (inputSchema && typeof inputSchema === 'object' && Object.keys(inputSchema).length > 0) {
-      parameters = z.object(inputSchema);
-    } else {
-      parameters = z.object({});
-    }
-
-    tools[queryTool.name] = tool({
-      description: queryTool.config.description,
-      inputSchema: parameters,
-      execute: async (params: Record<string, any>) => {
-        const chatSessionId = getCurrentChatSessionId();
-        const enrichedParams = {
-          ...params,
-          ...(chatSessionId && !params.chatSessionId && { chatSessionId })
-        };
-        
-        const result = await queryTool.handler(enrichedParams as any);
-        return result.content?.[0]?.text || JSON.stringify(result);
-      }
-    });
-  }
-  
-  // Add RAG tools
-  for (const ragTool of allRagTools) {
-    const inputSchema = (ragTool.config as any).inputSchema;
-
-    let parameters: z.ZodObject<any>;
-    
-    if (inputSchema && typeof inputSchema.parse === 'function') {
-      parameters = inputSchema as z.ZodObject<any>;
-    } else if (inputSchema && typeof inputSchema === 'object' && Object.keys(inputSchema).length > 0) {
-      parameters = z.object(inputSchema);
-    } else {
-      parameters = z.object({});
-    }
-
-    tools[ragTool.name] = tool({
-      description: ragTool.config.description,
-      inputSchema: parameters,
-      execute: async (params: Record<string, any>) => {
-        const result = await ragTool.handler(params as any);
-        return result.content?.[0]?.text || JSON.stringify(result);
-      }
-    });
-  }
-  
-  // Add execute GraphQL tool
-  const graphqlSchema = (executeGraphqlTool.config as any).inputSchema;
-  let graphqlParameters: z.ZodObject<any>;
-  
-  if (graphqlSchema && typeof graphqlSchema.parse === 'function') {
-    graphqlParameters = graphqlSchema as z.ZodObject<any>;
-  } else if (graphqlSchema && typeof graphqlSchema === 'object' && Object.keys(graphqlSchema).length > 0) {
-    graphqlParameters = z.object(graphqlSchema);
-  } else {
-    graphqlParameters = z.object({});
-  }
-  
-  tools['execute-graphql'] = tool({
-    description: executeGraphqlTool.config.description,
-    inputSchema: graphqlParameters,
-    execute: async (params: Record<string, any>) => {
-      const result = await executeGraphqlTool.handler(params as any);
-      return result.content?.[0]?.text || JSON.stringify(result);
-    }
-  });
+  const tools: Record<string, any> = {
+    ...queryTools,
+    ...mutationTools,
+    ...graphqlTools,
+  };
   
   // Add suggestions generation tool
   tools['generate_suggestions'] = tool({

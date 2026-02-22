@@ -29,8 +29,8 @@ backend:
         - docker buildx create --use --name multiarch --driver docker-container || true
         - docker buildx inspect --bootstrap
         - echo "Multi-arch Docker support enabled"
-        # - pnpm ci --cache .npm --prefer-offline
-        - pnpm install --frozen-lockfile --prefer-offline
+        - npm ci --cache .npm --prefer-offline
+        # - pnpm install --frozen-lockfile --prefer-offline
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 frontend:
   phases:
@@ -46,7 +46,7 @@ frontend:
         # - nvm alias default 20
         - echo "Frontend - Node.js version:" && node --version
         - echo "Frontend - npm version:" && npm --version
-        - pnpm run build
+        - npm run build
   artifacts:
     baseDirectory: .next
     files:
@@ -54,5 +54,5 @@ frontend:
   cache:
     paths:
       - .next/cache/**/*
-      - .pnpm-store/**/*
+      # - .pnpm-store/**/*
 
