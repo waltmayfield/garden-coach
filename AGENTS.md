@@ -3,9 +3,9 @@
 This guide helps AI coding agents understand the Digital Operations Agent project structure, locate relevant files, and find documentation for specific tasks.
 
 ## Guidance
+- Update this file if you learn something that may be useful later, like how to solve common technial issues. If there's a lot of text, put it in another file.
 - To deploy the backend, run `npm run sandbox` in the foreground. This will run the deployment once, and will return any error messages. Don't run this command in the background.
-- kb means Amazon Knowledge Base
-- BDA means Amazon Bedrock Data Automation
+- Before you finish an update to the front end, make sure that builds succeed by running `npm run build`
 
 ### Waiting for CloudFormation Deployments
 If the stack is currently updating, you can use AWS CLI wait commands to monitor deployment status:

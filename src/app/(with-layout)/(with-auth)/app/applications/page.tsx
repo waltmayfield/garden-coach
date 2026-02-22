@@ -106,9 +106,9 @@ export default function ApplicationsPage() {
         throw new Error(errors.map((err) => err.message).join(', '));
       }
 
-      setGroupApplications(groupsResult.data ?? []);
-      setStudentApplications(studentsResult.data ?? []);
-      setCompanyApplications(companiesResult.data ?? []);
+      setGroupApplications((groupsResult.data ?? []) as GroupApplicationItem[]);
+      setStudentApplications((studentsResult.data ?? []) as StudentApplicationItem[]);
+      setCompanyApplications((companiesResult.data ?? []) as CompanyApplicationItem[]);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'Unable to load applications.');
     } finally {
@@ -131,7 +131,7 @@ export default function ApplicationsPage() {
         if (result.errors?.length) {
           throw new Error(result.errors.map((err) => err.message).join(', '));
         }
-        setInternships(result.data ?? []);
+        setInternships((result.data ?? []) as InternshipOption[]);
       } catch (error) {
         setInternshipError(error instanceof Error ? error.message : 'Unable to load internships.');
       } finally {

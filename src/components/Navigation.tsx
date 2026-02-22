@@ -12,7 +12,7 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import UserMenu from './UserMenu';
-import { Home, Plus, List, ClipboardList, Building2, Sparkles } from 'lucide-react';
+import { Home, Plus, List, MessageSquare, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { createChat } from '@/../utils/chatStore';
 
@@ -23,10 +23,9 @@ export default function Navigation() {
 
   const navItems = [
     { href: '/app', label: 'Home', icon: Home },
-    { href: '/app/applications', label: 'Applications', icon: ClipboardList },
-    { href: '/app/internships', label: 'Internships', icon: Building2 },
-    { href: '/app/matching', label: 'Matching', icon: Sparkles },
+    { href: '/chat', label: 'Chat', icon: MessageSquare },
     { href: '/chats', label: 'Chat History', icon: List },
+    { href: '/settings', label: 'Settings', icon: Settings },
   ];
 
   const handleNewChat = async () => {
@@ -47,7 +46,7 @@ export default function Navigation() {
         {/* Logo/Brand */}
         <div className="flex items-center gap-6">
           <Link href="/app" className="flex items-center space-x-2 text-nav-foreground hover:text-nav-foreground/80">
-            <span className="font-bold text-xl">InternAround</span>
+            <span className="font-bold text-xl">Garden Coach</span>
           </Link>
 
           {/* Navigation Links - Desktop */}

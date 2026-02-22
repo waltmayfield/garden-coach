@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "InternAround",
-  description: "A group-based internship club connecting students with summer opportunities.",
+  title: "Garden Coach",
+  description: "AI-powered planning and operations for your garden.",
 };
 
 export default function RootLayout({

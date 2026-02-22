@@ -93,45 +93,45 @@ const cognitoDomain = new cognito.CfnUserPoolDomain(backend.stack, 'CognitoDomai
   userPoolId: backend.auth.resources.userPool.userPoolId
 });
 
-// Create a second Cognito client with secret for QuickSight OAuth integration
-const quicksightUserPoolClient = new cognito.CfnUserPoolClient(backend.stack, 'QuickSightUserPoolClient', {
-  userPoolId: backend.auth.resources.userPool.userPoolId,
-  clientName: 'quicksight-oauth-client',
-  generateSecret: true,
-  explicitAuthFlows: [
-    'ALLOW_ADMIN_USER_PASSWORD_AUTH',
-    'ALLOW_REFRESH_TOKEN_AUTH',
-    'ALLOW_USER_SRP_AUTH'
-  ],
-  allowedOAuthFlows: ['code', 'implicit'],
-  allowedOAuthScopes: ['openid', 'email', 'profile'],
-  allowedOAuthFlowsUserPoolClient: true,
-  callbackUrLs: [
-    'https://us-east-1.quicksight.aws.amazon.com/sn/integrations/oauth/callback',
-    'https://quicksight.aws.amazon.com/sn/integrations/oauth/callback',
-    'https://us-east-1.quicksight.aws.amazon.com/sn/oauthcallback',
-    // Localhost callbacks for MCP clients
-    'http://localhost:3000/callback',  // For mcpRemoteProxy.ts
-    // mcp-remote uses dynamic ports - adding common port ranges
-    'http://localhost:10419/oauth/callback',
-    'http://localhost:16998/oauth/callback',
-    'http://localhost:16999/oauth/callback',
-    'http://localhost:17000/oauth/callback',
-    'http://localhost:19245/oauth/callback',
-    'http://localhost:32359/oauth/callback',
-    'http://localhost:43111/oauth/callback',
-    // Add a range around common ephemeral ports
-    ...Array.from({ length: 20 }, (_, i) => `http://localhost:${30000 + i}/oauth/callback`),
-    ...Array.from({ length: 20 }, (_, i) => `http://localhost:${40000 + i}/oauth/callback`),
-  ],
-  logoutUrLs: [
-    'https://us-east-1.quicksight.aws.amazon.com/sn/start'
-  ],
-  supportedIdentityProviders: ['COGNITO']
-});
+// // Create a second Cognito client with secret for QuickSight OAuth integration
+// const quicksightUserPoolClient = new cognito.CfnUserPoolClient(backend.stack, 'QuickSightUserPoolClient', {
+//   userPoolId: backend.auth.resources.userPool.userPoolId,
+//   clientName: 'quicksight-oauth-client',
+//   generateSecret: true,
+//   explicitAuthFlows: [
+//     'ALLOW_ADMIN_USER_PASSWORD_AUTH',
+//     'ALLOW_REFRESH_TOKEN_AUTH',
+//     'ALLOW_USER_SRP_AUTH'
+//   ],
+//   allowedOAuthFlows: ['code', 'implicit'],
+//   allowedOAuthScopes: ['openid', 'email', 'profile'],
+//   allowedOAuthFlowsUserPoolClient: true,
+//   callbackUrLs: [
+//     'https://us-east-1.quicksight.aws.amazon.com/sn/integrations/oauth/callback',
+//     'https://quicksight.aws.amazon.com/sn/integrations/oauth/callback',
+//     'https://us-east-1.quicksight.aws.amazon.com/sn/oauthcallback',
+//     // Localhost callbacks for MCP clients
+//     'http://localhost:3000/callback',  // For mcpRemoteProxy.ts
+//     // mcp-remote uses dynamic ports - adding common port ranges
+//     'http://localhost:10419/oauth/callback',
+//     'http://localhost:16998/oauth/callback',
+//     'http://localhost:16999/oauth/callback',
+//     'http://localhost:17000/oauth/callback',
+//     'http://localhost:19245/oauth/callback',
+//     'http://localhost:32359/oauth/callback',
+//     'http://localhost:43111/oauth/callback',
+//     // Add a range around common ephemeral ports
+//     ...Array.from({ length: 20 }, (_, i) => `http://localhost:${30000 + i}/oauth/callback`),
+//     ...Array.from({ length: 20 }, (_, i) => `http://localhost:${40000 + i}/oauth/callback`),
+//   ],
+//   logoutUrLs: [
+//     'https://us-east-1.quicksight.aws.amazon.com/sn/start'
+//   ],
+//   supportedIdentityProviders: ['COGNITO']
+// });
 
-// Ensure domain is created before client
-quicksightUserPoolClient.addDependency(cognitoDomain);
+// // Ensure domain is created before client
+// quicksightUserPoolClient.addDependency(cognitoDomain);
 
 // Seed the Settings table with the system prompt
 const SettingsDdbTable = backend.data.resources.tables["Settings"];
@@ -472,7 +472,7 @@ backend.addOutput({
     // mcpServerAgentArn: mcpServer.runtime.attrAgentRuntimeArn,
     // s3FilesystemServerAgentArn: s3FilesystemServer.runtime.attrAgentRuntimeArn,
     agentServerAgentArn: agentServer.runtime.attrAgentRuntimeArn,
-    quicksightOAuthClientId: quicksightUserPoolClient.ref,
+    // quicksightOAuthClientId: quicksightUserPoolClient.ref,
     cognitoDomain: cognitoDomain.domain,
     // knowledgeBaseId: knowledgeBase.knowledgeBaseId,
     // knowledgeBaseDataSourceId: knowledgeBase.dataSourceId,

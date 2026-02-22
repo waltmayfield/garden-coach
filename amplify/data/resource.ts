@@ -3,11 +3,13 @@ import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 // Import modular schemas
 import { chatSchema } from './schemas/chat.schema';
 import { mapSchema } from './schemas/map.schema';
+import { gardenSchema } from './schemas/garden.schema';
 
 // Combine all schemas
 const schema = a.combine([
   chatSchema,
   mapSchema,
+  gardenSchema,
 ]);
 
 export type Schema = ClientSchema<typeof schema>;
