@@ -3,9 +3,11 @@
 This guide helps AI coding agents understand the Digital Operations Agent project structure, locate relevant files, and find documentation for specific tasks.
 
 ## Guidance
+- You can find the intent of this project here `docs/intent.md`
 - Update this file if you learn something that may be useful later, like how to solve common technial issues. If there's a lot of text, put it in another file.
 - To deploy the backend, run `npm run sandbox` in the foreground. This will run the deployment once, and will return any error messages. Don't run this command in the background.
 - Before you finish an update to the front end, make sure that builds succeed by running `npm run build`
+- Use `jq` to query json objects in a folder
 
 ### Waiting for CloudFormation Deployments
 If the stack is currently updating, you can use AWS CLI wait commands to monitor deployment status:

@@ -17,8 +17,11 @@ Things that have to go right for a person to build a gardening habit:
 Target features:
 1. Natural language -> garden task list with steps and visuals of what to expect.
 1. Chat interface to
+    - Set up the user's garden using natural language and pictures. (Perimeter, size, location, ...)
+    - Recommend a plan for the garden, including when and where to plant various varities in their garden, garden bed maintence tasks like weeding, and any other actions to improve gardening success.
     - Troubleshoot the garden
     - Update the goal / task list
+1. View the garden at various stages in the year so the user can better understand the proposed plan.
 1. Harvest yield prediction calendar based on planting plan
 1. System to organize trading of crops based on planting plan
     - Distributed comunity agriculture

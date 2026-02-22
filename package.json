@@ -23,6 +23,7 @@
     "deploy:frontend": "tsx scripts/deployFrontend.ts",
     "deploy": "npm run build:static && npm run deploy:frontend",
     "graphql": "tsx scripts/runGraphql.ts",
+    "seed:data": "tsx scripts/uploadSeedData.ts",
     "quicksight-oauth": "tsx scripts/getQuickSightOAuthInfo.ts",
     "mcp-logs": "tsx scripts/getMcpServerLogs.ts",
     "cdk-diff": "cdk diff --ci --app \"npx tsx amplify/backend.ts\" --output .amplify/artifacts/cdk.out --context amplify-backend-name=$(whoami) --context amplify-backend-namespace=$(node -e \"console.log(require('./package.json').name)\") --context amplify-backend-type=sandbox"
